@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "gallery": "Portfolio",
+    "calculator": "Calculator",
+    "blog": "Blog",
+    "contact": "Contact",
+    "get_quote": "Get a Quote"
+  },
+  "hero": {
+    "title": "Montreal's Pavé Uni Experts",
+    "subtitle": "For 15 years, we've been transforming driveways, patios and parking lots with premium interlocking pavers.",
+    "cta_estimate": "Free Estimate",
+    "cta_gallery": "Our Work",
+    "trust_badge_1": "Professional installation",
+    "trust_badge_2": "5-year warranty",
+    "trust_badge_3": "Turnkey service"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "From design to installation, we handle it all",
+    "driveway": {
+      "title": "Paved Driveway",
+      "desc": "Durable residential and commercial driveways that withstand Quebec winters."
+    },
+    "patio": {
+      "title": "Patio & Balcony",
+      "desc": "Beautiful outdoor spaces to enjoy the Montreal summer."
+    },
+    "walkway": {
+      "title": "Walkways & Paths",
+      "desc": "Custom-designed pedestrian paths and garden walkways."
+    },
+    "retaining": {
+      "title": "Retaining Walls",
+      "desc": "Decorative and functional walls to structure your property."
+    },
+    "commercial": {
+      "title": "Commercial",
+      "desc": "Parking lots, public squares and commercial spaces."
+    },
+    "cta": "Request a Quote"
+  },
+  "calculator": {
+    "title": "Paver Calculator",
+    "subtitle": "Estimate your project cost in seconds",
+    "shape": "Shape",
+    "rectangle": "Rectangle",
+    "square": "Square",
+    "custom": "Custom",
+    "length": "Length (ft)",
+    "width": "Width (ft)",
+    "area": "Area",
+    "product": "Paver type",
+    "classic": "Classic Paver",
+    "aged": "Aged Paver",
+    "slate": "Slate",
+    "pattern": "Pattern",
+    "running": "Running bond",
+    "herringbone": "Herringbone",
+    "basket": "Basket weave",
+    "estimate_result": "Project Estimate",
+    "materials_label": "Materials",
+    "installation_label": "Installation",
+    "total_label": "Total estimated",
+    "cta_get_quote": "Get Your Free Quote"
+  },
+  "gallery": {
+    "title": "Our Portfolio",
+    "subtitle": "Projects that speak for themselves",
+    "filter_all": "All",
+    "filter_driveway": "Driveways",
+    "filter_patio": "Patios",
+    "filter_walkway": "Walkways",
+    "filter_commercial": "Commercial",
+    "before": "Before",
+    "after": "After",
+    "view_project": "View Project"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Talk to an expert today",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Project address",
+    "project_type": "Project type",
+    "project_desc": "Project description",
+    "photos": "Photos (optional)",
+    "submit": "Send request",
+    "success_title": "Thank you!",
+    "success_msg": "An expert will contact you within 24h.",
+    "error_msg": "An error occurred. Please try again.",
+    "phone_label": "Or call us",
+    "phone_number": "(514) 555-1234",
+    "areas": "Serving Greater Montreal"
+  },
+  "blog": {
+    "title": "Blog & Tips",
+    "subtitle": "Everything about interlocking pavers",
+    "read_more": "Read more",
+    "categories": "Categories"
+  },
+  "footer": {
+    "description": "Montreal's paver specialist since 2009. Professional installation, turnkey service.",
+    "quick_links": "Quick links",
+    "services_list": "Our services",
+    "contact_info": "Contact",
+    "hours": "Hours",
+    "mon_fri": "Mon-Fri: 8am-6pm",
+    "sat": "Sat: 9am-4pm",
+    "sun": "Sun: Closed",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use"
+  },
+  "seo": {
+    "home_title": "Pavé Expert | Interlocking Paver Specialist Montreal",
+    "home_desc": "Experts in interlocking paver installation in Montreal and Greater Montreal. Driveways, patios, parking lots turnkey. Free quote."
+  }
+}

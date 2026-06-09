@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "gallery": "Réalisations",
+    "calculator": "Calculateur",
+    "blog": "Blog",
+    "contact": "Contact",
+    "get_quote": "Obtenir un devis"
+  },
+  "hero": {
+    "title": "Experts en Pavé Uni à Montréal",
+    "subtitle": "Depuis 15 ans, nous transformons vos entrées, terrasses et stationnements avec du pavé uni de première qualité.",
+    "cta_estimate": "Estimation gratuite",
+    "cta_gallery": "Nos réalisations",
+    "trust_badge_1": "Installation professionnelle",
+    "trust_badge_2": "Garantie 5 ans",
+    "trust_badge_3": "Service clé en main"
+  },
+  "services": {
+    "title": "Nos Services",
+    "subtitle": "Du design à l'installation, on s'occupe de tout",
+    "driveway": {
+      "title": "Entrée pavée",
+      "desc": "Entrées résidentielles et commerciales durables qui résistent aux hivers québécois."
+    },
+    "patio": {
+      "title": "Terrasse & Balcon",
+      "desc": "Espaces extérieurs magnifiques pour profiter de l'été montréalais."
+    },
+    "walkway": {
+      "title": "Sentiers & Allées",
+      "desc": "Allées piétonnières et sentiers de jardin au design personnalisé."
+    },
+    "retaining": {
+      "title": "Murs de soutènement",
+      "desc": "Murs décoratifs et fonctionnels pour structurer votre terrain."
+    },
+    "commercial": {
+      "title": "Commercial",
+      "desc": "Stationnements, places publiques et espaces commerciaux."
+    },
+    "cta": "Demander un devis"
+  },
+  "calculator": {
+    "title": "Calculateur de Pavé Uni",
+    "subtitle": "Estimez le coût de votre projet en quelques clics",
+    "shape": "Forme",
+    "rectangle": "Rectangulaire",
+    "square": "Carré",
+    "custom": "Personnalisé",
+    "length": "Longueur (m)",
+    "width": "Largeur (m)",
+    "area": "Superficie",
+    "product": "Type de pavé",
+    "classic": "Pavé Classique",
+    "aged": "Pavé Vieilli",
+    "slate": "Ardoise",
+    "pattern": "Motif de pose",
+    "running": "Opus romain",
+    "herringbone": "Chevrons",
+    "basket": "Panier",
+    "estimate_result": "Estimation du projet",
+    "materials_label": "Matériaux",
+    "installation_label": "Installation",
+    "total_label": "Total estimé",
+    "cta_get_quote": "Obtenez votre devis gratuit"
+  },
+  "gallery": {
+    "title": "Nos Réalisations",
+    "subtitle": "Des projets qui parlent d'eux-mêmes",
+    "filter_all": "Tous",
+    "filter_driveway": "Entrées",
+    "filter_patio": "Terrasses",
+    "filter_walkway": "Sentiers",
+    "filter_commercial": "Commercial",
+    "before": "Avant",
+    "after": "Après",
+    "view_project": "Voir le projet"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Parlez à un expert dès aujourd'hui",
+    "name": "Nom complet",
+    "email": "Courriel",
+    "phone": "Téléphone",
+    "address": "Adresse du projet",
+    "project_type": "Type de projet",
+    "project_desc": "Description du projet",
+    "photos": "Photos (optionnel)",
+    "submit": "Envoyer ma demande",
+    "success_title": "Merci !",
+    "success_msg": "Un expert vous contactera sous 24h.",
+    "error_msg": "Une erreur est survenue. Veuillez réessayer.",
+    "phone_label": "Ou appelez-nous",
+    "phone_number": "(514) 555-1234",
+    "areas": "Nous desservons le Grand Montréal"
+  },
+  "blog": {
+    "title": "Blog & Conseils",
+    "subtitle": "Tout savoir sur le pavé uni",
+    "read_more": "Lire la suite",
+    "categories": "Catégories"
+  },
+  "footer": {
+    "description": "Spécialiste en pavé uni dans le Grand Montréal depuis 2009. Installation professionnelle, service clé en main.",
+    "quick_links": "Liens rapides",
+    "services_list": "Nos services",
+    "contact_info": "Coordonnées",
+    "hours": "Heures d'ouverture",
+    "mon_fri": "Lun-Ven: 8h-18h",
+    "sat": "Sam: 9h-16h",
+    "sun": "Dim: Fermé",
+    "rights": "Tous droits réservés.",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "seo": {
+    "home_title": "Pavé Expert | Spécialiste en Pavé Uni à Montréal",
+    "home_desc": "Experts en installation de pavé uni à Montréal et Grand Montréal. Entrées, terrasses, stationnements clé en main. Devis gratuit."
+  }
+}
