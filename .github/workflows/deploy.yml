@@ -1,4 +1,4 @@
-name: Build & Push Docker Image
+name: Build & Deploy
 
 on:
   push:
@@ -29,3 +29,23 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy on droplet
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DROPLET_SSH }}
+          script: |
+            cd ~/apps/pavagexpert
+            git pull
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
