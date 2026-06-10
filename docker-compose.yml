@@ -5,10 +5,8 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-    networks:
-      - swag-network
 
 networks:
-  swag-network:
+  default:
     external: true
-    name: web
+    name: apps_default
