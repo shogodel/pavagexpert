@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "@/lib/use-translations";
 import Link from "next/link";
 
