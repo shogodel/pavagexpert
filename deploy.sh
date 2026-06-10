@@ -7,7 +7,7 @@
 set -e
 
 REPO="https://github.com/shogodel/pavagexpert.git"
-DOMAIN="pavagexpert.com"
+DOMAIN="pavagexpert.space"
 EMAIL="ton-email@gmail.com"  # ← CHANGE MOI
 
 echo "=== 1. Cloner le repo ==="
