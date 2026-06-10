@@ -1,9 +1,14 @@
 services:
-  app:
+  pavexpert:
     image: ghcr.io/shogodel/pavagexpert:latest
     pull_policy: always
-    ports:
-      - "3000:3000"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+    networks:
+      - swag-network
+
+networks:
+  swag-network:
+    external: true
+    name: web
