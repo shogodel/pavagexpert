@@ -1,5 +1,6 @@
 services:
-  pavexpert:
+  pavagexpert:
+    container_name: pavagexpert
     image: ghcr.io/shogodel/pavagexpert:latest
     pull_policy: always
     restart: unless-stopped
