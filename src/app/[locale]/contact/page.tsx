@@ -106,12 +106,12 @@ export default function ContactPage() {
                 onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                 className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors bg-white"
               >
-                <option value="">Sélectionner...</option>
-                <option value="driveway">Entrée pavée</option>
-                <option value="patio">Terrasse</option>
-                <option value="walkway">Sentier</option>
-                <option value="retaining">Mur de soutènement</option>
-                <option value="commercial">Commercial</option>
+                <option value="">{t("project_type")}</option>
+                <option value="driveway">Pavé Uni - Entrée / Driveway</option>
+                <option value="patio">Pavé Uni - Terrasse / Patio</option>
+                <option value="walkway">Pavé Uni - Sentier / Walkway</option>
+                <option value="retaining">Pavé Uni - Mur / Wall</option>
+                <option value="commercial">Pavé Uni - Commercial</option>
               </select>
             </div>
             <div>

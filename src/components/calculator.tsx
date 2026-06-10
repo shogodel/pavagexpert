@@ -147,15 +147,15 @@ export default function Calculator() {
             <div className="space-y-3 flex-1">
               <div className="flex justify-between py-2 border-b border-stone-100">
                 <span className="text-stone-600">{t("materials_label")}</span>
-                <span className="font-semibold text-stone-800">{materialsCost.toFixed(0)}$</span>
+                <span className="font-semibold text-stone-800">{materialsCost.toFixed(0)} $CAD</span>
               </div>
               <div className="flex justify-between py-2 border-b border-stone-100">
                 <span className="text-stone-600">{t("installation_label")}</span>
-                <span className="font-semibold text-stone-800">{installationCost.toFixed(0)}$</span>
+                <span className="font-semibold text-stone-800">{installationCost.toFixed(0)} $CAD</span>
               </div>
               <div className="flex justify-between py-3">
                 <span className="font-semibold text-stone-800 text-lg">{t("total_label")}</span>
-                <span className="font-bold text-terracotta text-xl">{totalCost.toFixed(0)}$</span>
+                <span className="font-bold text-terracotta text-xl">{totalCost.toFixed(0)} $CAD</span>
               </div>
             </div>
 
