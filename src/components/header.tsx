@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-const pages = ["home", "services", "gallery", "calculator", "blog", "jobs"] as const;
+const pages = ["home", "services", "calculator", "blog", "jobs"] as const;
 
 export default function Header() {
   const t = useTranslations("nav");

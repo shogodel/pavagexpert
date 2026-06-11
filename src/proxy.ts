@@ -17,9 +17,41 @@ function findLocale(pathname: string): string | undefined {
   );
 }
 
-export function proxy(request: NextRequest) {
+function isAdminPath(pathname: string): boolean {
+  return pathname.startsWith("/admin") || locales.some((l) => pathname.startsWith(`/${l}/admin`));
+}
+
+function isAdminLoginPath(pathname: string): boolean {
+  return pathname === "/admin/login" || locales.some((l) => pathname === `/${l}/admin/login`);
+}
+
+export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
+  // --- Admin auth check ---
+  if (isAdminPath(pathname) && !isAdminLoginPath(pathname)) {
+    const token = request.cookies.get("admin_token")?.value;
+    if (token) {
+      const { verifyToken } = await import("./lib/auth");
+      const payload = await verifyToken(token);
+      if (payload) {
+        const found = findLocale(pathname);
+        if (found) return NextResponse.next();
+        const locale = defaultLocale;
+        const url = new URL(`/${locale}/admin${pathname.replace(/^\/admin/, "") || ""}`, request.url);
+        url.search = search;
+        return NextResponse.redirect(url);
+      }
+    }
+    // Not authenticated — redirect to login (preserve locale)
+    const found = findLocale(pathname);
+    const prefix = found ? `/${found}` : `/${defaultLocale}`;
+    const loginUrl = new URL(`${prefix}/admin/login`, request.url);
+    loginUrl.search = search;
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // --- Locale detection ---
   const found = findLocale(pathname);
 
   if (found) {
