@@ -3,6 +3,7 @@
 import { useTranslations } from "@/lib/use-translations";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL } from "@/lib/constants";
 
 export default function ContactPreview() {
   const t = useTranslations("get_quote");
@@ -27,10 +28,10 @@ export default function ContactPreview() {
               {t("submit")}
             </Link>
             <a
-              href="tel:+15145551234"
+              href={`tel:${CONTACT_PHONE_TEL}`}
               className="text-white font-semibold text-lg hover:underline"
             >
-              {t("phone_number")}
+              {CONTACT_PHONE}
             </a>
           </div>
 

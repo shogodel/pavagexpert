@@ -1,5 +1,18 @@
-import { useTranslations } from "@/lib/use-translations";
+import type { Metadata } from "next";
+import { isLocale } from "@/i18n/config";
+import { getMessages } from "@/i18n/get-messages";
 import Link from "next/link";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const messages = await getMessages(locale);
+  return {
+    title: messages.seo?.blog_title,
+    description: messages.seo?.blog_desc,
+    alternates: { languages: { fr: "/fr/blog", en: "/en/blog" } },
+  };
+}
 
 const articles = [
   { title: "Prix du pavé uni à Montréal en 2026", desc: "Guide complet des coûts d'installation au m².", slug: "prix-pave-uni-montreal-2026" },

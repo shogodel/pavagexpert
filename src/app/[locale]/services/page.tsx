@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
+import { isLocale } from "@/i18n/config";
+import { getMessages } from "@/i18n/get-messages";
 import ServicesSection from "@/components/services-section";
 import ContactPreview from "@/components/contact-preview";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const messages = await getMessages(locale);
+  return {
+    title: messages.seo?.services_title,
+    description: messages.seo?.services_desc,
+    alternates: { languages: { fr: "/fr/services", en: "/en/services" } },
+  };
+}
 
 export default function ServicesPage() {
   return (

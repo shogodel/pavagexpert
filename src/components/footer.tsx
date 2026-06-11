@@ -2,6 +2,7 @@
 
 import { useTranslations } from "@/lib/use-translations";
 import Link from "next/link";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/lib/constants";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -53,8 +54,8 @@ export default function Footer() {
             <div className="flex flex-col gap-2 text-sm text-stone-400">
               <span>1234 Rue Principal</span>
               <span>Montréal, QC H3Z 2Y7</span>
-              <a href="tel:+15145551234" className="hover:text-white transition-colors">(514) 555-1234</a>
-              <a href="mailto:info@pave.expert" className="hover:text-white transition-colors">info@pave.expert</a>
+              <a href={`tel:${CONTACT_PHONE_TEL}`} className="hover:text-white transition-colors">{CONTACT_PHONE}</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors">{CONTACT_EMAIL}</a>
             </div>
             <h4 className="text-white font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>
             <div className="flex flex-col gap-1 text-sm text-stone-400">
