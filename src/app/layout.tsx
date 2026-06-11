@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pavé Expert",
+  title: "Pavagexpert",
   description: "Spécialiste en pavé uni à Montréal",
 };
 

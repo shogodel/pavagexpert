@@ -5,8 +5,7 @@
   <rect x="14" y="8" width="12" height="8" rx="1" fill="#A83224"/>
   <rect x="20" y="16" width="12" height="8" rx="1" fill="#C73B2B"/>
 
-  <!-- Pavé text -->
-  <text x="44" y="26" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#292524">Pavé</text>
-  <!-- Expert text -->
-  <text x="106" y="26" font-family="system-ui, sans-serif" font-size="20" font-weight="300" fill="#C73B2B">Expert</text>
+  <!-- Pavagexpert text -->
+  <text x="44" y="26" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#292524">Pavage</text>
+  <text x="116" y="26" font-family="system-ui, sans-serif" font-size="20" font-weight="300" fill="#C73B2B">xpert</text>
 </svg>

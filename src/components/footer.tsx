@@ -17,7 +17,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div>
             <div className="mb-4">
-              <img src="/images/logo-white.svg" alt="Pavé Expert" className="h-7 w-auto" />
+              <img src="/images/logo-white.svg" alt="Pavagexpert" className="h-7 w-auto" />
             </div>
             <p className="text-sm leading-relaxed text-stone-400">{t("description")}</p>
           </div>
@@ -68,7 +68,7 @@ export default function Footer() {
 
         <div className="border-t border-stone-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-stone-500">
-            &copy; {new Date().getFullYear()} Pavé Expert. {t("rights")}
+            &copy; {new Date().getFullYear()} Pavagexpert. {t("rights")}
           </p>
           <div className="flex gap-4 text-sm text-stone-500">
             <Link href="/privacy" className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>

@@ -39,7 +39,7 @@ export default function LoginForm() {
         className="w-full max-w-sm bg-stone-800 rounded-xl p-8 shadow-xl space-y-5"
       >
         <div className="flex justify-center mb-2">
-          <img src="/images/logo-white.svg" alt="Pavé Expert" className="h-8 w-auto" />
+          <img src="/images/logo-white.svg" alt="Pavagexpert" className="h-8 w-auto" />
         </div>
         <p className="text-stone-400 text-sm text-center">Connexion administrateur</p>
 
