@@ -4,7 +4,6 @@ services:
     image: ghcr.io/shogodel/pavagexpert:latest
     pull_policy: always
     restart: unless-stopped
-    env_file: .env
     environment:
       - NODE_ENV=production
       - DATA_DIR=/data
