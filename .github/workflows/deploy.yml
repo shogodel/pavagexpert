@@ -80,8 +80,12 @@ jobs:
             # Add jobs_data volume if missing
             grep -q "jobs_data:" docker-compose.yaml || sed -i '/^volumes:/a\  jobs_data:' docker-compose.yaml
 
+            # Show what changed in compose file
+            grep -A 10 "pavagexpert:" docker-compose.yaml
+
             docker compose pull pavagexpert
-            docker compose up -d pavagexpert
-            docker compose logs --tail 10 pavagexpert
+            docker compose up -d pavagexpert --force-recreate
+            sleep 3
+            docker compose logs --tail 20 pavagexpert
             docker restart swag 2>/dev/null || true
             docker image prune -f
