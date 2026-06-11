@@ -20,20 +20,49 @@ const PRICE_INSTALLATION: Record<string, number> = {
   basket: 40,
 };
 
+const M2_PER_FT2 = 10.764;
+const M_PER_FT = 3.281;
+
+function toFeet(meters: number) { return meters * M_PER_FT; }
+function toMeters(feet: number) { return feet / M_PER_FT; }
+
 export default function Calculator() {
   const t = useTranslations("calculator");
 
+  const [unit, setUnit] = useState<"m" | "ft">("m");
   const [length, setLength] = useState(6);
   const [width, setWidth] = useState(4);
   const [product, setProduct] = useState<string>("classic");
   const [pattern, setPattern] = useState<string>("running");
 
-  const area = length * width;
+  const lengthM = unit === "m" ? length : toMeters(length);
+  const widthM = unit === "m" ? width : toMeters(width);
+  const areaM2 = lengthM * widthM;
+  const areaDisplay = unit === "m" ? areaM2 : areaM2 * M2_PER_FT2;
+  const unitLabel = unit === "m" ? "m" : "ft";
+  const areaUnit = unit === "m" ? "m²" : "ft²";
+
   const materialPrice = PRICE_MATERIALS[product] || 45;
   const installPrice = PRICE_INSTALLATION[pattern] || 35;
-  const materialsCost = area * materialPrice;
-  const installationCost = area * installPrice;
+  const materialsCost = areaM2 * materialPrice;
+  const installationCost = areaM2 * installPrice;
   const totalCost = materialsCost + installationCost;
+
+  const sliderMin = unit === "m" ? 1 : 3;
+  const sliderMax = unit === "m" ? 30 : 100;
+  const sliderStep = unit === "m" ? 0.5 : 1;
+
+  function toggleUnit() {
+    if (unit === "m") {
+      setLength(toFeet(length));
+      setWidth(toFeet(width));
+      setUnit("ft");
+    } else {
+      setLength(toMeters(length));
+      setWidth(toMeters(width));
+      setUnit("m");
+    }
+  }
 
   return (
     <section className="py-16 md:py-24 bg-stone-50">
@@ -57,33 +86,43 @@ export default function Calculator() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={toggleUnit}
+                className="flex items-center gap-2 bg-stone-100 rounded-lg p-1 text-sm font-medium"
+              >
+                <span className={`px-3 py-1 rounded-md transition-colors ${unit === "m" ? "bg-white text-stone-800 shadow-sm" : "text-stone-500"}`}>m</span>
+                <span className={`px-3 py-1 rounded-md transition-colors ${unit === "ft" ? "bg-white text-stone-800 shadow-sm" : "text-stone-500"}`}>ft</span>
+              </button>
+            </div>
+
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">{t("length")}</label>
+                <label className="block text-sm font-medium text-stone-700 mb-2">{t("length")} ({unitLabel})</label>
                 <input
                   type="range"
-                  min="2"
-                  max="50"
-                  step="0.5"
+                  min={sliderMin}
+                  max={sliderMax}
+                  step={sliderStep}
                   value={length}
                   onChange={(e) => setLength(Number(e.target.value))}
                   className="w-full accent-terracotta"
                 />
-                <span className="text-sm text-stone-500">{length} m</span>
+                <span className="text-sm text-stone-500">{length.toFixed(unit === "m" ? 1 : 0)} {unitLabel}</span>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">{t("width")}</label>
+                <label className="block text-sm font-medium text-stone-700 mb-2">{t("width")} ({unitLabel})</label>
                 <input
                   type="range"
-                  min="1"
-                  max="30"
-                  step="0.5"
+                  min={sliderMin}
+                  max={sliderMax}
+                  step={sliderStep}
                   value={width}
                   onChange={(e) => setWidth(Number(e.target.value))}
                   className="w-full accent-terracotta"
                 />
-                <span className="text-sm text-stone-500">{width} m</span>
+                <span className="text-sm text-stone-500">{width.toFixed(unit === "m" ? 1 : 0)} {unitLabel}</span>
               </div>
 
               <div>
@@ -138,8 +177,8 @@ export default function Calculator() {
             <div className="flex items-center justify-center mb-6">
               <div className="w-32 h-32 rounded-full bg-stone-100 flex items-center justify-center border-2 border-terracotta/20">
                 <div className="text-center">
-                  <span className="text-2xl font-bold text-stone-800">{area.toFixed(1)}</span>
-                  <span className="text-sm text-stone-500 block">m²</span>
+                  <span className="text-2xl font-bold text-stone-800">{areaDisplay.toFixed(1)}</span>
+                  <span className="text-sm text-stone-500 block">{areaUnit}</span>
                 </div>
               </div>
             </div>
