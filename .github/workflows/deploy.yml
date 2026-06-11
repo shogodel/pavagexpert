@@ -44,10 +44,41 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DROPLET_SSH }}
           script: |
-            cd ~/apps/pavagexpert
-            git pull
-            docker compose pull
-            docker compose up -d
+            cd ~/apps
+
+            # Ensure .env exists for pavagexpert
+            if [ ! -f .env ]; then
+              echo "# Admin panel credentials - CHANGE THESE" > .env
+              echo "ADMIN_EMAIL=admin@pave.expert" >> .env
+              echo "ADMIN_PASSWORD=$(openssl rand -base64 12)" >> .env
+            fi
+
+            # Update pavagexpert service in shared compose file
+            python3 -c "
+import re
+with open('docker-compose.yaml') as f:
+    content = f.read()
+new_block = '''  pavagexpert:
+    container_name: pavagexpert
+    image: ghcr.io/shogodel/pavagexpert:latest
+    pull_policy: always
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - DATA_DIR=/data
+    volumes:
+      - jobs_data:/data'''
+pattern = r'  pavagexpert:.*?(?=\n\S|\Z)'
+content = re.sub(pattern, new_block, content, flags=re.DOTALL)
+if 'jobs_data:' not in content:
+    content = content.replace('volumes:\n  pg_data:', 'volumes:\n  pg_data:\n  jobs_data:')
+with open('docker-compose.yaml', 'w') as f:
+    f.write(content)
+"
+
+            docker compose pull pavagexpert
+            docker compose up -d pavagexpert
             docker compose logs --tail 10 pavagexpert
             docker restart swag 2>/dev/null || true
             docker image prune -f
