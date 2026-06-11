@@ -5,8 +5,10 @@ import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
-  const t = useTranslations("contact");
+  const t = useTranslations("get_quote");
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,9 +18,23 @@ export default function ContactPage() {
     description: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("API error");
+      setSubmitted(true);
+    } catch {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   if (submitted) {
@@ -132,11 +148,15 @@ export default function ContactPage() {
                 className="w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
               />
             </div>
+            {error && (
+              <p className="text-red-600 text-sm text-center">{t("error_msg")}</p>
+            )}
             <button
               type="submit"
-              className="w-full bg-terracotta hover:bg-terracotta-dark text-white font-semibold py-3 rounded-lg transition-colors text-lg"
+              disabled={sending}
+              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors text-lg"
             >
-              {t("submit")}
+              {sending ? "..." : t("submit")}
             </button>
           </motion.form>
         </div>

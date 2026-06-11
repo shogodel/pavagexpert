@@ -5,8 +5,8 @@
     "gallery": "Portfolio",
     "calculator": "Calculator",
     "blog": "Blog",
-    "contact": "Contact",
-    "get_quote": "Get a Quote"
+    "get_quote": "Free Quote",
+    "jobs": "Recent Projects"
   },
   "hero": {
     "title": "Montreal's Pavé Uni Experts",
@@ -78,9 +78,21 @@
     "after": "After",
     "view_project": "View Project"
   },
-  "contact": {
-    "title": "Contact Us",
-    "subtitle": "Talk to an expert today",
+  "jobs": {
+    "title": "Projects Board",
+    "subtitle": "Browse recent projects from our clients",
+    "loading": "Loading...",
+    "empty": "No projects yet. Be the first to submit yours!",
+    "project_driveway": "Paved Driveway",
+    "project_patio": "Patio",
+    "project_walkway": "Walkway",
+    "project_retaining": "Retaining Wall",
+    "project_commercial": "Commercial"
+  },
+  "get_quote": {
+    "title": "Get Your Free Quote",
+    "subtitle": "Submit your project and it will appear on our projects board",
+
     "name": "Full name",
     "email": "Email",
     "phone": "Phone",

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 
-const pages = ["home", "services", "gallery", "calculator", "blog", "contact"] as const;
+const pages = ["home", "services", "gallery", "calculator", "blog", "get_quote", "jobs"] as const;
 
 export default function Header() {
   const t = useTranslations("nav");
@@ -45,7 +45,7 @@ export default function Header() {
             </button>
 
             <Link
-              href={`/${locale === "fr" ? "" : "en"}/contact`}
+              href={`/${locale === "fr" ? "" : "en"}/get-quote`}
               className="hidden sm:inline-flex bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
             >
               {t("get_quote")}
@@ -81,7 +81,7 @@ export default function Header() {
                 </Link>
               ))}
               <Link
-                href={`/${locale === "fr" ? "" : "en"}/contact`}
+                href={`/${locale === "fr" ? "" : "en"}/get-quote`}
                 className="bg-terracotta text-white text-center text-sm font-semibold px-5 py-2.5 rounded-lg mt-2"
                 onClick={() => setMenuOpen(false)}
               >

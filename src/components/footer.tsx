@@ -30,7 +30,8 @@ export default function Footer() {
               <Link href="/gallery" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("gallery")}</Link>
               <Link href="/calculator" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("calculator")}</Link>
               <Link href="/blog" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("blog")}</Link>
-              <Link href="/contact" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("contact")}</Link>
+              <Link href="/get-quote" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("get_quote")}</Link>
+              <Link href="/jobs" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("jobs")}</Link>
             </nav>
           </div>
 

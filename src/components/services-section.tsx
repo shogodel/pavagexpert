@@ -58,7 +58,7 @@ export default function ServicesSection() {
           transition={{ duration: 0.4, delay: 0.3 }}
         >
           <Link
-            href="/contact"
+            href="/get-quote"
             className="inline-flex bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg transition-colors"
           >
             {t("cta")}

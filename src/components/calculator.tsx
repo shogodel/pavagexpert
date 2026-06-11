@@ -160,7 +160,7 @@ export default function Calculator() {
             </div>
 
             <Link
-              href="/contact"
+              href="/get-quote"
               className="mt-6 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors block"
             >
               {t("cta_get_quote")}

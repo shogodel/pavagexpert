@@ -5,8 +5,8 @@
     "gallery": "Réalisations",
     "calculator": "Calculateur",
     "blog": "Blog",
-    "contact": "Contact",
-    "get_quote": "Obtenir un devis"
+    "get_quote": "Devis gratuit",
+    "jobs": "Projets récents"
   },
   "hero": {
     "title": "Experts en Pavé Uni à Montréal",
@@ -78,9 +78,21 @@
     "after": "Après",
     "view_project": "Voir le projet"
   },
-  "contact": {
-    "title": "Contactez-nous",
-    "subtitle": "Parlez à un expert dès aujourd'hui",
+  "jobs": {
+    "title": "Projets en cours",
+    "subtitle": "Découvrez les projets récents de nos clients",
+    "loading": "Chargement...",
+    "empty": "Aucun projet pour le moment. Soyez le premier à soumettre le vôtre !",
+    "project_driveway": "Entrée pavée",
+    "project_patio": "Terrasse",
+    "project_walkway": "Sentier",
+    "project_retaining": "Mur de soutènement",
+    "project_commercial": "Commercial"
+  },
+  "get_quote": {
+    "title": "Obtenez votre devis gratuit",
+    "subtitle": "Soumettez votre projet et il sera affiché sur notre tableau de projets",
+
     "name": "Nom complet",
     "email": "Courriel",
     "phone": "Téléphone",

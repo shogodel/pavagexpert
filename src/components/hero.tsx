@@ -41,7 +41,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Link
-              href="/contact"
+              href="/get-quote"
               className="bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg text-center transition-colors text-lg"
             >
               {t("cta_estimate")}

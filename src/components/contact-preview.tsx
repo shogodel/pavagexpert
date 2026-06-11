@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function ContactPreview() {
-  const t = useTranslations("contact");
+  const t = useTranslations("get_quote");
 
   return (
     <section className="py-16 md:py-24 bg-terracotta">
@@ -21,7 +21,7 @@ export default function ContactPreview() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/contact"
+              href="/get-quote"
               className="bg-white text-terracotta hover:bg-stone-100 font-semibold px-8 py-3.5 rounded-lg transition-colors text-lg"
             >
               {t("submit")}
