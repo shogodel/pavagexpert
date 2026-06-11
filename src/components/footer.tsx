@@ -15,9 +15,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xl font-bold text-white">Pavé</span>
-              <span className="text-xl font-light text-terracotta">Expert</span>
+            <div className="mb-4">
+              <img src="/images/logo-white.svg" alt="Pavé Expert" className="h-7 w-auto" />
             </div>
             <p className="text-sm leading-relaxed text-stone-400">{t("description")}</p>
           </div>
