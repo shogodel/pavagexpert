@@ -2,27 +2,40 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { locales, defaultLocale, isLocale } from "./i18n/config";
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+function setLocaleCookie(response: NextResponse, locale: string) {
+  response.cookies.set("NEXT_LOCALE", locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+}
 
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+function findLocale(pathname: string): string | undefined {
+  return locales.find(
+    (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`
   );
+}
 
-  if (pathnameHasLocale) return;
+export function proxy(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+
+  const found = findLocale(pathname);
+
+  if (found) {
+    const response = NextResponse.next();
+    setLocaleCookie(response, found);
+    return response;
+  }
 
   const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
   const locale = cookieLocale && isLocale(cookieLocale) ? cookieLocale : defaultLocale;
 
   const newUrl = new URL(`/${locale}${pathname === "/" ? "" : pathname}`, request.url);
-  newUrl.search = request.nextUrl.search;
+  newUrl.search = search;
 
   const response = NextResponse.redirect(newUrl);
-  response.cookies.set("NEXT_LOCALE", locale, {
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365,
-    sameSite: "lax",
-  });
+  setLocaleCookie(response, locale);
 
   return response;
 }
