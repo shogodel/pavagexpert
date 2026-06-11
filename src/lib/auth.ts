@@ -5,7 +5,7 @@ const secret = new TextEncoder().encode(
 );
 
 export interface AdminPayload {
-  email: string;
+  username: string;
   role: "admin";
 }
 

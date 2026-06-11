@@ -3,16 +3,16 @@ import { signToken } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    const { username, password } = await req.json();
 
     if (
-      email !== process.env.ADMIN_EMAIL ||
+      username !== process.env.ADMIN_USERNAME ||
       password !== process.env.ADMIN_PASSWORD
     ) {
       return NextResponse.json({ ok: false, error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = await signToken({ email, role: "admin" });
+    const token = await signToken({ username, role: "admin" });
 
     const response = NextResponse.json({ ok: true });
     response.cookies.set("admin_token", token, {

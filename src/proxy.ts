@@ -22,7 +22,7 @@ function isAdminPath(pathname: string): boolean {
 }
 
 function isAdminLoginPath(pathname: string): boolean {
-  return pathname === "/admin/login" || locales.some((l) => pathname === `/${l}/admin/login`);
+  return pathname === "/login" || locales.some((l) => pathname === `/${l}/login`);
 }
 
 export async function proxy(request: NextRequest) {
@@ -46,7 +46,7 @@ export async function proxy(request: NextRequest) {
     // Not authenticated — redirect to login (preserve locale)
     const found = findLocale(pathname);
     const prefix = found ? `/${found}` : `/${defaultLocale}`;
-    const loginUrl = new URL(`${prefix}/admin/login`, request.url);
+    const loginUrl = new URL(`${prefix}/login`, request.url);
     loginUrl.search = search;
     return NextResponse.redirect(loginUrl);
   }

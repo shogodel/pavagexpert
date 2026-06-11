@@ -50,7 +50,7 @@ jobs:
             if [ ! -f .env ]; then
               PASSWORD=$(openssl rand -base64 12)
               echo "# Admin panel credentials - CHANGE THESE" > .env
-              echo "ADMIN_EMAIL=admin@pave.expert" >> .env
+              echo "ADMIN_USERNAME=admin" >> .env
               echo "ADMIN_PASSWORD=$PASSWORD" >> .env
               echo ">>> New admin password: $PASSWORD"
             fi

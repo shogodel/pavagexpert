@@ -40,7 +40,7 @@ export default function AdminPage() {
         fetch("/api/admin/leads"),
       ]);
       if (aRes.status === 401 || uRes.status === 401) {
-        router.push("/admin/login");
+        router.push("/login");
         return;
       }
       const aData = await aRes.json();
@@ -58,7 +58,7 @@ export default function AdminPage() {
 
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin/login");
+    router.push("/login");
   }
 
   async function handleAddUser(e: React.FormEvent) {

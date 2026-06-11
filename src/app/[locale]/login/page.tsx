@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AdminLoginPage() {
+export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!res.ok) throw new Error();
@@ -38,19 +38,23 @@ export default function AdminLoginPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-stone-800 rounded-xl p-8 shadow-xl space-y-5"
       >
-        <h1 className="text-2xl font-bold text-white text-center">Admin</h1>
+        <h1 className="text-2xl font-bold text-white text-center">
+          <span className="text-terracotta">Pavé</span> Expert
+        </h1>
+        <p className="text-stone-400 text-sm text-center">Connexion administrateur</p>
 
         {error && (
           <p className="text-red-400 text-sm text-center">Identifiants invalides</p>
         )}
 
         <div>
-          <label className="block text-sm text-stone-400 mb-1">Email</label>
+          <label className="block text-sm text-stone-400 mb-1">Nom d'utilisateur</label>
           <input
-            type="email"
+            type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg bg-stone-700 border border-stone-600 text-white focus:ring-2 focus:ring-terracotta/50 focus:border-terracotta outline-none"
           />
         </div>
@@ -60,6 +64,7 @@ export default function AdminLoginPage() {
           <input
             type="password"
             required
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg bg-stone-700 border border-stone-600 text-white focus:ring-2 focus:ring-terracotta/50 focus:border-terracotta outline-none"
