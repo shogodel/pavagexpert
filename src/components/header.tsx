@@ -34,12 +34,15 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link
-              href={`/${otherLocale}`}
-              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md"
+            <button
+              onClick={() => {
+                document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+                window.location.href = `/${otherLocale}`;
+              }}
+              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer"
             >
               {otherLocale === "fr" ? "FR" : "EN"}
-            </Link>
+            </button>
 
             <Link
               href={`/${locale === "fr" ? "" : "en"}/contact`}

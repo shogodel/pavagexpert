@@ -11,18 +11,20 @@ export function proxy(request: NextRequest) {
 
   if (pathnameHasLocale) return;
 
-  const acceptLang = request.headers.get("accept-language") || "";
-  const preferred = acceptLang
-    .split(",")
-    .map((l) => l.split(";")[0].trim().slice(0, 2))
-    .find((l) => isLocale(l));
-
-  const locale = preferred || defaultLocale;
+  const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
+  const locale = cookieLocale && isLocale(cookieLocale) ? cookieLocale : defaultLocale;
 
   const newUrl = new URL(`/${locale}${pathname === "/" ? "" : pathname}`, request.url);
   newUrl.search = request.nextUrl.search;
 
-  return NextResponse.redirect(newUrl);
+  const response = NextResponse.redirect(newUrl);
+  response.cookies.set("NEXT_LOCALE", locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
+
+  return response;
 }
 
 export const config = {
