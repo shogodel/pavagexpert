@@ -48,4 +48,6 @@ jobs:
             git pull
             docker compose pull
             docker compose up -d
+            docker compose logs --tail 10 pavagexpert
+            docker restart swag 2>/dev/null || true
             docker image prune -f
