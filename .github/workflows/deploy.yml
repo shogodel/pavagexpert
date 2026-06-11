@@ -56,28 +56,29 @@ jobs:
             fi
 
             # Update pavagexpert service in shared compose file
-            python3 -c "
-import re
-with open('docker-compose.yaml') as f:
-    content = f.read()
-new_block = '''  pavagexpert:
-    container_name: pavagexpert
-    image: ghcr.io/shogodel/pavagexpert:latest
-    pull_policy: always
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - NODE_ENV=production
-      - DATA_DIR=/data
-    volumes:
-      - jobs_data:/data'''
-pattern = r'  pavagexpert:.*?(?=\n\S|\Z)'
-content = re.sub(pattern, new_block, content, flags=re.DOTALL)
-if 'jobs_data:' not in content:
-    content = content.replace('volumes:\n  pg_data:', 'volumes:\n  pg_data:\n  jobs_data:')
-with open('docker-compose.yaml', 'w') as f:
-    f.write(content)
-"
+            awk '
+            /^  pavagexpert:/ {
+              print "  pavagexpert:"
+              print "    container_name: pavagexpert"
+              print "    image: ghcr.io/shogodel/pavagexpert:latest"
+              print "    pull_policy: always"
+              print "    restart: unless-stopped"
+              print "    env_file: .env"
+              print "    environment:"
+              print "      - NODE_ENV=production"
+              print "      - DATA_DIR=/data"
+              print "    volumes:"
+              print "      - jobs_data:/data"
+              skip = 1
+              next
+            }
+            skip && /^[a-z]/ { skip = 0 }
+            skip { next }
+            { print }
+            ' docker-compose.yaml > /tmp/compose.tmp && mv /tmp/compose.tmp docker-compose.yaml
+
+            # Add jobs_data volume if missing
+            grep -q "jobs_data:" docker-compose.yaml || sed -i '/^volumes:/a\  jobs_data:' docker-compose.yaml
 
             docker compose pull pavagexpert
             docker compose up -d pavagexpert
