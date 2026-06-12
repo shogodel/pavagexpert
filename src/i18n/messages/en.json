@@ -10,8 +10,9 @@
     "login": "Login"
   },
   "hero": {
-    "title": "Montreal's Pavé Uni Experts",
-    "cta_estimate": "Free Estimate",
+    "title": "Your driveway deserves better. Turn it into a masterpiece.",
+    "subtitle": "Protect your biggest investment with paving that lasts. Certified contractors compete for your project.",
+    "cta_estimate": "Get my personalized quote",
     "trust_badge_1": "Professional installation",
     "trust_badge_2": "5-year warranty",
     "trust_badge_3": "Turnkey service"

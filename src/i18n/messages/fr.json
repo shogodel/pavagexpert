@@ -10,8 +10,9 @@
     "login": "Connexion"
   },
   "hero": {
-    "title": "Experts en Pavé Uni à Montréal",
-    "cta_estimate": "Estimation gratuite",
+    "title": "Votre entrée mérite mieux. Transformez-la en chef-d'œuvre.",
+    "subtitle": "Protégez votre plus grand investissement avec un pavage qui dure. Des entrepreneurs certifiés se disputent votre projet.",
+    "cta_estimate": "Obtenez mon devis personnalisé",
     "trust_badge_1": "Installation professionnelle",
     "trust_badge_2": "Garantie 5 ans",
     "trust_badge_3": "Service clé en main"
