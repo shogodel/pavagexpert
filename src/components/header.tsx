@@ -37,7 +37,7 @@ export default function Header() {
             {pages.map((page) => (
               <Link
                 key={page}
-                href={`/${locale}/${page}`}
+                href={page === "home" ? `/${locale}` : `/${locale}/${page}`}
                 className={`text-sm font-medium uppercase tracking-wider transition-colors ${
                   isActive(page)
                     ? "text-terracotta"
@@ -88,7 +88,7 @@ export default function Header() {
               {pages.map((page) => (
                 <Link
                   key={page}
-                  href={`/${locale}/${page}`}
+                  href={page === "home" ? `/${locale}` : `/${locale}/${page}`}
                   className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${
                     isActive(page)
                       ? "text-terracotta"
