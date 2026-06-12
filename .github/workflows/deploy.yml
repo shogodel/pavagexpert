@@ -58,6 +58,12 @@ jobs:
               echo "ADMIN_PASSWORD=P@55word" >> .env
               echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
             else
+              # Ensure ADMIN_USERNAME is set
+              if grep -q "^ADMIN_USERNAME=" .env; then
+                sed -i 's/^ADMIN_USERNAME=.*/ADMIN_USERNAME=admin/' .env
+              else
+                echo "ADMIN_USERNAME=admin" >> .env
+              fi
               # Ensure ADMIN_PASSWORD is P@55word
               if grep -q "^ADMIN_PASSWORD=" .env; then
                 sed -i 's/^ADMIN_PASSWORD=.*/ADMIN_PASSWORD=P@55word/' .env
