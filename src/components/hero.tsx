@@ -46,12 +46,6 @@ export default function Hero() {
             >
               {t("cta_estimate")}
             </Link>
-            <Link
-              href="/gallery"
-              className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-3.5 rounded-lg text-center transition-colors text-lg"
-            >
-              {t("cta_gallery")}
-            </Link>
           </motion.div>
 
           <motion.div
