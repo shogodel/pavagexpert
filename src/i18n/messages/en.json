@@ -106,7 +106,23 @@
     "success_title": "Congratulations!",
     "success_msg": "Your project has been published. Certified contractors will contact you within 24h.",
     "error_msg": "An error occurred. Please try again.",
-    "privacy": "Your information is confidential. No cold calling."
+    "privacy": "Your information is confidential. No cold calling.",
+    "guarantee": "Free quote • No obligation • Verified contractors"
+  },
+  "social_proof": {
+    "projects": "active projects",
+    "area": "Surface paved",
+    "satisfaction": "Satisfaction rate"
+  },
+  "how_it_works": {
+    "title": "How It Works",
+    "subtitle": "Three simple steps to turn your project into reality",
+    "step1_title": "1. Tell us about your project",
+    "step1_desc": "Describe your space in minutes. Photos, video, dimensions — the more you share, the more accurate the offers.",
+    "step2_title": "2. Receive offers",
+    "step2_desc": "Certified contractors review your project and submit their best estimate. You compare with peace of mind.",
+    "step3_title": "3. Choose with confidence",
+    "step3_desc": "Browse profiles, compare quotes, and pick the contractor that's right for you. No pressure, no obligation."
   },
   "blog": {
     "title": "Blog & Tips",

@@ -177,6 +177,10 @@ export default function GetQuoteForm() {
               {sending ? "..." : t("submit")}
             </button>
 
+            <p className="text-xs text-green-700 font-medium text-center">
+              {t("guarantee")}
+            </p>
+
             <p className="text-xs text-stone-400 text-center">
               {t("privacy")}
             </p>

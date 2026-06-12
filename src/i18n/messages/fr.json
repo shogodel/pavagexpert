@@ -106,7 +106,23 @@
     "success_title": "Félicitations !",
     "success_msg": "Votre projet a été publié. Des entrepreneurs certifiés vous contacteront sous 24h.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
-    "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage."
+    "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage.",
+    "guarantee": "Devis gratuit • Aucune obligation • Entrepreneurs vérifiés"
+  },
+  "social_proof": {
+    "projects": "projets en cours",
+    "area": "Surface pavée",
+    "satisfaction": "Taux de satisfaction"
+  },
+  "how_it_works": {
+    "title": "Comment ça marche",
+    "subtitle": "Trois étapes simples pour transformer votre projet en réalité",
+    "step1_title": "1. Racontez votre projet",
+    "step1_desc": "Décrivez votre espace en quelques minutes. Photos, vidéo, dimensions — plus vous en dites, plus les offres seront précises.",
+    "step2_title": "2. Recevez des offres",
+    "step2_desc": "Des entrepreneurs certifiés analysent votre projet et vous soumettent leur meilleure estimation. Vous comparez en toute tranquillité.",
+    "step3_title": "3. Choisissez en confiance",
+    "step3_desc": "Consultez les profils, comparez les devis et choisissez l'artisan qui vous convient. Sans pression, sans engagement."
   },
   "blog": {
     "title": "Blog & Conseils",
