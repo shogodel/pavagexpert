@@ -51,30 +51,17 @@ jobs:
             set -e
             cd ~/apps
 
-            # Ensure .env exists for pavagexpert
+            # FORCE a clean .env — strip any ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL
+            # and rewrite them fresh. This avoids sed issues with CRLF/spaces/empty values.
             if [ ! -f .env ]; then
-              echo "# Pavagexpert configuration" > .env
-              echo "ADMIN_USERNAME=admin" >> .env
-              echo "ADMIN_PASSWORD=P@55word" >> .env
-              echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
-            else
-              # Ensure ADMIN_USERNAME is set
-              if grep -q "^ADMIN_USERNAME=" .env; then
-                sed -i 's/^ADMIN_USERNAME=.*/ADMIN_USERNAME=admin/' .env
-              else
-                echo "ADMIN_USERNAME=admin" >> .env
-              fi
-              # Ensure ADMIN_PASSWORD is P@55word
-              if grep -q "^ADMIN_PASSWORD=" .env; then
-                sed -i 's/^ADMIN_PASSWORD=.*/ADMIN_PASSWORD=P@55word/' .env
-              else
-                echo "ADMIN_PASSWORD=P@55word" >> .env
-              fi
-              # Ensure JWT_SECRET exists
-              if ! grep -q "^JWT_SECRET=" .env; then
-                echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
-              fi
+              touch .env
             fi
+            # Remove any existing ADMIN_* lines and JWT_SECRET, then append clean values
+            grep -v '^ADMIN_USERNAME=' .env | grep -v '^ADMIN_PASSWORD=' | grep -v '^ADMIN_EMAIL=' | grep -v '^JWT_SECRET=' > /tmp/env.clean
+            echo "ADMIN_USERNAME=admin" >> /tmp/env.clean
+            echo "ADMIN_PASSWORD=P@55word" >> /tmp/env.clean
+            echo "JWT_SECRET=$(openssl rand -base64 32)" >> /tmp/env.clean
+            mv /tmp/env.clean .env
 
             # Ensure jobs_data volume exists
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
