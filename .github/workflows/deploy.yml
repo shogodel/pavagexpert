@@ -51,17 +51,14 @@ jobs:
             set -e
             cd ~/apps
 
-            # FORCE a clean .env — strip any ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL
-            # and rewrite them fresh. This avoids sed issues with CRLF/spaces/empty values.
-            if [ ! -f .env ]; then
-              touch .env
-            fi
-            # Remove any existing ADMIN_* lines and JWT_SECRET, then append clean values
-            grep -v '^ADMIN_USERNAME=' .env | grep -v '^ADMIN_PASSWORD=' | grep -v '^ADMIN_EMAIL=' | grep -v '^JWT_SECRET=' > /tmp/env.clean
-            echo "ADMIN_USERNAME=admin" >> /tmp/env.clean
-            echo "ADMIN_PASSWORD=P@55word" >> /tmp/env.clean
-            echo "JWT_SECRET=$(openssl rand -base64 32)" >> /tmp/env.clean
-            mv /tmp/env.clean .env
+            # Write a BRAND NEW .env — no CRLF, no spaces, no garbage from old files.
+            # This is the only way to guarantee clean values.
+            cat > .env << 'ENVEOF'
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=P@55word
+JWT_SECRET=__JWT_SECRET__
+ENVEOF
+            sed -i "s/__JWT_SECRET__/$(openssl rand -base64 32)/" .env
 
             # Ensure jobs_data volume exists
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
@@ -103,25 +100,10 @@ jobs:
             # Log in to ghcr.io with GITHUB_TOKEN so we can pull the private package
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
-            # Pull latest image and recreate container
+            # Pull latest image and recreate container.
+            # The entrypoint.sh seeds auth.json from env on first start.
+            # auth-store.ts falls back to admin/admin if everything else fails.
             docker compose pull pavagexpert
-
-            # Seed auth.json with P@55word directly in the Docker volume.
-            # This guarantees the admin password is correct regardless of env_file resolution.
-            echo ">>> Seeding auth.json with P@55word..."
-            docker run --rm \
-              -v jobs_data:/data \
-              ghcr.io/shogodel/pavagexpert:latest \
-              node -e "
-                const fs = require('fs');
-                const bcrypt = require('bcryptjs');
-                fs.writeFileSync('/data/auth.json', JSON.stringify({
-                  admin: { username: 'admin', passwordHash: bcrypt.hashSync('P@55word', 10) },
-                  contractors: [],
-                }, null, 2));
-                console.log('auth.json created with P@55word');
-              " || echo ">>> Seeding failed (non-fatal, entrypoint will handle it)"
-
             docker compose up -d pavagexpert --force-recreate
             sleep 3
             docker compose logs --tail 20 pavagexpert
