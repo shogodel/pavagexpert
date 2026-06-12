@@ -112,6 +112,23 @@ jobs:
 
             # Pull latest image and recreate container
             docker compose pull pavagexpert
+
+            # Seed auth.json with P@55word directly in the Docker volume.
+            # This guarantees the admin password is correct regardless of env_file resolution.
+            echo ">>> Seeding auth.json with P@55word..."
+            docker run --rm \
+              -v jobs_data:/data \
+              ghcr.io/shogodel/pavagexpert:latest \
+              node -e "
+                const fs = require('fs');
+                const bcrypt = require('bcryptjs');
+                fs.writeFileSync('/data/auth.json', JSON.stringify({
+                  admin: { username: 'admin', passwordHash: bcrypt.hashSync('P@55word', 10) },
+                  contractors: [],
+                }, null, 2));
+                console.log('auth.json created with P@55word');
+              " || echo ">>> Seeding failed (non-fatal, entrypoint will handle it)"
+
             docker compose up -d pavagexpert --force-recreate
             sleep 3
             docker compose logs --tail 20 pavagexpert
