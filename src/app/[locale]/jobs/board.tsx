@@ -16,13 +16,23 @@ export default function JobsBoard() {
   const locale = useLocale();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filterPostal, setFilterPostal] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
-  useEffect(() => {
-    fetch("/api/jobs")
+  const fetchJobs = () => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (filterPostal) params.set("postalCode", filterPostal);
+    if (filterStatus) params.set("status", filterStatus);
+    fetch(`/api/jobs?${params.toString()}`)
       .then((r) => r.json())
       .then(setJobs)
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, [filterPostal, filterStatus]);
 
   return (
     <div className="min-h-[80vh] bg-stone-50">
@@ -35,6 +45,26 @@ export default function JobsBoard() {
 
       <section className="py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-3 mb-6">
+            <input
+              type="text"
+              placeholder={t("filter_postal")}
+              value={filterPostal}
+              onChange={(e) => setFilterPostal(e.target.value)}
+              className="flex-1 min-w-[160px] px-4 py-2 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-4 py-2 rounded-lg border border-stone-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="">{t("filter_status_all")}</option>
+              <option value="new">{statusLabels.new[locale as "fr" | "en"]}</option>
+              <option value="in_progress">{statusLabels.in_progress[locale as "fr" | "en"]}</option>
+              <option value="completed">{statusLabels.completed[locale as "fr" | "en"]}</option>
+            </select>
+          </div>
+
           {loading ? (
             <p className="text-center text-stone-600">{t("loading")}</p>
           ) : jobs.length === 0 ? (

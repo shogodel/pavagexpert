@@ -82,7 +82,9 @@
     "subtitle": "Découvrez les projets récents de nos clients",
     "loading": "Chargement...",
     "empty": "Aucun projet pour le moment. Soyez le premier à soumettre le vôtre !",
-    "postal": "Code postal :"
+    "postal": "Code postal :",
+    "filter_postal": "Filtrer par code postal...",
+    "filter_status_all": "Tous les statuts"
   },
   "get_quote": {
     "title": "Obtenez votre devis gratuit",

@@ -82,7 +82,9 @@
     "subtitle": "Browse recent projects from our clients",
     "loading": "Loading...",
     "empty": "No projects yet. Be the first to submit yours!",
-    "postal": "Postal code:"
+    "postal": "Postal code:",
+    "filter_postal": "Filter by postal code...",
+    "filter_status_all": "All statuses"
   },
   "get_quote": {
     "title": "Get Your Free Quote",
