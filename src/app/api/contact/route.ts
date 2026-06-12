@@ -5,10 +5,10 @@ function validate(data: Record<string, unknown>) {
   const errors: string[] = [];
   if (!data.name || typeof data.name !== "string" || data.name.trim().length < 2)
     errors.push("name");
-  if (!data.email || typeof data.email !== "string" || !data.email.includes("@"))
-    errors.push("email");
   if (!data.phone || typeof data.phone !== "string" || data.phone.trim().length < 6)
     errors.push("phone");
+  if (!data.description || typeof data.description !== "string" || data.description.trim().length < 10)
+    errors.push("description");
   return errors;
 }
 
@@ -20,13 +20,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, errors }, { status: 400 });
     }
 
-    const job = addJob({
+    addJob({
       name: body.name,
-      email: body.email,
+      postalCode: body.postalCode || "",
       phone: body.phone,
-      address: body.address || "",
-      projectType: body.projectType || "",
-      description: body.description || "",
+      description: body.description,
     });
 
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
@@ -39,18 +37,16 @@ export async function POST(req: NextRequest) {
       });
       await transporter.sendMail({
         from: `"${body.name}" <${process.env.SMTP_FROM}>`,
-        replyTo: body.email,
+        replyTo: process.env.SMTP_FROM,
         to: process.env.SMTP_TO,
-        subject: `Nouveau devis - ${body.projectType || "Général"}`,
+        subject: "Nouveau devis - Pavagexpert",
         html: `
           <h2>Nouvelle demande de devis</h2>
           <table>
             <tr><td><strong>Nom</strong></td><td>${body.name}</td></tr>
-            <tr><td><strong>Courriel</strong></td><td>${body.email}</td></tr>
             <tr><td><strong>Téléphone</strong></td><td>${body.phone}</td></tr>
-            <tr><td><strong>Adresse</strong></td><td>${body.address || "—"}</td></tr>
-            <tr><td><strong>Type de projet</strong></td><td>${body.projectType || "—"}</td></tr>
-            <tr><td><strong>Description</strong></td><td>${body.description || "—"}</td></tr>
+            <tr><td><strong>Code postal</strong></td><td>${body.postalCode || "—"}</td></tr>
+            <tr><td><strong>Description</strong></td><td>${body.description}</td></tr>
           </table>
         `.trim(),
       });

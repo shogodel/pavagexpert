@@ -6,7 +6,8 @@
     "calculator": "Calculateur",
     "blog": "Blog",
     "get_quote": "Devis gratuit",
-    "jobs": "Projets récents"
+    "jobs": "Projets récents",
+    "login": "Connexion"
   },
   "hero": {
     "title": "Experts en Pavé Uni à Montréal",
@@ -81,30 +82,26 @@
     "subtitle": "Découvrez les projets récents de nos clients",
     "loading": "Chargement...",
     "empty": "Aucun projet pour le moment. Soyez le premier à soumettre le vôtre !",
-    "project_driveway": "Entrée pavée",
-    "project_patio": "Terrasse",
-    "project_walkway": "Sentier",
-    "project_retaining": "Mur de soutènement",
-    "project_commercial": "Commercial"
+    "postal": "Code postal :"
   },
   "get_quote": {
     "title": "Obtenez votre devis gratuit",
-    "subtitle": "Soumettez votre projet et il sera affiché sur notre tableau de projets",
+    "subtitle": "Décrivez votre projet en quelques mots",
 
     "name": "Nom complet",
-    "email": "Courriel",
+    "postal_code": "Code postal",
     "phone": "Téléphone",
-    "address": "Adresse du projet",
-    "project_type": "Type de projet",
-    "project_desc": "Description du projet",
-    "photos": "Photos (optionnel)",
+    "photos": "Photos du projet",
+    "photos_hint": "Ajoutez au moins 10 photos (obligatoire). Plus vous en mettez, plus l'estimation sera précise.",
+    "video": "Vidéo du projet (optionnel)",
+    "video_hint": "Une courte vidéo de votre espace peut nous aider à mieux comprendre votre projet.",
+    "project_desc": "Description détaillée",
+    "desc_hint": "Décrivez votre projet en détail : dimensions, type de surface, état actuel, vos idées. Plus vous êtes précis, plus notre devis sera juste.",
+    "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
     "submit": "Envoyer ma demande",
     "success_title": "Merci !",
     "success_msg": "Un expert vous contactera sous 24h.",
-    "error_msg": "Une erreur est survenue. Veuillez réessayer.",
-    "phone_label": "Ou appelez-nous",
-    "phone_number": "(514) 555-1234",
-    "areas": "Nous desservons le Grand Montréal"
+    "error_msg": "Une erreur est survenue. Veuillez réessayer."
   },
   "blog": {
     "title": "Blog & Conseils",

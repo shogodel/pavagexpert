@@ -34,8 +34,6 @@ export default function ContactPreview() {
               {CONTACT_PHONE}
             </a>
           </div>
-
-          <p className="mt-6 text-sm text-white/60">{t("areas")}</p>
         </motion.div>
       </div>
     </section>

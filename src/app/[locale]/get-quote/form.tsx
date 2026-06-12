@@ -11,10 +11,8 @@ export default function GetQuoteForm() {
   const [error, setError] = useState(false);
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    postalCode: "",
     phone: "",
-    address: "",
-    projectType: "",
     description: "",
   });
 
@@ -59,7 +57,7 @@ export default function GetQuoteForm() {
   }
 
   return (
-    <div className="min-h-[80vh] bg-stone-50">
+    <div className="min-h-screen bg-stone-50">
       <div className="pt-24 pb-8 bg-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-stone-800">{t("title")}</h1>
@@ -68,93 +66,103 @@ export default function GetQuoteForm() {
       </div>
 
       <section className="py-12 md:py-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.form
             onSubmit={handleSubmit}
-            className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-stone-200 space-y-5"
+            className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-stone-200 space-y-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">{t("name")}</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("name")} <span className="text-red-500">*</span>
+              </label>
               <input
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                placeholder="Jean Tremblay"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1">{t("email")}</label>
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1">{t("phone")}</label>
-                <input
-                  type="tel"
-                  required
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-            </div>
+
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">{t("address")}</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("postal_code")} <span className="text-red-500">*</span>
+              </label>
               <input
-                value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-                className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors"
+                required
+                value={form.postalCode}
+                onChange={(e) => setForm({ ...form, postalCode: e.target.value })}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                placeholder="H3Z 2Y7"
               />
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">{t("project_type")}</label>
-              <select
-                value={form.projectType}
-                onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-                className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors bg-white"
-              >
-                <option value="">{t("project_type")}</option>
-                <option value="driveway">Pavé Uni - Entrée / Driveway</option>
-                <option value="patio">Pavé Uni - Terrasse / Patio</option>
-                <option value="walkway">Pavé Uni - Sentier / Walkway</option>
-                <option value="retaining">Pavé Uni - Mur / Wall</option>
-                <option value="commercial">Pavé Uni - Commercial</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">{t("project_desc")}</label>
-              <textarea
-                rows={4}
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors resize-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">{t("photos")}</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("phone")} <span className="text-red-500">*</span>
+              </label>
               <input
+                type="tel"
+                required
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                placeholder="(514) 555-1234"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("photos")} <span className="text-red-500">*</span>
+              </label>
+              <p className="text-xs text-stone-400 mb-2">{t("photos_hint")}</p>
+              <input
+                required
                 type="file"
                 multiple
                 accept="image/*"
-                className="w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
+                className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("video")}
+              </label>
+              <p className="text-xs text-stone-400 mb-2">{t("video_hint")}</p>
+              <input
+                type="file"
+                accept="video/*"
+                className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("project_desc")} <span className="text-red-500">*</span>
+              </label>
+              <p className="text-xs text-stone-400 mb-2">{t("desc_hint")}</p>
+              <textarea
+                required
+                rows={6}
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors resize-none text-base"
+                placeholder={t("desc_placeholder")}
+              />
+            </div>
+
             {error && (
               <p className="text-red-600 text-sm text-center">{t("error_msg")}</p>
             )}
+
             <button
               type="submit"
               disabled={sending}
-              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors text-lg"
+              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-lg transition-colors text-lg"
             >
               {sending ? "..." : t("submit")}
             </button>

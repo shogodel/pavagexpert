@@ -6,10 +6,8 @@ export type JobStatus = "new" | "in_progress" | "completed";
 export interface Job {
   id: string;
   name: string;
-  email: string;
+  postalCode: string;
   phone: string;
-  address: string;
-  projectType: string;
   description: string;
   status: JobStatus;
   createdAt: string;

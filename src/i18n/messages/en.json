@@ -6,7 +6,8 @@
     "calculator": "Calculator",
     "blog": "Blog",
     "get_quote": "Free Quote",
-    "jobs": "Recent Projects"
+    "jobs": "Recent Projects",
+    "login": "Login"
   },
   "hero": {
     "title": "Montreal's Pavé Uni Experts",
@@ -81,30 +82,26 @@
     "subtitle": "Browse recent projects from our clients",
     "loading": "Loading...",
     "empty": "No projects yet. Be the first to submit yours!",
-    "project_driveway": "Paved Driveway",
-    "project_patio": "Patio",
-    "project_walkway": "Walkway",
-    "project_retaining": "Retaining Wall",
-    "project_commercial": "Commercial"
+    "postal": "Postal code:"
   },
   "get_quote": {
     "title": "Get Your Free Quote",
-    "subtitle": "Submit your project and it will appear on our projects board",
+    "subtitle": "Tell us about your project in a few words",
 
     "name": "Full name",
-    "email": "Email",
+    "postal_code": "Postal code",
     "phone": "Phone",
-    "address": "Project address",
-    "project_type": "Project type",
-    "project_desc": "Project description",
-    "photos": "Photos (optional)",
+    "photos": "Project photos",
+    "photos_hint": "Add at least 10 photos (required). The more you upload, the more accurate your estimate.",
+    "video": "Project video (optional)",
+    "video_hint": "A short video of your space helps us better understand your project.",
+    "project_desc": "Detailed description",
+    "desc_hint": "Describe your project in detail: dimensions, surface type, current condition, your ideas. The more precise you are, the more accurate your quote.",
+    "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
     "submit": "Send request",
     "success_title": "Thank you!",
     "success_msg": "An expert will contact you within 24h.",
-    "error_msg": "An error occurred. Please try again.",
-    "phone_label": "Or call us",
-    "phone_number": "(514) 555-1234",
-    "areas": "Serving Greater Montreal"
+    "error_msg": "An error occurred. Please try again."
   },
   "blog": {
     "title": "Blog & Tips",

@@ -79,7 +79,7 @@ export function getAnalytics() {
   const dailyCount: Record<string, number> = {};
 
   for (const job of jobs) {
-    const type = job.projectType || "other";
+    const type = "other";
     projectTypeCount[type] = (projectTypeCount[type] || 0) + 1;
 
     statusCount[job.status] = (statusCount[job.status] || 0) + 1;
