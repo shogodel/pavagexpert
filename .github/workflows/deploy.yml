@@ -77,6 +77,11 @@ jobs:
               print "      - ADMIN_USERNAME=" admin_user
               print "      - ADMIN_PASSWORD=" admin_pass
               print "      - JWT_SECRET=" jwt_secret
+              print "    logging:"
+              print "      driver: json-file"
+              print "      options:"
+              print "        max-size: \"10m\""
+              print "        max-file: \"3\""
               print "    volumes:"
               print "      - jobs_data:/data"
               skip = 1

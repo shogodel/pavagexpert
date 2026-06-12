@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addJob } from "@/lib/job-store";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 function validate(data: Record<string, unknown>) {
   const errors: string[] = [];
@@ -14,6 +15,15 @@ function validate(data: Record<string, unknown>) {
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
+    const { allowed, remaining } = checkRateLimit(ip);
+    if (!allowed) {
+      return NextResponse.json(
+        { ok: false, error: "Trop de demandes. Réessayez dans une heure." },
+        { status: 429, headers: { "Retry-After": "3600", "X-RateLimit-Remaining": "0" } }
+      );
+    }
+
     const body = await req.json();
     const errors = validate(body);
     if (errors.length > 0) {

@@ -25,12 +25,15 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-RUN apk add --no-cache su-exec
+RUN apk add --no-cache su-exec curl
 
 COPY --chmod=755 entrypoint.sh ./
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
 
 CMD ["./entrypoint.sh"]
