@@ -66,7 +66,20 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-stone-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-stone-800 mt-8 pt-8 pb-8 mb-8 border-b border-stone-800">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-white font-semibold text-lg">{t("exit_title")}</p>
+            <p className="text-stone-400 text-sm mt-1">{t("exit_desc")}</p>
+            <Link
+              href="/get-quote"
+              className="inline-block mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-sm transition-colors"
+            >
+              {t("exit_cta")}
+            </Link>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-stone-500">
             &copy; {new Date().getFullYear()} Pavagexpert. {t("rights")}
           </p>

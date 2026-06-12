@@ -132,6 +132,9 @@
   },
   "footer": {
     "description": "Spécialiste en pavé uni dans le Grand Montréal depuis 2009. Installation professionnelle, service clé en main.",
+    "exit_title": "Vous hésitez encore ?",
+    "exit_desc": "Chaque jour sans devis, c'est un jour de plus avec une entrée qui vieillit.",
+    "exit_cta": "Obtenez mon estimation personnalisée",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",

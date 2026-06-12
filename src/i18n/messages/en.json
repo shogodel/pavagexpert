@@ -132,6 +132,9 @@
   },
   "footer": {
     "description": "Montreal's paver specialist since 2009. Professional installation, turnkey service.",
+    "exit_title": "Still hesitating?",
+    "exit_desc": "Every day without a quote is another day your driveway keeps aging.",
+    "exit_cta": "Get my personalized estimate",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",
