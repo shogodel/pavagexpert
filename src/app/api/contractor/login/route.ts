@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signToken } from "@/lib/auth";
-import { verifyAdmin } from "@/lib/auth-store";
+import { verifyContractorPassword } from "@/lib/auth-store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,13 +8,13 @@ export async function POST(req: NextRequest) {
     if (!username || !password) {
       return NextResponse.json({ ok: false }, { status: 400 });
     }
-    const valid = await verifyAdmin(username, password);
-    if (!valid) {
+    const contractor = await verifyContractorPassword(username, password);
+    if (!contractor) {
       return NextResponse.json({ ok: false }, { status: 401 });
     }
-    const token = await signToken({ sub: username, role: "admin" });
-    const res = NextResponse.json({ ok: true });
-    res.cookies.set("admin_token", token, {
+    const token = await signToken({ sub: contractor.id, role: "contractor" });
+    const res = NextResponse.json({ ok: true, data: contractor });
+    res.cookies.set("contractor_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

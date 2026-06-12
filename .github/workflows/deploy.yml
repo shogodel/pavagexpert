@@ -53,11 +53,21 @@ jobs:
 
             # Ensure .env exists for pavagexpert
             if [ ! -f .env ]; then
-              PASSWORD=$(openssl rand -base64 12)
-              echo "# Admin panel credentials - CHANGE THESE" > .env
+              echo "# Pavagexpert configuration" > .env
               echo "ADMIN_USERNAME=admin" >> .env
-              echo "ADMIN_PASSWORD=$PASSWORD" >> .env
-              echo ">>> New admin password: $PASSWORD"
+              echo "ADMIN_PASSWORD=P@55word" >> .env
+              echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
+            else
+              # Ensure ADMIN_PASSWORD is P@55word
+              if grep -q "^ADMIN_PASSWORD=" .env; then
+                sed -i 's/^ADMIN_PASSWORD=.*/ADMIN_PASSWORD=P@55word/' .env
+              else
+                echo "ADMIN_PASSWORD=P@55word" >> .env
+              fi
+              # Ensure JWT_SECRET exists
+              if ! grep -q "^JWT_SECRET=" .env; then
+                echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
+              fi
             fi
 
             # Ensure jobs_data volume exists

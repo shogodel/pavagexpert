@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function ContractorLoginForm() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,15 +16,14 @@ export default function LoginForm() {
     setError(false);
 
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await fetch("/api/contractor/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-
-      if (!res.ok) throw new Error();
-
-      router.push("/admin");
+      const data = await res.json();
+      if (!data.ok) throw new Error();
+      router.push("/contractor/dashboard");
     } catch {
       setError(true);
     } finally {
@@ -33,48 +32,45 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-900 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-stone-800 rounded-xl p-8 shadow-xl space-y-5"
+        className="w-full max-w-sm bg-white rounded-xl p-8 shadow-xl space-y-5"
       >
-        <div className="flex justify-center mb-2">
-          <img src="/images/logo-white.svg" alt="Pavagexpert" className="h-8 w-auto" />
-        </div>
-        <p className="text-stone-400 text-sm text-center">Espace entrepreneur</p>
+        <h1 className="text-2xl font-bold text-center">Espace entrepreneur</h1>
 
         {error && (
-          <p className="text-red-400 text-sm text-center">Identifiants invalides</p>
+          <p className="text-red-600 text-sm text-center">Identifiants invalides</p>
         )}
 
         <div>
-          <label className="block text-sm text-stone-400 mb-1">Nom d&apos;utilisateur</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Nom d&apos;utilisateur</label>
           <input
             type="text"
             required
             autoComplete="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg bg-stone-700 border border-stone-600 text-white focus:ring-2 focus:ring-terracotta/50 focus:border-terracotta outline-none"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-stone-400 mb-1">Mot de passe</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
           <input
             type="password"
             required
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg bg-stone-700 border border-stone-600 text-white focus:ring-2 focus:ring-terracotta/50 focus:border-terracotta outline-none"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition-colors"
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition-colors"
         >
           {loading ? "..." : "Se connecter"}
         </button>
