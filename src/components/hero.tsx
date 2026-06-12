@@ -25,20 +25,11 @@ export default function Hero() {
             {t("title")}
           </motion.h1>
 
-          <motion.p
-            className="mt-6 text-lg sm:text-xl text-stone-200 leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            {t("subtitle")}
-          </motion.p>
-
           <motion.div
             className="mt-8 flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
           >
             <Link
               href="/get-quote"
