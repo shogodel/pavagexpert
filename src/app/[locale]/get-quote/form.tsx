@@ -15,16 +15,22 @@ export default function GetQuoteForm() {
     phone: "",
     description: "",
   });
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
     setError(false);
     try {
+      const fd = new FormData();
+      fd.set("name", form.name);
+      fd.set("phone", form.phone);
+      fd.set("postalCode", form.postalCode);
+      fd.set("description", form.description);
+      for (const f of photoFiles) fd.append("photos", f);
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: fd,
       });
       if (!res.ok) throw new Error("API error");
       setSubmitted(true);
@@ -124,8 +130,12 @@ export default function GetQuoteForm() {
                 type="file"
                 multiple
                 accept="image/*"
+                onChange={(e) => setPhotoFiles(Array.from(e.target.files || []))}
                 className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
               />
+              {photoFiles.length > 0 && (
+                <p className="text-xs text-stone-400 mt-1">{photoFiles.length} fichier(s) sélectionné(s)</p>
+              )}
             </div>
 
             <div>
