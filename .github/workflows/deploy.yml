@@ -74,7 +74,10 @@ jobs:
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
 
             # Update pavagexpert service in shared compose file
-            awk '
+            # Source the .env so we can inject vars into the compose environment section
+            set -a; . .env; set +a
+
+            awk -v admin_user="$ADMIN_USERNAME" -v admin_pass="$ADMIN_PASSWORD" -v jwt_secret="$JWT_SECRET" '
             /^  pavagexpert:/ {
               print "  pavagexpert:"
               print "    container_name: pavagexpert"
@@ -85,6 +88,9 @@ jobs:
               print "    environment:"
               print "      - NODE_ENV=production"
               print "      - DATA_DIR=/data"
+              print "      - ADMIN_USERNAME=" admin_user
+              print "      - ADMIN_PASSWORD=" admin_pass
+              print "      - JWT_SECRET=" jwt_secret
               print "    volumes:"
               print "      - jobs_data:/data"
               skip = 1
