@@ -41,7 +41,7 @@ export default function LoginForm() {
         <div className="flex justify-center mb-2">
           <img src="/images/logo-white.svg" alt="Pavagexpert" className="h-8 w-auto" />
         </div>
-        <p className="text-stone-400 text-sm text-center">Connexion administrateur</p>
+        <p className="text-stone-400 text-sm text-center">Espace entrepreneur</p>
 
         {error && (
           <p className="text-red-400 text-sm text-center">Identifiants invalides</p>
