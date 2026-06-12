@@ -4,24 +4,22 @@ set -e
 mkdir -p /data
 chown nextjs:nodejs /data
 
-# Seed auth.json from environment on first start.
+# Seed auth.json from environment on first start using Node.js built-in crypto (no bcryptjs dep).
 cd /app
 node -e "
 const fs = require('fs');
+const crypto = require('crypto');
 const p = '/data/auth.json';
 if (!fs.existsSync(p)) {
-  try {
-    const bcrypt = require('bcryptjs');
-    const u = process.env.ADMIN_USERNAME || 'admin';
-    const pw = process.env.ADMIN_PASSWORD || 'admin';
-    fs.writeFileSync(p, JSON.stringify({
-      admin: { username: u, passwordHash: bcrypt.hashSync(pw, 10) },
-      contractors: [],
-    }, null, 2));
-    console.log('[entrypoint] auth.json seeded from env (' + u + ')');
-  } catch (e) {
-    console.error('[entrypoint] seed failed:', e.message);
-  }
+  const salt = crypto.randomBytes(16).toString('hex');
+  const u = process.env.ADMIN_USERNAME || 'admin';
+  const pw = process.env.ADMIN_PASSWORD || 'admin';
+  const hash = crypto.scryptSync(pw, salt, 64).toString('hex');
+  fs.writeFileSync(p, JSON.stringify({
+    admin: { username: u, passwordHash: salt + ':' + hash },
+    contractors: [],
+  }, null, 2));
+  console.log('[entrypoint] auth.json seeded from env (' + u + ')');
 }
 "
 

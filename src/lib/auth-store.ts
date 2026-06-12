@@ -1,9 +1,22 @@
 import fs from "fs";
 import path from "path";
-import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
 const authFile = path.join(dataDir, "auth.json");
+
+function scryptHash(password: string): string {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `${salt}:${hash}`;
+}
+
+function scryptVerify(password: string, stored: string): boolean {
+  const [salt, hash] = stored.split(":");
+  if (!salt || !hash) return false;
+  const verify = crypto.scryptSync(password, salt, 64).toString("hex");
+  return hash === verify;
+}
 
 interface StoredAdmin {
   username: string;
@@ -39,7 +52,7 @@ function readAuth(): AuthData {
     return JSON.parse(fs.readFileSync(authFile, "utf-8"));
   } catch {
     const data: AuthData = {
-      admin: { username: "admin", passwordHash: bcrypt.hashSync("admin", 10) },
+      admin: { username: "admin", passwordHash: scryptHash("admin") },
       contractors: [],
     };
     writeAuth(data);
@@ -54,12 +67,13 @@ function writeAuth(data: AuthData) {
 
 export async function verifyAdmin(username: string, password: string): Promise<boolean> {
   const auth = readAuth();
-  return auth.admin.username === username && bcrypt.compareSync(password, auth.admin.passwordHash);
+  if (auth.admin.username !== username) return false;
+  return scryptVerify(password, auth.admin.passwordHash);
 }
 
 export async function changeAdminPassword(newPassword: string): Promise<void> {
   const auth = readAuth();
-  auth.admin.passwordHash = bcrypt.hashSync(newPassword, 10);
+  auth.admin.passwordHash = scryptHash(newPassword);
   writeAuth(auth);
 }
 
@@ -67,7 +81,7 @@ export async function verifyContractorPassword(username: string, password: strin
   const auth = readAuth();
   const contractor = auth.contractors.find((c) => c.username === username && c.status === "active");
   if (!contractor) return null;
-  if (!bcrypt.compareSync(password, contractor.passwordHash)) return null;
+  if (!scryptVerify(password, contractor.passwordHash)) return null;
   const { passwordHash: _pw, ...safe } = contractor;
   return safe;
 }
@@ -81,7 +95,7 @@ export function addContractor(input: { username: string; password: string; compa
   const contractor: StoredContractor = {
     id: crypto.randomUUID(),
     username: input.username,
-    passwordHash: bcrypt.hashSync(input.password, 10),
+    passwordHash: scryptHash(input.password),
     company: input.company,
     phone: input.phone,
     email: input.email,
@@ -117,7 +131,7 @@ export async function changeContractorPassword(id: string, newPassword: string):
   const auth = readAuth();
   const idx = auth.contractors.findIndex((c) => c.id === id);
   if (idx === -1) return false;
-  auth.contractors[idx] = { ...auth.contractors[idx], passwordHash: bcrypt.hashSync(newPassword, 10) };
+  auth.contractors[idx] = { ...auth.contractors[idx], passwordHash: scryptHash(newPassword) };
   writeAuth(auth);
   return true;
 }
