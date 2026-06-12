@@ -176,6 +176,10 @@ export default function GetQuoteForm() {
             >
               {sending ? "..." : t("submit")}
             </button>
+
+            <p className="text-xs text-stone-400 text-center">
+              {t("privacy")}
+            </p>
           </motion.form>
         </div>
       </section>

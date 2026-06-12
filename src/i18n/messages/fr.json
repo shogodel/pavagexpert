@@ -88,23 +88,24 @@
     "filter_status_all": "Tous les statuts"
   },
   "get_quote": {
-    "title": "Obtenez votre devis gratuit",
-    "subtitle": "Décrivez votre projet en quelques mots",
+    "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",
+    "subtitle": "Racontez-nous votre projet en toute simplicité",
 
     "name": "Nom complet",
     "postal_code": "Code postal",
     "phone": "Téléphone",
     "photos": "Photos du projet",
-    "photos_hint": "Ajoutez au moins 10 photos (obligatoire). Plus vous en mettez, plus l'estimation sera précise.",
+    "photos_hint": "Montrez-nous votre espace. Plus vous en montrez, plus les entrepreneurs seront précis dans leur estimation.",
     "video": "Vidéo du projet (optionnel)",
-    "video_hint": "Une courte vidéo de votre espace peut nous aider à mieux comprendre votre projet.",
+    "video_hint": "Une courte vidéo de votre espace peut aider les entrepreneurs à mieux comprendre votre projet.",
     "project_desc": "Description détaillée",
-    "desc_hint": "Décrivez votre projet en détail : dimensions, type de surface, état actuel, vos idées. Plus vous êtes précis, plus notre devis sera juste.",
+    "desc_hint": "Racontez-nous votre projet : depuis combien de temps l'entrée est fissurée ? Qu'avez-vous imaginé ?",
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
-    "submit": "Envoyer ma demande",
-    "success_title": "Merci !",
-    "success_msg": "Un expert vous contactera sous 24h.",
-    "error_msg": "Une erreur est survenue. Veuillez réessayer."
+    "submit": "Lancer mon projet",
+    "success_title": "Félicitations !",
+    "success_msg": "Votre projet a été publié. Des entrepreneurs certifiés vous contacteront sous 24h.",
+    "error_msg": "Une erreur est survenue. Veuillez réessayer.",
+    "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage."
   },
   "blog": {
     "title": "Blog & Conseils",

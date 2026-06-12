@@ -88,23 +88,24 @@
     "filter_status_all": "All statuses"
   },
   "get_quote": {
-    "title": "Get Your Free Quote",
+    "title": "Describe your project once. Certified contractors compete for your contract.",
     "subtitle": "Tell us about your project in a few words",
 
     "name": "Full name",
     "postal_code": "Postal code",
     "phone": "Phone",
     "photos": "Project photos",
-    "photos_hint": "Add at least 10 photos (required). The more you upload, the more accurate your estimate.",
+    "photos_hint": "Show us your space. The more you show, the more precise contractors will be with their estimate.",
     "video": "Project video (optional)",
-    "video_hint": "A short video of your space helps us better understand your project.",
+    "video_hint": "A short video helps contractors better understand your project.",
     "project_desc": "Detailed description",
-    "desc_hint": "Describe your project in detail: dimensions, surface type, current condition, your ideas. The more precise you are, the more accurate your quote.",
+    "desc_hint": "Tell us your story: how long has your driveway been cracked? What have you imagined?",
     "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
-    "submit": "Send request",
-    "success_title": "Thank you!",
-    "success_msg": "An expert will contact you within 24h.",
-    "error_msg": "An error occurred. Please try again."
+    "submit": "Launch my project",
+    "success_title": "Congratulations!",
+    "success_msg": "Your project has been published. Certified contractors will contact you within 24h.",
+    "error_msg": "An error occurred. Please try again.",
+    "privacy": "Your information is confidential. No cold calling."
   },
   "blog": {
     "title": "Blog & Tips",
