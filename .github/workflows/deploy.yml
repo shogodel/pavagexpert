@@ -47,60 +47,60 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DROPLET_SSH }}
           envs: GHCR_TOKEN,GHCR_USER
+          script: |
+            set -e
+            cd ~/apps
+
+            # Ensure .env exists for pavagexpert
+            if [ ! -f .env ]; then
+              PASSWORD=$(openssl rand -base64 12)
+              echo "# Admin panel credentials - CHANGE THESE" > .env
+              echo "ADMIN_USERNAME=admin" >> .env
+              echo "ADMIN_PASSWORD=$PASSWORD" >> .env
+              echo ">>> New admin password: $PASSWORD"
+            fi
+
+            # Ensure jobs_data volume exists
+            docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
+
+            # Update pavagexpert service in shared compose file
+            awk '
+            /^  pavagexpert:/ {
+              print "  pavagexpert:"
+              print "    container_name: pavagexpert"
+              print "    image: ghcr.io/shogodel/pavagexpert:latest"
+              print "    pull_policy: always"
+              print "    restart: unless-stopped"
+              print "    env_file: .env"
+              print "    environment:"
+              print "      - NODE_ENV=production"
+              print "      - DATA_DIR=/data"
+              print "    volumes:"
+              print "      - jobs_data:/data"
+              skip = 1
+              next
+            }
+            skip && /^[a-z]/ { skip = 0 }
+            skip { next }
+            { print }
+            ' docker-compose.yaml > /tmp/compose.tmp && mv /tmp/compose.tmp docker-compose.yaml
+
+            # Add jobs_data volume if missing
+            grep -q "jobs_data:" docker-compose.yaml || sed -i '/^volumes:/a\  jobs_data:' docker-compose.yaml
+
+            # Show updated compose section
+            grep -A 10 "pavagexpert:" docker-compose.yaml
+
+            # Log in to ghcr.io with GITHUB_TOKEN so we can pull the private package
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+
+            # Pull latest image and recreate container
+            docker compose pull pavagexpert
+            docker compose up -d pavagexpert --force-recreate
+            sleep 3
+            docker compose logs --tail 20 pavagexpert
+            docker restart swag 2>/dev/null || true
+            docker image prune -f
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GHCR_USER: ${{ github.actor }}
-        script: |
-          set -e
-          cd ~/apps
-
-          # Ensure .env exists for pavagexpert
-          if [ ! -f .env ]; then
-            PASSWORD=$(openssl rand -base64 12)
-            echo "# Admin panel credentials - CHANGE THESE" > .env
-            echo "ADMIN_USERNAME=admin" >> .env
-            echo "ADMIN_PASSWORD=$PASSWORD" >> .env
-            echo ">>> New admin password: $PASSWORD"
-          fi
-
-          # Ensure jobs_data volume exists
-          docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
-
-          # Update pavagexpert service in shared compose file
-          awk '
-          /^  pavagexpert:/ {
-            print "  pavagexpert:"
-            print "    container_name: pavagexpert"
-            print "    image: ghcr.io/shogodel/pavagexpert:latest"
-            print "    pull_policy: always"
-            print "    restart: unless-stopped"
-            print "    env_file: .env"
-            print "    environment:"
-            print "      - NODE_ENV=production"
-            print "      - DATA_DIR=/data"
-            print "    volumes:"
-            print "      - jobs_data:/data"
-            skip = 1
-            next
-          }
-          skip && /^[a-z]/ { skip = 0 }
-          skip { next }
-          { print }
-          ' docker-compose.yaml > /tmp/compose.tmp && mv /tmp/compose.tmp docker-compose.yaml
-
-          # Add jobs_data volume if missing
-          grep -q "jobs_data:" docker-compose.yaml || sed -i '/^volumes:/a\  jobs_data:' docker-compose.yaml
-
-          # Show updated compose section
-          grep -A 10 "pavagexpert:" docker-compose.yaml
-
-          # Log in to ghcr.io with GITHUB_TOKEN so we can pull the private package
-          echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-
-          # Pull latest image and recreate container
-          docker compose pull pavagexpert
-          docker compose up -d pavagexpert --force-recreate
-          sleep 3
-          docker compose logs --tail 20 pavagexpert
-          docker restart swag 2>/dev/null || true
-          docker image prune -f
