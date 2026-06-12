@@ -64,7 +64,8 @@
     "materials_label": "Matériaux",
     "installation_label": "Installation",
     "total_label": "Total estimé",
-    "cta_get_quote": "Obtenez votre devis gratuit"
+    "cta_get_quote": "Obtenez mon devis personnalisé →",
+    "result_prompt": "Ce que vous voyez n'est pas qu'un prix — c'est la tranquillité d'esprit."
   },
   "gallery": {
     "title": "Nos Réalisations",
