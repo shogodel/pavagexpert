@@ -79,10 +79,10 @@
     "view_project": "Voir le projet"
   },
   "jobs": {
-    "title": "Projets en cours",
+    "title": "Projets en vedette — Voyez qui d'autres fait confiance à Pavagexpert",
     "subtitle": "Découvrez les projets récents de nos clients",
     "loading": "Chargement...",
-    "empty": "Aucun projet pour le moment. Soyez le premier à soumettre le vôtre !",
+    "empty": "Soyez le premier à lancer votre projet. Les entrepreneurs les plus qualifiés vous attendent.",
     "postal": "Code postal :",
     "filter_postal": "Filtrer par code postal...",
     "filter_status_all": "Tous les statuts"

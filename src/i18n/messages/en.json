@@ -79,10 +79,10 @@
     "view_project": "View Project"
   },
   "jobs": {
-    "title": "Projects Board",
+    "title": "Featured Projects — See who trusts Pavagexpert",
     "subtitle": "Browse recent projects from our clients",
     "loading": "Loading...",
-    "empty": "No projects yet. Be the first to submit yours!",
+    "empty": "Be the first to launch your project. The most qualified contractors are waiting for you.",
     "postal": "Postal code:",
     "filter_postal": "Filter by postal code...",
     "filter_status_all": "All statuses"
