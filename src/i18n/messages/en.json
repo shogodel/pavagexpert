@@ -5,7 +5,7 @@
     "gallery": "Portfolio",
     "calculator": "Calculator",
     "blog": "Blog",
-    "get_quote": "Free Quote",
+    "get_quote": "Personalized Estimate",
     "jobs": "Recent Projects",
     "login": "Login"
   },
@@ -107,7 +107,8 @@
     "success_msg": "Your project has been published. Certified contractors will contact you within 24h.",
     "error_msg": "An error occurred. Please try again.",
     "privacy": "Your information is confidential. No cold calling.",
-    "guarantee": "Free quote • No obligation • Verified contractors"
+    "guarantee": "Personalized estimate • No obligation • Verified contractors",
+    "urgency": "Contractors are most active right now."
   },
   "social_proof": {
     "projects": "active projects",
@@ -158,7 +159,7 @@
     "blog_title": "Paver Blog & Tips | Pavagexpert Montreal",
     "blog_desc": "Expert advice on interlocking pavers: pricing, maintenance, installation patterns and comparisons. Complete guide for your Montreal project.",
     "get_quote_title": "Free Paver Quote | Pavagexpert Montreal",
-    "get_quote_desc": "Get a free quote for your interlocking paver project in Montreal. Submit your project and receive an estimate within 24h.",
+    "get_quote_desc": "Get a personalized estimate for your interlocking paver project in Montreal. Launch your project and receive offers within 24h.",
     "jobs_title": "Recent Paver Projects | Project Board | Pavagexpert",
     "jobs_desc": "Browse recent interlocking paver projects submitted by our clients in Montreal. Driveways, patios, parking lots and more."
   }

@@ -5,7 +5,7 @@
     "gallery": "Réalisations",
     "calculator": "Calculateur",
     "blog": "Blog",
-    "get_quote": "Devis gratuit",
+    "get_quote": "Estimation personnalisée",
     "jobs": "Projets récents",
     "login": "Connexion"
   },
@@ -107,7 +107,8 @@
     "success_msg": "Votre projet a été publié. Des entrepreneurs certifiés vous contacteront sous 24h.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage.",
-    "guarantee": "Devis gratuit • Aucune obligation • Entrepreneurs vérifiés"
+    "guarantee": "Estimation personnalisée • Aucune obligation • Entrepreneurs vérifiés",
+    "urgency": "Les entrepreneurs sont les plus actifs en ce moment."
   },
   "social_proof": {
     "projects": "projets en cours",
@@ -158,7 +159,7 @@
     "blog_title": "Blog & Conseils Pavé Uni | Pavagexpert Montréal",
     "blog_desc": "Conseils d'experts sur le pavé uni : prix, entretien, motifs de pose et comparaisons. Guide complet pour votre projet à Montréal.",
     "get_quote_title": "Devis Gratuit Pavé Uni | Pavagexpert Montréal",
-    "get_quote_desc": "Obtenez un devis gratuit pour votre projet de pavé uni à Montréal. Soumettez votre projet et recevez une estimation sous 24h.",
+    "get_quote_desc": "Obtenez une estimation personnalisée pour votre projet de pavé uni à Montréal. Lancez votre projet et recevez des offres sous 24h.",
     "jobs_title": "Projets Récents de Pavé Uni | Tableau des Projets | Pavagexpert",
     "jobs_desc": "Consultez les projets récents de pavé uni soumis par nos clients à Montréal. Entrées, terrasses, stationnements et plus."
   }
