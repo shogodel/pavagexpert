@@ -51,8 +51,19 @@ function readAuth(): AuthData {
   try {
     return JSON.parse(fs.readFileSync(authFile, "utf-8"));
   } catch {
+    // Backup corrupted file, then seed from env vars (same logic as entrypoint.sh)
+    console.error("[auth-store] auth.json is missing or corrupted.");
+    try {
+      const bak = authFile + ".bak." + Date.now();
+      fs.renameSync(authFile, bak);
+      console.error("[auth-store] Corrupted file backed up to", bak);
+    } catch {}
+
+    const pw = process.env.ADMIN_PASSWORD || "admin";
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto.scryptSync(pw, salt, 64).toString("hex");
     const data: AuthData = {
-      admin: { username: "admin", passwordHash: scryptHash("admin") },
+      admin: { username: process.env.ADMIN_USERNAME || "admin", passwordHash: salt + ":" + hash },
       contractors: [],
     };
     writeAuth(data);
