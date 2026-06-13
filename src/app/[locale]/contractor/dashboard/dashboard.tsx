@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 interface Lead {
   id: string;
   name: string;
-  postalCode: string;
+  email: string;
   phone: string;
+  postalCode: string;
+  budget: string;
   description: string;
   createdAt: string;
 }
@@ -72,11 +74,12 @@ export default function ContractorDashboard() {
           {leads.map((lead) => (
             <div key={lead.id} className="bg-white rounded-lg shadow p-4">
               <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-semibold">{lead.name}</h3>
-                  <p className="text-sm text-gray-500">{lead.postalCode}</p>
-                  <p className="text-sm text-gray-500">{lead.phone}</p>
-                </div>
+                  <div>
+                    <h3 className="font-semibold">{lead.name}</h3>
+                    <p className="text-sm text-gray-500">{lead.email}</p>
+                    <p className="text-sm text-gray-500">{lead.phone} | {lead.postalCode}</p>
+                    {lead.budget && <p className="text-sm font-medium text-green-700">Budget : {lead.budget}</p>}
+                  </div>
                 <span className="text-xs text-gray-400">
                   {new Date(lead.createdAt).toLocaleDateString("fr-CA")}
                 </span>

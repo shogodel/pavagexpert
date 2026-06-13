@@ -11,8 +11,10 @@ export default function GetQuoteForm() {
   const [error, setError] = useState(false);
   const [form, setForm] = useState({
     name: "",
+    email: "",
     postalCode: "",
     phone: "",
+    budget: "",
     description: "",
   });
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
@@ -24,8 +26,10 @@ export default function GetQuoteForm() {
     try {
       const fd = new FormData();
       fd.set("name", form.name);
+      fd.set("email", form.email);
       fd.set("phone", form.phone);
       fd.set("postalCode", form.postalCode);
+      fd.set("budget", form.budget);
       fd.set("description", form.description);
       for (const f of photoFiles) fd.append("photos", f);
       const res = await fetch("/api/contact", {
@@ -95,6 +99,20 @@ export default function GetQuoteForm() {
 
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("email")} <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                placeholder="jean@exemple.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 {t("postal_code")} <span className="text-red-500">*</span>
               </label>
               <input
@@ -147,6 +165,19 @@ export default function GetQuoteForm() {
                 type="file"
                 accept="video/*"
                 className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                {t("budget")} <span className="text-red-500">*</span>
+              </label>
+              <input
+                required
+                value={form.budget}
+                onChange={(e) => setForm({ ...form, budget: e.target.value })}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                placeholder={t("budget_placeholder")}
               />
             </div>
 

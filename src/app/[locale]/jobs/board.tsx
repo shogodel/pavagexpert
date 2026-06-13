@@ -89,6 +89,7 @@ export default function JobsBoard() {
                       )}
                       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-stone-500">
                         <span>{t("postal")} {job.postalCode || "—"}</span>
+                        {job.budget && <span className="text-green-700 font-medium">{job.budget}</span>}
                         <span>{new Date(job.createdAt).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA")}</span>
                       </div>
                     </div>

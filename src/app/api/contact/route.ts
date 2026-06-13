@@ -16,15 +16,23 @@ export async function POST(req: NextRequest) {
 
     const form = await req.formData();
     const name = form.get("name") as string;
+    const email = form.get("email") as string;
     const phone = form.get("phone") as string;
     const postalCode = form.get("postalCode") as string;
+    const budget = form.get("budget") as string;
     const description = form.get("description") as string;
 
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ ok: false, errors: ["name"] }, { status: 400 });
     }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ ok: false, errors: ["email"] }, { status: 400 });
+    }
     if (!phone || phone.trim().length < 6) {
       return NextResponse.json({ ok: false, errors: ["phone"] }, { status: 400 });
+    }
+    if (!budget || budget.trim().length < 1) {
+      return NextResponse.json({ ok: false, errors: ["budget"] }, { status: 400 });
     }
     if (!description || description.trim().length < 10) {
       return NextResponse.json({ ok: false, errors: ["description"] }, { status: 400 });
@@ -43,7 +51,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const job = addJob({ name, postalCode: postalCode || "", phone, description });
+    const job = addJob({ name, email, postalCode: postalCode || "", phone, budget, description });
     const photoDir = ensureJobPhotoDir(job.id);
 
     const savedPhotos: string[] = [];
@@ -82,8 +90,10 @@ export async function POST(req: NextRequest) {
           <h2>Nouvelle demande de devis</h2>
           <table>
             <tr><td><strong>Nom</strong></td><td>${name}</td></tr>
+            <tr><td><strong>Courriel</strong></td><td>${email}</td></tr>
             <tr><td><strong>Téléphone</strong></td><td>${phone}</td></tr>
             <tr><td><strong>Code postal</strong></td><td>${postalCode || "—"}</td></tr>
+            <tr><td><strong>Budget</strong></td><td>${budget || "—"}</td></tr>
             <tr><td><strong>Description</strong></td><td>${description}</td></tr>
           </table>
         `.trim(),
