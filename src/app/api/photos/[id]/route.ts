@@ -4,6 +4,10 @@ import path from "path";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (!id || id.includes("..") || id.includes("/") || id.includes("\\")) {
+    return new NextResponse("invalid", { status: 400 });
+  }
+
   const filename = new URL(req.url).searchParams.get("file");
   if (!filename || filename.includes("..") || filename.includes("/")) {
     return new NextResponse("invalid", { status: 400 });
