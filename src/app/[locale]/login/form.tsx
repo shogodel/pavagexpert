@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "@/lib/use-translations";
 
 export default function LoginForm() {
+  const t = useTranslations("login");
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -41,14 +43,14 @@ export default function LoginForm() {
         <div className="flex justify-center mb-2">
           <img src="/images/logo-white.svg" alt="Pavagexpert" className="h-8 w-auto" />
         </div>
-        <p className="text-stone-400 text-sm text-center">Espace entrepreneur</p>
+        <p className="text-stone-400 text-sm text-center">{t("title")}</p>
 
         {error && (
-          <p className="text-red-400 text-sm text-center">Identifiants invalides</p>
+          <p className="text-red-400 text-sm text-center">{t("error")}</p>
         )}
 
         <div>
-          <label className="block text-sm text-stone-400 mb-1">Nom d&apos;utilisateur</label>
+          <label className="block text-sm text-stone-400 mb-1">{t("username")}</label>
           <input
             type="text"
             required
@@ -60,7 +62,7 @@ export default function LoginForm() {
         </div>
 
         <div>
-          <label className="block text-sm text-stone-400 mb-1">Mot de passe</label>
+          <label className="block text-sm text-stone-400 mb-1">{t("password")}</label>
           <input
             type="password"
             required
@@ -76,7 +78,7 @@ export default function LoginForm() {
           disabled={loading}
           className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition-colors"
         >
-          {loading ? "..." : "Se connecter"}
+          {loading ? "..." : t("submit")}
         </button>
       </form>
     </div>

@@ -88,6 +88,13 @@
     "filter_postal": "Filtrer par code postal...",
     "filter_status_all": "Tous les statuts"
   },
+  "login": {
+    "title": "Espace entrepreneur",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "error": "Identifiants invalides"
+  },
   "get_quote": {
     "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",
     "subtitle": "Racontez-nous votre projet en toute simplicité",

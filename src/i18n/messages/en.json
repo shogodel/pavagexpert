@@ -88,6 +88,13 @@
     "filter_postal": "Filter by postal code...",
     "filter_status_all": "All statuses"
   },
+  "login": {
+    "title": "Entrepreneur space",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Invalid credentials"
+  },
   "get_quote": {
     "title": "Describe your project once. Certified contractors compete for your contract.",
     "subtitle": "Tell us about your project in a few words",
