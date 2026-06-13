@@ -24,7 +24,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${inter.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
-        <JsonLd />
+        <JsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>
           <Header />
           <main className="flex-1">{children}</main>
