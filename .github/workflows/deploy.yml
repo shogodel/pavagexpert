@@ -52,9 +52,11 @@ jobs:
             cd ~/apps
 
             # Write a BRAND NEW .env — no CRLF, no spaces, no garbage from old files.
+            # Preserve existing JWT_SECRET so sessions survive deploys.
+            if [ -f .env ]; then OLD_SECRET=$(grep JWT_SECRET .env | cut -d= -f2-); fi
             echo "ADMIN_USERNAME=admin" > .env
             echo "ADMIN_PASSWORD=P@55word" >> .env
-            echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
+            echo "JWT_SECRET=${OLD_SECRET:-$(openssl rand -base64 32)}" >> .env
 
             # Ensure jobs_data volume exists
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
