@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations } from "@/lib/use-translations";
+import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/lib/constants";
 
 export default function Footer() {
+  const locale = useLocale();
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
   const servicesT = useTranslations("services");
@@ -84,8 +85,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Pavagexpert. {t("rights")}
           </p>
           <div className="flex gap-4 text-sm text-stone-500">
-            <Link href="/privacy" className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>
-            <Link href="/terms" className="hover:text-stone-300 transition-colors">{t("terms")}</Link>
+            <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>
+            <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors">{t("terms")}</Link>
           </div>
         </div>
       </div>

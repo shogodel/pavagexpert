@@ -139,8 +139,6 @@
     "username_placeholder": "Username",
     "password_placeholder": "Password",
     "company_placeholder": "Company",
-    "phone_placeholder": "Phone",
-    "email_placeholder": "Email",
     "contractors_empty": "No contractors yet.",
     "contractor_error": "Error",
     "reset_title": "Reset password",
@@ -152,7 +150,6 @@
   "get_quote": {
     "title": "Describe your project once. Certified contractors compete for your contract.",
     "subtitle": "Tell us about your project in a few words",
-
     "name": "Full name",
     "postal_code": "Postal code",
     "phone": "Phone",
@@ -223,5 +220,21 @@
     "get_quote_desc": "Get a personalized estimate for your interlocking paver project in Montreal, Laval or the South Shore. Launch your project and receive offers within 24h.",
     "jobs_title": "Active Paver Projects | Montreal, Laval, South Shore | Pavagexpert",
     "jobs_desc": "Browse recent paver projects from homeowners in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "content": [
+      "Pavagexpert is committed to protecting the confidentiality of the personal information you provide to us.",
+      "Information collected through our quote request form is used solely for the purpose of providing you with a personalized service and is never shared with third parties for commercial purposes.",
+      "In accordance with Quebec's privacy laws, you may at any time request access, correction or deletion of your personal data by contacting us."
+    ]
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "content": [
+      "By using the Pavagexpert website, you agree to these terms of use.",
+      "Quotes and estimates provided through our platform are indicative. A representative will contact you for an accurate assessment of your project.",
+      "Pavagexpert acts as a matching platform between homeowners and certified contractors. We are not responsible for work performed by contractors."
+    ]
   }
 }

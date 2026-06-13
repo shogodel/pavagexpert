@@ -123,7 +123,7 @@
     "add": "Ajouter",
     "cancel": "Annuler",
     "name_placeholder": "Nom",
-    "email_placeholder": "Email",
+    "email_placeholder": "Courriel",
     "phone_placeholder": "Téléphone",
     "notes_placeholder": "Notes",
     "created_prefix": "Créé le",
@@ -139,8 +139,6 @@
     "username_placeholder": "Nom d'utilisateur",
     "password_placeholder": "Mot de passe",
     "company_placeholder": "Entreprise",
-    "phone_placeholder": "Téléphone",
-    "email_placeholder": "Courriel",
     "contractors_empty": "Aucun entrepreneur pour le moment.",
     "contractor_error": "Erreur",
     "reset_title": "Réinitialiser mot de passe",
@@ -152,7 +150,6 @@
   "get_quote": {
     "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",
     "subtitle": "Racontez-nous votre projet en toute simplicité",
-
     "name": "Nom complet",
     "postal_code": "Code postal",
     "phone": "Téléphone",
@@ -223,5 +220,21 @@
     "get_quote_desc": "Obtenez une estimation personnalisée pour votre projet de pavé uni à Montréal, Laval ou sur la Rive-Sud. Lancez votre projet et recevez des offres sous 24h.",
     "jobs_title": "Projets de Pavé Uni en Cours | Montréal, Laval, Rive-Sud | Pavagexpert",
     "jobs_desc": "Consultez les projets de pavé uni récents soumis par des propriétaires à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal."
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "content": [
+      "Pavagexpert s'engage à protéger la confidentialité des informations personnelles que vous nous fournissez.",
+      "Les informations recueillies via notre formulaire de demande de soumission sont utilisées uniquement dans le but de vous offrir un service personnalisé et ne sont jamais partagées avec des tiers à des fins commerciales.",
+      "Conformément à la Loi sur la protection des renseignements personnels du Québec, vous pouvez à tout moment demander l'accès, la rectification ou la suppression de vos données personnelles en nous contactant."
+    ]
+  },
+  "terms": {
+    "title": "Conditions d'utilisation",
+    "content": [
+      "En utilisant le site Pavagexpert, vous acceptez les présentes conditions d'utilisation.",
+      "Les devis et estimations fournis via notre plateforme sont à titre indicatif. Un représentant vous contactera pour une évaluation précise de votre projet.",
+      "Pavagexpert agit comme plateforme de mise en relation entre les propriétaires et les entrepreneurs certifiés. Nous ne sommes pas responsables des travaux effectués par les entrepreneurs."
+    ]
   }
 }
