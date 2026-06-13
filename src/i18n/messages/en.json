@@ -7,38 +7,67 @@
     "blog": "Blog",
     "get_quote": "Personalized Estimate",
     "jobs": "Recent Projects",
-    "login": "Login"
+    "login": "Login",
+    "all_services": "All Services",
+    "services_asphalt": "Asphalt",
+    "services_pavers": "Pavers",
+    "services_concrete": "Concrete",
+    "services_excavation": "Excavation",
+    "services_retaining_walls": "Retaining Walls",
+    "services_landscaping": "Landscaping",
+    "services_turf": "Sod & Turf",
+    "services_drainage": "Drainage"
   },
   "hero": {
-    "title": "Your driveway deserves better. Turn it into a masterpiece.",
-    "subtitle": "Protect your biggest investment — residential and commercial paving in Montreal, Laval and the South Shore. Certified contractors compete for your project.",
-    "cta_estimate": "Get my personalized quote",
-    "trust_badge_1": "Professional installation",
-    "trust_badge_2": "5-year warranty",
-    "trust_badge_3": "Turnkey service"
+    "title": "The best outdoor contractors, all in one place.",
+    "subtitle": "Describe your project once. Our RBQ-licensed, APCHQ-member contractors compete for your contract. You pick the best value — for free, no obligation.",
+    "cta_estimate": "Launch my project for free",
+    "trust_badge_1": "RBQ-Licensed Contractors",
+    "trust_badge_2": "APCHQ Members",
+    "trust_badge_3": "Verified Customer Reviews"
   },
   "services": {
     "title": "Our Services",
-    "subtitle": "From design to installation, we handle it all",
-    "driveway": {
-      "title": "Paved Driveway",
-      "desc": "Residential and commercial paved driveways in Montreal, Laval, Longueuil and all Greater Montreal. Built for Quebec winters."
+    "subtitle": "From excavation to finishing, we handle it all",
+    "pavers": {
+      "title": "Interlocking Pavers",
+      "desc": "Driveways, patios and parking lots in Montreal, Laval, Longueuil and across Greater Montreal. Built for Quebec winters.",
+      "content": "Interlocking pavers are the premium choice to enhance your property in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux. Our RBQ-certified contractors install high-quality pavers from trusted brands like Techo-Bloc, Permacon and Rinox. Every project follows best practices: compacted granular base, precise installation and polymeric sand joints."
     },
-    "patio": {
-      "title": "Patio & Balcony",
-      "desc": "Interlocking paver patios and balconies in Montreal and the South Shore. Enjoy summer with a beautiful outdoor space."
+    "asphalt": {
+      "title": "Asphalt",
+      "desc": "Residential and commercial asphalt driveways and parking lots in Montreal and the South Shore. Durability and flawless finish.",
+      "content": "Asphalt remains a cost-effective and durable solution for your driveway or commercial parking lot. Our contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux use premium asphalt mix on a solid base. The result: a smooth, durable, low-maintenance surface that withstands Quebec winters."
     },
-    "walkway": {
-      "title": "Walkways & Paths",
-      "desc": "Pedestrian walkways and garden paths in Montreal, Laval, Brossard and across Greater Montreal. Custom design."
+    "concrete": {
+      "title": "Concrete",
+      "desc": "Slabs, sidewalks and decorative concrete surfaces in Montreal and the South Shore. Modern design and strength.",
+      "content": "Concrete offers unmatched versatility for your projects in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux. Poured, stamped or architectural concrete — our RBQ contractors master all techniques to create driveways, sidewalks, patios and stairs that combine aesthetics and durability."
     },
-    "retaining": {
+    "excavation": {
+      "title": "Excavation & Grading",
+      "desc": "Residential and commercial excavation, grading and site preparation in Montreal and surrounding areas.",
+      "content": "Every landscaping project starts with solid excavation. Our contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux handle excavation, grading and site preparation for paving, foundations or drainage projects. Modern machinery and RBQ expertise."
+    },
+    "retaining_walls": {
       "title": "Retaining Walls",
-      "desc": "Decorative and functional retaining walls for your property in Montreal and the South Shore."
+      "desc": "Decorative and functional retaining walls for your property in Montreal and the South Shore.",
+      "content": "Retaining walls stabilize slopes while adding aesthetic value to your property. Concrete blocks, natural stone or gabions — our certified contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux build durable walls that resist earth pressure and freeze-thaw cycles."
     },
-    "commercial": {
-      "title": "Commercial",
-      "desc": "Parking lots, public spaces and commercial paver projects in Montreal, Laval, Longueuil and across Quebec."
+    "landscaping": {
+      "title": "Landscaping",
+      "desc": "Complete landscape design and installation in Montreal and the greater metro area. Plants, borders, lighting.",
+      "content": "Transform your yard into a peaceful retreat. Our landscaping experts in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux design custom outdoor spaces: plantings, borders, landscape lighting, irrigation systems and furniture. A turnkey project to enhance your property."
+    },
+    "turf": {
+      "title": "Sod & Synthetic Turf",
+      "desc": "Natural sod and synthetic turf installation in Montreal and the greater metro area. Instant results.",
+      "content": "Get a perfect lawn in one day. Our contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux install natural sod or synthetic turf with meticulous soil preparation. Drainage, grading and professional installation for lasting results."
+    },
+    "drainage": {
+      "title": "Drainage & Water Management",
+      "desc": "French drains, sump pumps and stormwater management in Montreal and the South Shore. Sustainable solutions.",
+      "content": "Protect your property from water infiltration with professional drainage solutions. Our certified contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux install French drains, catch basins, manholes and stormwater management systems compliant with municipal standards."
     },
     "cta": "Request a Quote"
   },
@@ -213,6 +242,22 @@
     "home_desc": "Experts in interlocking pavers in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal. Driveways, patios, parking lots turnkey. Personalized estimate.",
     "services_title": "Interlocking Paver Installation Montreal, Laval, South Shore | Pavagexpert",
     "services_desc": "Interlocking paver installation in Montreal, Laval, Longueuil, Brossard, Terrebonne and all South Shore. Driveways, patios, walkways, retaining walls and commercial projects.",
+    "services_pavers_title": "Interlocking Pavers Montreal, Laval, South Shore | Pavagexpert",
+    "services_pavers_desc": "Interlocking paver installation in Montreal, Laval, Longueuil, Brossard and all Greater Montreal. Driveways, patios and parking lots by RBQ-certified contractors.",
+    "services_asphalt_title": "Asphalt Montreal, Laval, South Shore | Pavagexpert",
+    "services_asphalt_desc": "Residential and commercial asphalt paving in Montreal, Laval, Longueuil, Brossard and the South Shore. Durable driveways and parking lots by RBQ contractors.",
+    "services_concrete_title": "Concrete Montreal, Laval, South Shore | Pavagexpert",
+    "services_concrete_desc": "Concrete slabs, sidewalks and decorative concrete surfaces in Montreal, Laval, Longueuil, Brossard and all Greater Montreal.",
+    "services_excavation_title": "Excavation Montreal, Laval, South Shore | Pavagexpert",
+    "services_excavation_desc": "Residential and commercial excavation in Montreal, Laval, Longueuil, Brossard and the South Shore. Grading, site prep by RBQ contractors.",
+    "services_retaining_walls_title": "Retaining Walls Montreal, Laval, South Shore | Pavagexpert",
+    "services_retaining_walls_desc": "Decorative and functional retaining walls in Montreal, Laval, Longueuil, Brossard and all Greater Montreal. Concrete blocks, natural stone or gabions.",
+    "services_landscaping_title": "Landscaping Montreal, Laval, South Shore | Pavagexpert",
+    "services_landscaping_desc": "Complete landscape design and installation in Montreal, Laval, Longueuil, Brossard and the greater metro area. Plants, borders, lighting, irrigation.",
+    "services_turf_title": "Sod & Synthetic Turf Montreal, Laval, South Shore | Pavagexpert",
+    "services_turf_desc": "Natural sod and synthetic turf installation in Montreal, Laval, Longueuil, Brossard and all Greater Montreal. Instant results by RBQ contractors.",
+    "services_drainage_title": "Drainage Montreal, Laval, South Shore | Pavagexpert",
+    "services_drainage_desc": "French drains, catch basins and stormwater management in Montreal, Laval, Longueuil, Brossard and the South Shore. Compliant sustainable solutions.",
     "calculator_title": "Paver Cost Calculator | Price per sq ft Montreal & South Shore | Pavagexpert",
     "calculator_desc": "Estimate your paver project cost in Montreal, Laval or the South Shore. Free calculator with material and installation costs per square foot.",
     "gallery_title": "Paver Portfolio Montreal, Laval, Longueuil | Gallery | Pavagexpert",

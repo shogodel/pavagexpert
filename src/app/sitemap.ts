@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllSlugs } from "@/lib/blog-data";
+import { servicesList } from "@/lib/services-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://pavagexpert.space";
@@ -35,5 +36,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...staticEntries, ...extraEntries, ...blogEntries];
+  const serviceEntries = locales.flatMap((locale) =>
+    servicesList.map((s) => ({
+      url: `${baseUrl}/${locale}/services/${s.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
+  );
+
+  return [...staticEntries, ...extraEntries, ...blogEntries, ...serviceEntries];
 }

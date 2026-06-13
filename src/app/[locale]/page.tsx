@@ -3,6 +3,7 @@ import { isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
 import Hero from "@/components/hero";
 import SocialProof from "@/components/social-proof";
+import TrustBadges from "@/components/trust-badges";
 import ServicesSection from "@/components/services-section";
 import HowItWorks from "@/components/how-it-works";
 import Calculator from "@/components/calculator";
@@ -23,6 +24,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <TrustBadges />
       <SocialProof />
       <ServicesSection />
       <HowItWorks />

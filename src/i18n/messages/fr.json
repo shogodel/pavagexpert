@@ -7,38 +7,67 @@
     "blog": "Blog",
     "get_quote": "Estimation personnalisée",
     "jobs": "Projets récents",
-    "login": "Connexion"
+    "login": "Connexion",
+    "all_services": "Tous nos services",
+    "services_asphalt": "Asphalte",
+    "services_pavers": "Pavé Uni",
+    "services_concrete": "Béton",
+    "services_excavation": "Excavation",
+    "services_retaining_walls": "Murs de soutènement",
+    "services_landscaping": "Aménagement paysager",
+    "services_turf": "Gazon & Tourbe",
+    "services_drainage": "Drainage"
   },
   "hero": {
-    "title": "Votre entrée mérite mieux. Transformez-la en chef-d'œuvre.",
-    "subtitle": "Protégez votre plus grand investissement — pavage résidentiel et commercial à Montréal, Laval et la Rive-Sud. Des entrepreneurs certifiés se disputent votre projet.",
-    "cta_estimate": "Obtenez mon devis personnalisé",
-    "trust_badge_1": "Installation professionnelle",
-    "trust_badge_2": "Garantie 5 ans",
-    "trust_badge_3": "Service clé en main"
+    "title": "Le meilleur de l'aménagement extérieur, réuni en un lieu.",
+    "subtitle": "Décrivez votre projet une fois. Nos entrepreneurs certifiés RBQ, membres APCHQ, se disputent votre contrat. Vous choisissez le meilleur rapport qualité-prix — sans frais, sans engagement.",
+    "cta_estimate": "Lancer mon projet gratuitement",
+    "trust_badge_1": "Entrepreneurs certifiés RBQ",
+    "trust_badge_2": "Membres APCHQ",
+    "trust_badge_3": "Avis clients vérifiés"
   },
   "services": {
     "title": "Nos Services",
-    "subtitle": "Du design à l'installation, on s'occupe de tout",
-    "driveway": {
-      "title": "Entrée pavée",
-      "desc": "Entrées pavées pour maisons et commerces à Montréal, Laval, Longueuil et partout au Grand Montréal. Résistent aux hivers québécois."
+    "subtitle": "De l'excavation à la finition, on s'occupe de tout",
+    "pavers": {
+      "title": "Pavé Uni",
+      "desc": "Entrées, terrasses et stationnements en pavé uni à Montréal, Laval, Longueuil et tout le Grand Montréal. Résistent aux hivers québécois.",
+      "content": "Le pavé uni est le choix par excellence pour valoriser votre propriété à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux. Nos entrepreneurs certifiés RBQ installent des pavés de haute qualité de marques reconnues comme Techo-Bloc, Permacon et Rinox. Chaque projet est réalisé selon les règles de l'art avec une fondation granulaire compactée, une pose précise et des joints au sable polymère."
     },
-    "patio": {
-      "title": "Terrasse & Balcon",
-      "desc": "Terrasses et balcons en pavé uni à Montréal et sur la Rive-Sud. Profitez de l'été montréalais avec un espace extérieur magnifique."
+    "asphalt": {
+      "title": "Asphalte",
+      "desc": "Entrées et stationnements en asphalte pour résidences et commerces à Montréal et la Rive-Sud. Durabilité et finition impeccable.",
+      "content": "L'asphalte reste une solution économique et durable pour votre entrée de garage ou votre stationnement commercial. Nos entrepreneurs à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux utilisent un enrobé bitumineux de première qualité posé sur une fondation solide. Résultat : une surface lisse, durable et facile d'entretien qui résiste aux rigueurs de l'hiver québécois."
     },
-    "walkway": {
-      "title": "Sentiers & Allées",
-      "desc": "Allées piétonnières et sentiers de jardin à Montréal, Laval, Brossard et tout le Grand Montréal. Design personnalisé."
+    "concrete": {
+      "title": "Béton",
+      "desc": "Dalles, trottoirs et surfaces en béton décoratif à Montréal et la Rive-Sud. Design contemporain et solidité.",
+      "content": "Le béton offre une polyvalence inégalée pour vos projets d'aménagement à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux. Béton coulé, estampé ou architectonique — nos entrepreneurs RBQ maîtrisent toutes les techniques pour créer des entrées, trottoirs, patios et escaliers qui allient esthétique et durabilité."
     },
-    "retaining": {
-      "title": "Murs de soutènement",
-      "desc": "Murs de soutènement décoratifs et fonctionnels pour votre terrain à Montréal et la Rive-Sud."
+    "excavation": {
+      "title": "Excavation & Terrassement",
+      "desc": "Excavation résidentielle et commerciale, nivellement et préparation de terrain à Montréal et environs.",
+      "content": "Tout projet d'aménagement commence par une excavation solide. Nos entrepreneurs à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux réalisent l'excavation, le nivellement et la préparation de terrain pour vos projets de pavage, fondations ou drainages. Machinerie moderne et expertise RBQ."
     },
-    "commercial": {
-      "title": "Commercial",
-      "desc": "Stationnements, places publiques et espaces commerciaux en pavé uni à Montréal, Laval, Longueuil et partout au Québec."
+    "retaining_walls": {
+      "title": "Murs de Soutènement",
+      "desc": "Murs de soutènement décoratifs et fonctionnels pour votre terrain à Montréal et la Rive-Sud.",
+      "content": "Les murs de soutènement stabilisent vos talus tout en ajoutant une dimension esthétique à votre propriété. Blocs de béton, pierres naturelles ou gabions — nos entrepreneurs certifiés à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux conçoivent des murs durables qui résistent à la poussée des terres et aux cycles de gel-dégel."
+    },
+    "landscaping": {
+      "title": "Aménagement Paysager",
+      "desc": "Design et aménagement paysager complet à Montréal et la région métropolitaine. Plantes, bordures, éclairage.",
+      "content": "Transformez votre cour en havre de paix. Nos experts en aménagement paysager à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux conçoivent des espaces extérieurs sur mesure : plantations, bordures, éclairage paysager, arrosage intégré et mobilier. Un projet clé en main pour valoriser votre propriété."
+    },
+    "turf": {
+      "title": "Gazon & Tourbe",
+      "desc": "Installation de tourbe et gazon synthétique à Montréal et la région métropolitaine. Résultat instantané.",
+      "content": "Obtenez une pelouse parfaite en une journée. Nos entrepreneurs à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux installent la tourbe naturelle ou le gazon synthétique avec une préparation minutieuse du sol. Drainage, nivellement et pose professionnelle pour un résultat qui dure."
+    },
+    "drainage": {
+      "title": "Drainage & Gestion des Eaux",
+      "desc": "Drains français, puisards et gestion des eaux pluviales à Montréal et la Rive-Sud. Solutions durables.",
+      "content": "Protégez votre propriété contre l'infiltration d'eau avec des solutions de drainage professionnelles. Nos entrepreneurs certifiés à Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland et Dollard-Des-Ormeaux installent drains français, puisards, regards et systèmes de gestion des eaux pluviales conformes aux normes municipales."
     },
     "cta": "Demander un devis"
   },
@@ -213,6 +242,22 @@
     "home_desc": "Experts en pavé uni à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal. Entrées pavées, terrasses, stationnements clé en main. Estimation personnalisée.",
     "services_title": "Pose de Pavé Uni Montréal, Laval, Rive-Sud | Pavagexpert",
     "services_desc": "Installation de pavé uni à Montréal, Laval, Longueuil, Brossard, Terrebonne et toute la Rive-Sud. Entrées, terrasses, sentiers, murs et projets commerciaux.",
+    "services_pavers_title": "Pavé Uni Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_pavers_desc": "Installation de pavé uni à Montréal, Laval, Longueuil, Brossard et tout le Grand Montréal. Entrées pavées, terrasses et stationnements par des entrepreneurs RBQ certifiés.",
+    "services_asphalt_title": "Asphalte Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_asphalt_desc": "Pavage d'asphalte résidentiel et commercial à Montréal, Laval, Longueuil, Brossard et la Rive-Sud. Entrées et stationnements durables par entrepreneurs RBQ.",
+    "services_concrete_title": "Béton Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_concrete_desc": "Dalles de béton, trottoirs et surfaces en béton décoratif à Montréal, Laval, Longueuil, Brossard et tout le Grand Montréal.",
+    "services_excavation_title": "Excavation Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_excavation_desc": "Excavation résidentielle et commerciale à Montréal, Laval, Longueuil, Brossard et la Rive-Sud. Terrassement, nivellement et préparation de terrain par entrepreneurs RBQ.",
+    "services_retaining_walls_title": "Murs de Soutènement Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_retaining_walls_desc": "Murs de soutènement décoratifs et fonctionnels à Montréal, Laval, Longueuil, Brossard et tout le Grand Montréal. Blocs de béton, pierres naturelles ou gabions.",
+    "services_landscaping_title": "Aménagement Paysager Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_landscaping_desc": "Design et aménagement paysager complet à Montréal, Laval, Longueuil, Brossard et la région métropolitaine. Plantes, bordures, éclairage, arrosage intégré.",
+    "services_turf_title": "Gazon & Tourbe Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_turf_desc": "Installation de tourbe et gazon synthétique à Montréal, Laval, Longueuil, Brossard et tout le Grand Montréal. Résultat instantané par entrepreneurs RBQ.",
+    "services_drainage_title": "Drainage Montréal, Laval, Rive-Sud | Pavagexpert",
+    "services_drainage_desc": "Drains français, puisards et gestion des eaux pluviales à Montréal, Laval, Longueuil, Brossard et la Rive-Sud. Solutions durables conformes aux normes.",
     "calculator_title": "Calculateur de Pavé Uni | Prix au m² Montréal & Rive-Sud | Pavagexpert",
     "calculator_desc": "Estimez le prix de votre projet de pavé uni à Montréal, Laval ou la Rive-Sud. Calculateur gratuit avec coûts matériaux et installation par m².",
     "gallery_title": "Réalisations Pavé Uni Montréal, Laval, Longueuil | Galerie | Pavagexpert",
