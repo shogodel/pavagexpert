@@ -89,7 +89,7 @@
     "filter_status_all": "Tous les statuts"
   },
   "login": {
-    "title": "Espace entrepreneur",
+    "title": "Administration",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "submit": "Se connecter",

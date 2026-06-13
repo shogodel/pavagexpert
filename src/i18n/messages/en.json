@@ -89,7 +89,7 @@
     "filter_status_all": "All statuses"
   },
   "login": {
-    "title": "Entrepreneur space",
+    "title": "Admin",
     "username": "Username",
     "password": "Password",
     "submit": "Sign in",
