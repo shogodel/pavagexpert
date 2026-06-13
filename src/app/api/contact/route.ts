@@ -34,9 +34,17 @@ export async function POST(req: NextRequest) {
     const photoDir = ensureJobPhotoDir(job.id);
     const photoEntries = form.getAll("photos") as File[];
 
+    if (photoEntries.length > 5) {
+      return NextResponse.json({ ok: false, errors: ["photos"] }, { status: 400 });
+    }
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
     const savedPhotos: string[] = [];
     for (const file of photoEntries) {
       if (file.size === 0) continue;
+      if (file.size > MAX_FILE_SIZE) {
+        return NextResponse.json({ ok: false, errors: ["photos"] }, { status: 400 });
+      }
       const ext = file.name.split(".").pop() || "jpg";
       const filename = `${crypto.randomUUID()}.${ext}`;
       const buffer = Buffer.from(await file.arrayBuffer());
