@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: messages.seo?.gallery_title,
     description: messages.seo?.gallery_desc,
-    alternates: { languages: { fr: "/fr/gallery", en: "/en/gallery" } },
+    alternates: { languages: { "x-default": "/fr/gallery", fr: "/fr/gallery", en: "/en/gallery" } },
   };
 }
 

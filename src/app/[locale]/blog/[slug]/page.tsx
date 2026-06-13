@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${article.title} | ${messages.seo?.blog_title || "Blog"}`,
     description: article.desc,
-    alternates: { languages: { fr: `/fr/blog/${slug}`, en: `/en/blog/${slug}` } },
+    alternates: { languages: { "x-default": `/fr/blog/${slug}`, fr: `/fr/blog/${slug}`, en: `/en/blog/${slug}` } },
   };
 }
 

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: messages.seo?.home_title,
     description: messages.seo?.home_desc,
-    alternates: { languages: { fr: "/fr", en: "/en" } },
+    alternates: { languages: { "x-default": "/fr", fr: "/fr", en: "/en" } },
   };
 }
 

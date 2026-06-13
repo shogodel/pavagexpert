@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const messages = await getMessages(locale);
   return {
     title: messages.privacy?.title || "Privacy",
-    alternates: { languages: { fr: "/fr/privacy", en: "/en/privacy" } },
+    alternates: { languages: { "x-default": "/fr/privacy", fr: "/fr/privacy", en: "/en/privacy" } },
   };
 }
 
