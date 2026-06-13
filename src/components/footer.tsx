@@ -3,14 +3,13 @@
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/lib/constants";
+import { servicesList } from "@/lib/services-data";
 
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
   const servicesT = useTranslations("services");
-
-  const serviceKeys = ["driveway", "patio", "walkway", "retaining", "commercial"] as const;
 
   return (
     <footer className="bg-stone-900 text-stone-300">
@@ -26,25 +25,25 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("quick_links")}</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("home")}</Link>
-              <Link href="/services" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("services")}</Link>
-              <Link href="/calculator" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("calculator")}</Link>
-              <Link href="/blog" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("blog")}</Link>
-              <Link href="/get-quote" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("get_quote")}</Link>
-              <Link href="/jobs" className="text-sm text-stone-400 hover:text-white transition-colors">{nav("jobs")}</Link>
+              <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("home")}</Link>
+              <Link href={`/${locale}/services`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("services")}</Link>
+              <Link href={`/${locale}/calculator`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("calculator")}</Link>
+              <Link href={`/${locale}/blog`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("blog")}</Link>
+              <Link href={`/${locale}/get-quote`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("get_quote")}</Link>
+              <Link href={`/${locale}/jobs`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("jobs")}</Link>
             </nav>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("services_list")}</h3>
             <nav className="flex flex-col gap-2">
-              {serviceKeys.map((key) => (
+              {servicesList.map((s) => (
                 <Link
-                  key={key}
-                  href="/services"
+                  key={s.slug}
+                  href={`/${locale}/services/${s.slug}`}
                   className="text-sm text-stone-400 hover:text-white transition-colors"
                 >
-                  {servicesT(`${key}.title`)}
+                  {servicesT(`${s.id}.title`)}
                 </Link>
               ))}
             </nav>
@@ -71,12 +70,12 @@ export default function Footer() {
           <div className="max-w-xl mx-auto text-center">
             <p className="text-white font-semibold text-lg">{t("exit_title")}</p>
             <p className="text-stone-400 text-sm mt-1">{t("exit_desc")}</p>
-            <Link
-              href="/get-quote"
-              className="inline-block mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-sm transition-colors"
-            >
-              {t("exit_cta")}
-            </Link>
+              <Link
+                href={`/${locale}/get-quote`}
+                className="inline-block mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-sm transition-colors"
+              >
+                {t("exit_cta")}
+              </Link>
           </div>
         </div>
 
