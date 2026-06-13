@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   const response = NextResponse.json({ ok: true });
+  const isHttps = req.headers.get("x-forwarded-proto") === "https";
   response.cookies.set("admin_token", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isHttps,
     sameSite: "lax",
     path: "/",
     maxAge: 0,

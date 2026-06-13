@@ -14,9 +14,10 @@ export async function POST(req: NextRequest) {
     }
     const token = await signToken({ sub: contractor.id, role: "contractor" });
     const res = NextResponse.json({ ok: true, data: contractor });
+    const isHttps = req.headers.get("x-forwarded-proto") === "https";
     res.cookies.set("contractor_token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps,
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24,
