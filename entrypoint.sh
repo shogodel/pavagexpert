@@ -23,4 +23,7 @@ if (!fs.existsSync(p)) {
 }
 "
 
+# Ensure the auth file is writable by the nextjs user (created by root above).
+if [ -f /data/auth.json ]; then chown nextjs:nodejs /data/auth.json; fi
+
 exec su-exec nextjs:nodejs node server.js
