@@ -138,6 +138,13 @@ export function deleteContractor(id: string): boolean {
   return true;
 }
 
+export function verifyContractorPasswordById(id: string, password: string): boolean {
+  const auth = readAuth();
+  const contractor = auth.contractors.find((c) => c.id === id && c.status === "active");
+  if (!contractor) return false;
+  return scryptVerify(password, contractor.passwordHash);
+}
+
 export async function changeContractorPassword(id: string, newPassword: string): Promise<boolean> {
   const auth = readAuth();
   const idx = auth.contractors.findIndex((c) => c.id === id);
