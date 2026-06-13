@@ -42,6 +42,7 @@ export default function AdminDashboard() {
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({ name: "", email: "", phone: "", notes: "" });
   const [error, setError] = useState("");
+  const [fetchError, setFetchError] = useState("");
 
   const [showAddContractor, setShowAddContractor] = useState(false);
   const [contractorForm, setContractorForm] = useState({ username: "", password: "", company: "", phone: "", email: "" });
@@ -54,24 +55,28 @@ export default function AdminDashboard() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setFetchError("");
     try {
       const [aRes, uRes, cRes] = await Promise.all([
         fetch("/api/admin/analytics"),
         fetch("/api/admin/leads"),
         fetch("/api/admin/contractors"),
       ]);
-      if (aRes.status === 401 || uRes.status === 401) {
+      if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401) {
         router.push("/login");
         return;
       }
-      const aData = await aRes.json();
-      const uData = await uRes.json();
-      const cData = await cRes.json();
-      if (aData.ok) setAnalytics(aData.data);
-      if (uData.ok) setUsers(uData.data);
-      if (cData.ok) setContractors(cData.data);
-    } catch {
-      // ignore
+      const ok = aRes.ok && uRes.ok && cRes.ok;
+      const aData = ok ? await aRes.json() : null;
+      const uData = ok ? await uRes.json() : null;
+      const cData = ok ? await cRes.json() : null;
+      if (aData?.ok) setAnalytics(aData.data);
+      if (uData?.ok) setUsers(uData.data);
+      if (cData?.ok) setContractors(cData.data);
+      if (!ok) setFetchError("Erreur de chargement. Reconnectez-vous.");
+    } catch (err) {
+      console.error("Dashboard fetch error:", err);
+      setFetchError("Erreur réseau. Reconnectez-vous.");
     } finally {
       setLoading(false);
     }
@@ -196,6 +201,12 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
+        {fetchError && (
+          <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
+            {fetchError}
+          </div>
+        )}
+
         {/* Password Change - visible on analytics tab */}
         {tab === "analytics" && (
           <>
