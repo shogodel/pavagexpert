@@ -82,6 +82,7 @@ jobs:
             echo "ADMIN_PASSWORD=P@55word" >> .env
             echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
             echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
             # Ensure dedicated volumes
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
