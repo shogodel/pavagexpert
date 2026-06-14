@@ -111,10 +111,9 @@ describe("deploy.yml", () => {
     expect(content).toContain("docker rm -f pavagexpert-pavexpert-1");
   });
 
-  it("copies compose file via scp-action", () => {
-    expect(content).toContain("appleboy/scp-action@v1");
-    expect(content).toContain("docker-compose.pavagexpert.yaml");
-    expect(content).toContain("target: ~/apps/");
+  it("downloads compose file via curl from repo", () => {
+    expect(content).toContain("curl -sSL -o docker-compose.pavagexpert.yaml");
+    expect(content).toContain("raw.githubusercontent.com/shogodel/pavagexpert/master/docker-compose.pavagexpert.yaml");
   });
 
   it("uses compose file via -f flag", () => {

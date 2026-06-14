@@ -40,15 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy compose file to droplet
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.DROPLET_SSH }}
-          source: docker-compose.pavagexpert.yaml
-          target: ~/apps/
-
       - name: Deploy on droplet
         uses: appleboy/ssh-action@v1
         with:
@@ -96,7 +87,11 @@ jobs:
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
             docker volume inspect pavagexpert_pg_data >/dev/null 2>&1 || docker volume create pavagexpert_pg_data
 
-            # Pull latest image and deploy using the file copied via scp
+            # Download compose file from repo (avoids heredoc YAML issues)
+            curl -sSL -o docker-compose.pavagexpert.yaml \
+              https://raw.githubusercontent.com/shogodel/pavagexpert/master/docker-compose.pavagexpert.yaml
+
+            # Pull latest image and deploy
             docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
 
             # Start DB first (migrate.mjs retries if not ready)
