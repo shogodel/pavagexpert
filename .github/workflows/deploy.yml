@@ -133,7 +133,7 @@ jobs:
 
             # Pull latest image and recreate both services (db first, then pavagexpert)
             docker compose pull pavagexpert
-            docker compose up -d pavagexpert db --force-recreate
+            docker compose up -d pavagexpert pavagexpert-db --force-recreate
             sleep 5
             docker compose logs --tail 20 pavagexpert db
             docker restart swag 2>/dev/null || true
