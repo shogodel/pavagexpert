@@ -114,6 +114,7 @@ jobs:
               print "      interval: 5s"
               print "      timeout: 5s"
               print "      retries: 5"
+              print "      start_period: 30s"
               skip = 1
               next
             }

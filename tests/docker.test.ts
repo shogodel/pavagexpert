@@ -58,6 +58,7 @@ describe("docker-compose.yml", () => {
 
   it("has healthcheck on db service", () => {
     expect(content).toContain("pg_isready -U pavagexpert");
+    expect(content).toContain("start_period: 30s");
   });
 });
 
