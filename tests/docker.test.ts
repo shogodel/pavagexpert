@@ -30,9 +30,21 @@ describe("Dockerfile", () => {
 
 describe("docker-compose.yml", () => {
   const composePath = path.join(__dirname, "..", "docker-compose.yml");
+  const deployComposePath = path.join(
+    __dirname,
+    "..",
+    "docker-compose.pavagexpert.yaml"
+  );
 
   it("exists", () => {
     expect(fs.existsSync(composePath)).toBe(true);
+  });
+
+  it("deploy copy exists and matches template", () => {
+    expect(fs.existsSync(deployComposePath)).toBe(true);
+    expect(fs.readFileSync(deployComposePath, "utf-8")).toBe(
+      fs.readFileSync(composePath, "utf-8")
+    );
   });
 
   const content = fs.readFileSync(composePath, "utf-8");
@@ -99,19 +111,19 @@ describe("deploy.yml", () => {
     expect(content).toContain("docker rm -f pavagexpert-pavexpert-1");
   });
 
+  it("copies compose file via scp-action", () => {
+    expect(content).toContain("appleboy/scp-action@v1");
+    expect(content).toContain("docker-compose.pavagexpert.yaml");
+    expect(content).toContain("target: ~/apps/");
+  });
+
+  it("uses compose file via -f flag", () => {
+    expect(content).toContain("-f docker-compose.pavagexpert.yaml");
+  });
+
   it("creates dedicated pavagexpert_pg_data (not shared pg_data)", () => {
     expect(content).toContain("pavagexpert_pg_data");
     expect(content).not.toContain("volume inspect pg_data");
-  });
-
-  it("generates separate compose file via heredoc with fixed project name", () => {
-    expect(content).toContain("cat > docker-compose.pavagexpert.yaml << 'COMPOSE'");
-    expect(content).toContain("name: pavagexpert");
-    expect(content).not.toContain("awk -v");
-  });
-
-  it("uses -f flag to target only pavagexpert compose file", () => {
-    expect(content).toContain("-f docker-compose.pavagexpert.yaml");
   });
 
   it("starts pavagexpert-db before pavagexpert", () => {

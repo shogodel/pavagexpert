@@ -40,6 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Copy compose file to droplet
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DROPLET_SSH }}
+          source: docker-compose.pavagexpert.yaml
+          target: ~/apps/
+
       - name: Deploy on droplet
         uses: appleboy/ssh-action@v1
         with:
@@ -51,10 +60,7 @@ jobs:
             set -e
             cd ~/apps
 
-            # ──────────────────────────────────────────────
-            #  1. Clean up pavagexpert artifacts left by old
-            #     awk-based deploys from the shared file
-            # ──────────────────────────────────────────────
+            # Clean up pavagexpert artifacts left by old awk-based deploys
             if [ -f docker-compose.yaml ]; then
               awk '
               BEGIN { skip = 0 }
@@ -75,9 +81,7 @@ jobs:
             docker rm -f pavagexpert 2>/dev/null || true
             docker rm -f pavagexpert-pavexpert-1 2>/dev/null || true
 
-            # ──────────────────────────────────────────────
-            #  2. Preserve secrets across deploys
-            # ──────────────────────────────────────────────
+            # Preserve secrets across deploys
             if [ -f .env ]; then
               OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-) || :
               OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-) || :
@@ -88,71 +92,11 @@ jobs:
             echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
             echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
 
-            # ──────────────────────────────────────────────
-            #  3. Ensure dedicated volumes
-            # ──────────────────────────────────────────────
+            # Ensure dedicated volumes
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
             docker volume inspect pavagexpert_pg_data >/dev/null 2>&1 || docker volume create pavagexpert_pg_data
 
-            # ──────────────────────────────────────────────
-            #  4. Generate separate compose file with fixed
-            #     project name to isolate from shared file
-            # ──────────────────────────────────────────────
-            cat > docker-compose.pavagexpert.yaml << 'COMPOSE'
-name: pavagexpert
-
-services:
-  pavagexpert:
-    container_name: pavagexpert
-    image: ghcr.io/shogodel/pavagexpert:latest
-    pull_policy: always
-    restart: unless-stopped
-    depends_on:
-      - pavagexpert-db
-    env_file: .env
-    environment:
-      - NODE_ENV=production
-      - DATA_DIR=/data
-      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    volumes:
-      - jobs_data:/data
-
-  pavagexpert-db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-      - pavagexpert_pg_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: pavagexpert
-      POSTGRES_USER: pavagexpert
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pavagexpert"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
-
-volumes:
-  jobs_data:
-    external: true
-  pavagexpert_pg_data:
-    external: true
-
-networks:
-  default:
-    external: true
-    name: apps_default
-COMPOSE
-
-            # ──────────────────────────────────────────────
-            #  5. Pull latest image and deploy
-            # ──────────────────────────────────────────────
+            # Pull latest image and deploy using the file copied via scp
             docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
 
             # Start DB first (migrate.mjs retries if not ready)
