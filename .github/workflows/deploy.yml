@@ -51,92 +51,119 @@ jobs:
             set -e
             cd ~/apps
 
-            # Preserve existing secrets across deploys
-            if [ -f .env ]; then
-              OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-)
-              OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-)
+            # ──────────────────────────────────────────────
+            #  1. Clean up pavagexpert artifacts left by old
+            #     awk-based deploys from the shared file
+            # ──────────────────────────────────────────────
+            if [ -f docker-compose.yaml ]; then
+              awk '
+              BEGIN { skip = 0 }
+              /^  pavagexpert(-db)?:/ { skip = 1; next }
+              skip && /^  [a-z]|^volumes|^networks/ { skip = 0 }
+              skip { next }
+              /^  (jobs_data|pavagexpert_pg_data):$/ { next }
+              { print }
+              ' docker-compose.yaml > .dc.clean
+              if [ -s .dc.clean ]; then
+                mv .dc.clean docker-compose.yaml
+              else
+                rm -f .dc.clean
+              fi
             fi
 
-            # Write fresh .env (no CRLF, no spaces, no garbage from old files)
+            # Remove stale pavagexpert containers
+            docker rm -f pavagexpert 2>/dev/null || true
+            docker rm -f pavagexpert-pavexpert-1 2>/dev/null || true
+
+            # ──────────────────────────────────────────────
+            #  2. Preserve secrets across deploys
+            # ──────────────────────────────────────────────
+            if [ -f .env ]; then
+              OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-) || :
+              OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-) || :
+            fi
+
             echo "ADMIN_USERNAME=admin" > .env
             echo "ADMIN_PASSWORD=P@55word" >> .env
             echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
             echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
 
-            # Ensure volumes exist
+            # ──────────────────────────────────────────────
+            #  3. Ensure dedicated volumes
+            # ──────────────────────────────────────────────
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
-            docker volume inspect pg_data >/dev/null 2>&1 || docker volume create pg_data
+            docker volume inspect pavagexpert_pg_data >/dev/null 2>&1 || docker volume create pavagexpert_pg_data
 
-            # Source env so we can inject into the compose environment section
-            set -a; . .env; set +a
+            # ──────────────────────────────────────────────
+            #  4. Generate separate compose file with fixed
+            #     project name to isolate from shared file
+            # ──────────────────────────────────────────────
+            cat > docker-compose.pavagexpert.yaml << 'COMPOSE'
+name: pavagexpert
 
-            # Rewrite pavagexpert + db services in shared compose file.
-            # The awk replaces the existing pavagexpert: block (and anything between
-            # it and the next top-level key) with a fresh section that includes
-            # both services. This ensures the db: service stays inside services:.
-            awk -v admin_user="$ADMIN_USERNAME" -v admin_pass="$ADMIN_PASSWORD" \
-                -v jwt_secret="$JWT_SECRET" '
-            /^  pavagexpert:/ {
-              print "  pavagexpert:"
-              print "    container_name: pavagexpert"
-              print "    image: ghcr.io/shogodel/pavagexpert:latest"
-              print "    pull_policy: always"
-              print "    restart: unless-stopped"
-              print "    depends_on:"
-              print "      pavagexpert-db:"
-              print "        condition: service_healthy"
-              print "    env_file: .env"
-              print "    environment:"
-              print "      - NODE_ENV=production"
-              print "      - DATA_DIR=/data"
-              print "      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert"
-              print "      - ADMIN_USERNAME=" admin_user
-              print "      - ADMIN_PASSWORD=" admin_pass
-              print "      - JWT_SECRET=" jwt_secret
-              print "    logging:"
-              print "      driver: json-file"
-              print "      options:"
-              print "        max-size: \"10m\""
-              print "        max-file: \"3\""
-              print "    volumes:"
-              print "      - jobs_data:/data"
-              print "  pavagexpert-db:"
-              print "    image: postgres:16-alpine"
-              print "    restart: unless-stopped"
-              print "    volumes:"
-              print "      - pg_data:/var/lib/postgresql/data"
-              print "    environment:"
-              print "      POSTGRES_DB: pavagexpert"
-              print "      POSTGRES_USER: pavagexpert"
-              print "      POSTGRES_PASSWORD: ${DB_PASSWORD}"
-              print "    healthcheck:"
-              print "      test: [\"CMD-SHELL\", \"pg_isready -U pavagexpert\"]"
-              print "      interval: 5s"
-              print "      timeout: 5s"
-              print "      retries: 5"
-              print "      start_period: 30s"
-              skip = 1
-              next
-            }
-            skip && /^[a-z]/ { skip = 0 }
-            skip { next }
-            { print }
-            ' docker-compose.yaml > /tmp/compose.tmp && mv /tmp/compose.tmp docker-compose.yaml
+services:
+  pavagexpert:
+    container_name: pavagexpert
+    image: ghcr.io/shogodel/pavagexpert:latest
+    pull_policy: always
+    restart: unless-stopped
+    depends_on:
+      - pavagexpert-db
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - DATA_DIR=/data
+      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - jobs_data:/data
 
-            # Add pg_data volume if missing
-            grep -q "pg_data:" docker-compose.yaml || sed -i '/^volumes:/a\  pg_data:' docker-compose.yaml
+  pavagexpert-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - pavagexpert_pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: pavagexpert
+      POSTGRES_USER: pavagexpert
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pavagexpert"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
-            # Show updated compose
-            head -50 docker-compose.yaml
+volumes:
+  jobs_data:
+    external: true
+  pavagexpert_pg_data:
+    external: true
 
-            # Log in to ghcr.io with GITHUB_TOKEN so we can pull the private package
-            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+networks:
+  default:
+    external: true
+    name: apps_default
+COMPOSE
 
-            # Pull latest image and recreate both services (db first, then pavagexpert)
-            docker compose pull pavagexpert
-            docker compose up -d pavagexpert pavagexpert-db --force-recreate
+            # ──────────────────────────────────────────────
+            #  5. Pull latest image and deploy
+            # ──────────────────────────────────────────────
+            docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
+
+            # Start DB first (migrate.mjs retries if not ready)
+            docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert-db
+            sleep 3
+
+            # Start app (no service_healthy gate — migrate.mjs handles retries)
+            docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert --force-recreate
             sleep 5
-            docker compose logs --tail 20 pavagexpert db
+
+            docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert pavagexpert-db
             docker restart swag 2>/dev/null || true
             docker image prune -f
         env:

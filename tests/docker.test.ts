@@ -37,10 +37,11 @@ describe("docker-compose.yml", () => {
 
   const content = fs.readFileSync(composePath, "utf-8");
 
-  it("has pavagexpert service with depends_on", () => {
+  it("has pavagexpert service with depends_on and fixed project name", () => {
     expect(content).toContain("pavagexpert:");
     expect(content).toContain("depends_on:");
-    expect(content).toContain("pavagexpert-db:");
+    expect(content).toContain("- pavagexpert-db");
+    expect(content).toContain("name: pavagexpert");
   });
 
   it("has pavagexpert-db service", () => {
@@ -52,13 +53,16 @@ describe("docker-compose.yml", () => {
     expect(content).toContain("@pavagexpert-db:5432/pavagexpert");
   });
 
-  it("has pg_data volume", () => {
-    expect(content).toContain("pg_data:");
+  it("has dedicated pavagexpert_pg_data volume with external: true", () => {
+    expect(content).toContain("pavagexpert_pg_data:");
+    expect(content).toContain("external: true");
+    expect(content).not.toMatch(/^\s{2}pg_data:$/m);
   });
 
-  it("has healthcheck on db service", () => {
+  it("has healthcheck with 60s start_period and 10 retries", () => {
     expect(content).toContain("pg_isready -U pavagexpert");
-    expect(content).toContain("start_period: 30s");
+    expect(content).toContain("start_period: 60s");
+    expect(content).toContain("retries: 10");
   });
 });
 
@@ -86,13 +90,36 @@ describe("deploy.yml", () => {
     expect(content).toContain("DB_PASSWORD=");
   });
 
-  it("creates pg_data volume via docker compose", () => {
-    expect(content).toContain("pg_data");
+  it("cleans up pavagexpert entries from shared compose file", () => {
+    expect(content).toContain("/^  pavagexpert(-db)?:/");
   });
 
-  it("starts both pavagexpert and db services", () => {
+  it("removes stale pavagexpert containers", () => {
+    expect(content).toContain("docker rm -f pavagexpert");
+    expect(content).toContain("docker rm -f pavagexpert-pavexpert-1");
+  });
+
+  it("creates dedicated pavagexpert_pg_data (not shared pg_data)", () => {
+    expect(content).toContain("pavagexpert_pg_data");
+    expect(content).not.toContain("volume inspect pg_data");
+  });
+
+  it("generates separate compose file via heredoc with fixed project name", () => {
+    expect(content).toContain("cat > docker-compose.pavagexpert.yaml << 'COMPOSE'");
+    expect(content).toContain("name: pavagexpert");
+    expect(content).not.toContain("awk -v");
+  });
+
+  it("uses -f flag to target only pavagexpert compose file", () => {
+    expect(content).toContain("-f docker-compose.pavagexpert.yaml");
+  });
+
+  it("starts pavagexpert-db before pavagexpert", () => {
     expect(content).toContain(
-      "docker compose up -d pavagexpert pavagexpert-db --force-recreate"
+      "docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert-db"
+    );
+    expect(content).toContain(
+      "docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert --force-recreate"
     );
   });
 });

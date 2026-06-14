@@ -1,3 +1,5 @@
+name: pavagexpert
+
 services:
   pavagexpert:
     container_name: pavagexpert
@@ -5,8 +7,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     depends_on:
-      pavagexpert-db:
-        condition: service_healthy
+      - pavagexpert-db
     environment:
       - NODE_ENV=production
       - DATA_DIR=/data
@@ -18,7 +19,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pavagexpert_pg_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: pavagexpert
       POSTGRES_USER: pavagexpert
@@ -27,12 +28,14 @@ services:
       test: ["CMD-SHELL", "pg_isready -U pavagexpert"]
       interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 10
+      start_period: 60s
 
 volumes:
   jobs_data:
-  pg_data:
+    external: true
+  pavagexpert_pg_data:
+    external: true
 
 networks:
   default:
