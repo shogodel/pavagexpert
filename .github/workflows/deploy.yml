@@ -51,31 +51,45 @@ jobs:
             set -e
             cd ~/apps
 
-            # Write a BRAND NEW .env — no CRLF, no spaces, no garbage from old files.
-            # Preserve existing JWT_SECRET so sessions survive deploys.
-            if [ -f .env ]; then OLD_SECRET=$(grep JWT_SECRET .env | cut -d= -f2-); fi
+            # Preserve existing secrets across deploys
+            if [ -f .env ]; then
+              OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-)
+              OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-)
+            fi
+
+            # Write fresh .env (no CRLF, no spaces, no garbage from old files)
             echo "ADMIN_USERNAME=admin" > .env
             echo "ADMIN_PASSWORD=P@55word" >> .env
-            echo "JWT_SECRET=${OLD_SECRET:-$(openssl rand -base64 32)}" >> .env
+            echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
+            echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
 
-            # Ensure jobs_data volume exists
+            # Ensure volumes exist
             docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
+            docker volume inspect pg_data >/dev/null 2>&1 || docker volume create pg_data
 
-            # Update pavagexpert service in shared compose file
-            # Source the .env so we can inject vars into the compose environment section
+            # Source env so we can inject into the compose environment section
             set -a; . .env; set +a
 
-            awk -v admin_user="$ADMIN_USERNAME" -v admin_pass="$ADMIN_PASSWORD" -v jwt_secret="$JWT_SECRET" '
+            # Rewrite pavagexpert + db services in shared compose file.
+            # The awk replaces the existing pavagexpert: block (and anything between
+            # it and the next top-level key) with a fresh section that includes
+            # both services. This ensures the db: service stays inside services:.
+            awk -v admin_user="$ADMIN_USERNAME" -v admin_pass="$ADMIN_PASSWORD" \
+                -v jwt_secret="$JWT_SECRET" '
             /^  pavagexpert:/ {
               print "  pavagexpert:"
               print "    container_name: pavagexpert"
               print "    image: ghcr.io/shogodel/pavagexpert:latest"
               print "    pull_policy: always"
               print "    restart: unless-stopped"
+              print "    depends_on:"
+              print "      db:"
+              print "        condition: service_healthy"
               print "    env_file: .env"
               print "    environment:"
               print "      - NODE_ENV=production"
               print "      - DATA_DIR=/data"
+              print "      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@db:5432/pavagexpert"
               print "      - ADMIN_USERNAME=" admin_user
               print "      - ADMIN_PASSWORD=" admin_pass
               print "      - JWT_SECRET=" jwt_secret
@@ -86,6 +100,20 @@ jobs:
               print "        max-file: \"3\""
               print "    volumes:"
               print "      - jobs_data:/data"
+              print "  db:"
+              print "    image: postgres:16-alpine"
+              print "    restart: unless-stopped"
+              print "    volumes:"
+              print "      - pg_data:/var/lib/postgresql/data"
+              print "    environment:"
+              print "      POSTGRES_DB: pavagexpert"
+              print "      POSTGRES_USER: pavagexpert"
+              print "      POSTGRES_PASSWORD: ${DB_PASSWORD}"
+              print "    healthcheck:"
+              print "      test: [\"CMD-SHELL\", \"pg_isready -U pavagexpert\"]"
+              print "      interval: 5s"
+              print "      timeout: 5s"
+              print "      retries: 5"
               skip = 1
               next
             }
@@ -94,22 +122,20 @@ jobs:
             { print }
             ' docker-compose.yaml > /tmp/compose.tmp && mv /tmp/compose.tmp docker-compose.yaml
 
-            # Add jobs_data volume if missing
-            grep -q "jobs_data:" docker-compose.yaml || sed -i '/^volumes:/a\  jobs_data:' docker-compose.yaml
+            # Add pg_data volume if missing
+            grep -q "pg_data:" docker-compose.yaml || sed -i '/^volumes:/a\  pg_data:' docker-compose.yaml
 
-            # Show updated compose section
-            grep -A 10 "pavagexpert:" docker-compose.yaml
+            # Show updated compose
+            head -50 docker-compose.yaml
 
             # Log in to ghcr.io with GITHUB_TOKEN so we can pull the private package
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
-            # Pull latest image and recreate container.
-            # The entrypoint.sh seeds auth.json from env on first start.
-            # auth-store.ts falls back to admin/admin if everything else fails.
+            # Pull latest image and recreate both services (db first, then pavagexpert)
             docker compose pull pavagexpert
-            docker compose up -d pavagexpert --force-recreate
-            sleep 3
-            docker compose logs --tail 20 pavagexpert
+            docker compose up -d pavagexpert db --force-recreate
+            sleep 5
+            docker compose logs --tail 20 pavagexpert db
             docker restart swag 2>/dev/null || true
             docker image prune -f
         env:

@@ -4,7 +4,10 @@ set -e
 mkdir -p /data
 chown nextjs:nodejs /data
 
-# Seed auth.json from environment on first start using Node.js built-in crypto (no bcryptjs dep).
+# Run database migration (connects to PostgreSQL, seeds admin if empty)
+node /app/db/migrate.mjs
+
+# Seed auth.json from environment (fallback for existing JSON operations)
 cd /app
 node -e "
 const fs = require('fs');
@@ -14,7 +17,6 @@ var needsReseed = false;
 if (fs.existsSync(p)) {
   try {
     var existing = JSON.parse(fs.readFileSync(p, 'utf-8'));
-    // Detect old bcrypt hash ($$2b$$ prefix) and re-seed with scrypt
     if (existing.admin && existing.admin.passwordHash && existing.admin.passwordHash.startsWith('\$2b\$')) {
       needsReseed = true;
       console.log('[entrypoint] detected bcrypt format, re-seeding with scrypt');
@@ -35,7 +37,6 @@ if (needsReseed) {
 }
 "
 
-# Ensure the auth file is writable by the nextjs user (created by root above).
 if [ -f /data/auth.json ]; then chown nextjs:nodejs /data/auth.json; fi
 
 exec su-exec nextjs:nodejs node server.js

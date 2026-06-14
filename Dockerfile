@@ -27,6 +27,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 RUN apk add --no-cache su-exec curl
 
+COPY src/db/migrate.mjs ./db/migrate.mjs
+COPY src/db/migrations/ ./db/migrations/
+
 COPY --chmod=755 entrypoint.sh ./
 
 EXPOSE 3000
