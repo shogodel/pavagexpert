@@ -5,16 +5,16 @@ services:
     pull_policy: always
     restart: unless-stopped
     depends_on:
-      db:
+      pavagexpert-db:
         condition: service_healthy
     environment:
       - NODE_ENV=production
       - DATA_DIR=/data
-      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@db:5432/pavagexpert
+      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert
     volumes:
       - jobs_data:/data
 
-  db:
+  pavagexpert-db:
     image: postgres:16-alpine
     restart: unless-stopped
     volumes:

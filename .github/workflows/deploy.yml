@@ -83,13 +83,13 @@ jobs:
               print "    pull_policy: always"
               print "    restart: unless-stopped"
               print "    depends_on:"
-              print "      db:"
+              print "      pavagexpert-db:"
               print "        condition: service_healthy"
               print "    env_file: .env"
               print "    environment:"
               print "      - NODE_ENV=production"
               print "      - DATA_DIR=/data"
-              print "      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@db:5432/pavagexpert"
+              print "      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert"
               print "      - ADMIN_USERNAME=" admin_user
               print "      - ADMIN_PASSWORD=" admin_pass
               print "      - JWT_SECRET=" jwt_secret
@@ -100,7 +100,7 @@ jobs:
               print "        max-file: \"3\""
               print "    volumes:"
               print "      - jobs_data:/data"
-              print "  db:"
+              print "  pavagexpert-db:"
               print "    image: postgres:16-alpine"
               print "    restart: unless-stopped"
               print "    volumes:"
