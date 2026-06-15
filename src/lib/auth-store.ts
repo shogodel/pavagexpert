@@ -89,6 +89,13 @@ export async function addContractor(input: { username: string; password: string;
   const rows = await query<ContractorRow>(
     `INSERT INTO contractors (username, company, email, phone, password_hash, status)
      VALUES ($1, $2, $3, $4, $5, 'active')
+     ON CONFLICT (username) DO UPDATE SET
+       company = EXCLUDED.company,
+       email = EXCLUDED.email,
+       phone = EXCLUDED.phone,
+       password_hash = EXCLUDED.password_hash,
+       status = 'active',
+       updated_at = now()
      RETURNING *`,
     [input.username, input.company, input.email, input.phone, hash]
   );
