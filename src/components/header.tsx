@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,6 +23,25 @@ export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then(setAuth)
+      .catch(() => setAuth({ authenticated: false }));
+  }, []);
+
+  async function handleLogout() {
+    await fetch("/api/logout", { method: "POST" });
+    setAuth({ authenticated: false });
+    router.push(`/${locale}`);
+  }
+
+  function dashboardHref(): string {
+    if (auth?.role === "contractor") return `/${locale}/contractor/dashboard`;
+    return `/${locale}/admin`;
+  }
   const otherLocale = locale === "fr" ? "en" : "fr";
 
   function isActive(page: string): boolean {
@@ -121,15 +140,40 @@ export default function Header() {
               {t("jobs")}
             </Link>
 
-            <Link
-              href={`/${locale}/login`}
-              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-              }`}
-              aria-current={isActive("login") ? "page" : undefined}
-            >
-              {t("login")}
-            </Link>
+            {auth === null ? null : auth.authenticated ? (
+              <>
+                <Link
+                  href={dashboardHref()}
+                  className={`text-sm font-medium uppercase tracking-wider transition-colors text-stone-600 hover:text-stone-900`}
+                >
+                  {t("dashboard")}
+                </Link>
+                {auth.role === "contractor" && (
+                  <Link
+                    href={`/${locale}/contractor/profile`}
+                    className={`text-sm font-medium uppercase tracking-wider transition-colors text-stone-600 hover:text-stone-900`}
+                  >
+                    {t("profile")}
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="text-sm font-medium uppercase tracking-wider text-stone-600 hover:text-stone-900 cursor-pointer"
+                >
+                  {t("logout")}
+                </button>
+              </>
+            ) : (
+              <Link
+                href={`/${locale}/login`}
+                className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+                  isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+                }`}
+                aria-current={isActive("login") ? "page" : undefined}
+              >
+                {t("login")}
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-4">
@@ -215,13 +259,40 @@ export default function Header() {
               >
                 {t("jobs")}
               </Link>
-              <Link
-                href={`/${locale}/login`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("login")}
-              </Link>
+              {auth === null ? null : auth.authenticated ? (
+                <>
+                  <Link
+                    href={dashboardHref()}
+                    className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {t("dashboard")}
+                  </Link>
+                  {auth.role === "contractor" && (
+                    <Link
+                      href={`/${locale}/contractor/profile`}
+                      className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {t("profile")}
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => { handleLogout(); setMenuOpen(false); }}
+                    className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900 text-left cursor-pointer"
+                  >
+                    {t("logout")}
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href={`/${locale}/login`}
+                  className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("login")}
+                </Link>
+              )}
 
               <Link
                 href={`/${locale}/get-quote`}
