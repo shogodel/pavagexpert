@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         fetch("/api/admin/contractors"),
       ]);
       if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401) {
-        router.push("/login");
+        router.push(`/${locale}/login`);
         return;
       }
       const ok = aRes.ok && uRes.ok && cRes.ok;
@@ -83,13 +83,13 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, locale, t]);
 
   useEffect(() => { fetchData(); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
 
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/login");
+    router.push(`/${locale}/login`);
   }
 
   async function handleAddUser(e: React.FormEvent) {

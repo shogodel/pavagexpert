@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "@/lib/use-translations";
 
 interface Lead {
   id: string;
@@ -15,6 +16,7 @@ interface Lead {
 }
 
 export default function ContractorDashboard() {
+  const locale = useLocale();
   const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [profile, setProfile] = useState<{ company: string; email: string; phone: string } | null>(null);
@@ -25,7 +27,7 @@ export default function ContractorDashboard() {
       .then((r) => r.json())
       .then((d) => {
         if (d.ok) setProfile(d.data);
-        else router.push("/contractor/login");
+        else router.push(`/${locale}/contractor/login`);
       });
     fetch("/api/leads")
       .then((r) => r.json())
@@ -33,11 +35,11 @@ export default function ContractorDashboard() {
         if (d.ok) setLeads(d.data);
         setLoading(false);
       });
-  }, [router]);
+  }, [router, locale]);
 
   const handleLogout = () => {
     document.cookie = "contractor_token=; path=/; max-age=0";
-    router.push("/");
+    router.push(`/${locale}`);
   };
 
   if (loading) return <p className="text-center py-10">Chargement...</p>;
@@ -48,7 +50,7 @@ export default function ContractorDashboard() {
         <h1 className="text-2xl font-bold">Tableau de bord</h1>
         <div className="flex gap-4">
           <button
-            onClick={() => router.push("/contractor/profile")}
+            onClick={() => router.push(`/${locale}/contractor/profile`)}
             className="text-blue-600 hover:underline"
           >
             Mon profil

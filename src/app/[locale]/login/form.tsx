@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "@/lib/use-translations";
+import { useTranslations, useLocale } from "@/lib/use-translations";
 
 export default function LoginForm() {
   const t = useTranslations("login");
+  const locale = useLocale();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ export default function LoginForm() {
 
       if (!res.ok) throw new Error();
 
-      router.push("/admin");
+      router.push(`/${locale}/admin`);
     } catch {
       setError(true);
     } finally {

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "@/lib/use-translations";
 
 export default function ContractorLoginForm() {
+  const locale = useLocale();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +25,7 @@ export default function ContractorLoginForm() {
       });
       const data = await res.json();
       if (!data.ok) throw new Error();
-      router.push("/contractor/dashboard");
+      router.push(`/${locale}/contractor/dashboard`);
     } catch {
       setError(true);
     } finally {

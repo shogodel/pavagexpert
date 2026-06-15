@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "@/lib/use-translations";
 
 export default function ContractorProfileClient() {
+  const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -21,13 +23,13 @@ export default function ContractorProfileClient() {
     fetch("/api/contractor/profile")
       .then((r) => r.json())
       .then((d) => {
-        if (!d.ok) return router.push("/contractor/login");
+        if (!d.ok) return router.push(`/${locale}/contractor/login`);
         setCompany(d.data.company || "");
         setPhone(d.data.phone || "");
         setEmail(d.data.email || "");
         setLoading(false);
       });
-  }, [router]);
+  }, [router, locale]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

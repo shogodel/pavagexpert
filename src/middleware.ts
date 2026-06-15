@@ -33,7 +33,7 @@ function isContractorPath(pathname: string): boolean {
   return pathname.startsWith("/contractor/") || locales.some((l) => pathname.startsWith(`/${l}/contractor/`));
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   // --- Admin auth check ---
@@ -51,7 +51,6 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
-    // Not authenticated — redirect to login (preserve locale)
     const found = findLocale(pathname);
     const prefix = found ? `/${found}` : `/${defaultLocale}`;
     const loginUrl = new URL(`${prefix}/login`, request.url);
