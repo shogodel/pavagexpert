@@ -1,4 +1,7 @@
 import { Pool, QueryResultRow } from "pg";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -11,10 +14,72 @@ pool.on("error", (err) => {
   console.error("[db] Unexpected pool error:", err);
 });
 
+let initPromise: Promise<void> | null = null;
+
+async function ensureInit(): Promise<void> {
+  if (!process.env.DATABASE_URL) return;
+  if (!initPromise) {
+    initPromise = runMigrations();
+  }
+  return initPromise;
+}
+
+async function runMigrations(): Promise<void> {
+  for (let i = 0; i < 30; i++) {
+    try {
+      await pool.query("SELECT 1");
+      break;
+    } catch {
+      if (i === 29) throw new Error("Database not reachable after 30 seconds");
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+  }
+
+  const possibleDirs = [
+    path.join(process.cwd(), "src", "db", "migrations"),
+    path.join(process.cwd(), "db", "migrations"),
+  ];
+  const migrationsDir = possibleDirs.find((d) => fs.existsSync(d));
+
+  if (migrationsDir) {
+    await pool.query(
+      "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, run_at TIMESTAMPTZ DEFAULT now())"
+    );
+
+    const files = fs
+      .readdirSync(migrationsDir)
+      .filter((f) => f.endsWith(".sql"))
+      .sort();
+
+    const { rows: ran } = await pool.query("SELECT name FROM _migrations");
+    const ranSet = new Set(ran.map((r: { name: string }) => r.name));
+
+    for (const file of files) {
+      if (ranSet.has(file)) continue;
+      const sql = fs.readFileSync(path.join(migrationsDir, file), "utf-8");
+      await pool.query(sql);
+      await pool.query("INSERT INTO _migrations (name) VALUES ($1)", [file]);
+    }
+  }
+
+  const { rows: admins } = await pool.query("SELECT id FROM admin LIMIT 1");
+  if (admins.length === 0) {
+    const username = process.env.ADMIN_USERNAME || "admin";
+    const password = process.env.ADMIN_PASSWORD || "admin";
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+    await pool.query(
+      "INSERT INTO admin (username, password_hash) VALUES ($1, $2)",
+      [username, salt + ":" + hash]
+    );
+  }
+}
+
 export async function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
   params?: unknown[]
 ): Promise<T[]> {
+  await ensureInit();
   const client = await pool.connect();
   try {
     const res = await client.query<T>(text, params);
@@ -27,6 +92,7 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
 export async function transaction<T>(
   fn: (q: typeof query) => Promise<T>
 ): Promise<T> {
+  await ensureInit();
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
