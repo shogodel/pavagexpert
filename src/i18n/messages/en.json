@@ -19,7 +19,8 @@
     "services_retaining_walls": "Retaining Walls",
     "services_landscaping": "Landscaping",
     "services_turf": "Sod & Turf",
-    "services_drainage": "Drainage"
+    "services_drainage": "Drainage",
+    "apply": "Become a Contractor"
   },
   "hero": {
     "title": "The best outdoor contractors, all in one place.",
@@ -120,6 +121,33 @@
     "filter_postal": "Filter by postal code...",
     "filter_status_all": "All statuses"
   },
+  "apply": {
+    "title": "Become a Contractor",
+    "subtitle": "Fill out the form below to submit your application. We'll review it within 48 hours.",
+    "company": "Company name",
+    "rbq": "RBQ License",
+    "phone": "Phone",
+    "email": "Email",
+    "years": "Years of experience",
+    "areas": "Service areas",
+    "area_residential": "Residential",
+    "area_commercial": "Commercial",
+    "area_industrial": "Industrial",
+    "area_roadwork": "Roadwork",
+    "area_municipal": "Municipal",
+    "company_required": "Company name is required.",
+    "rbq_invalid": "Invalid RBQ format (e.g. RBQ 1234-5675-01).",
+    "phone_invalid": "Invalid phone format.",
+    "email_invalid": "Invalid email format.",
+    "email_taken": "This email is already registered.",
+    "years_invalid": "Invalid years value.",
+    "areas_required": "Select at least one service area.",
+    "error_generic": "Something went wrong. Please try again.",
+    "error_network": "Network error. Check your connection.",
+    "success_title": "Application received!",
+    "success_body": "Thank you for your application. Our team will review it within 48 hours. You'll receive an email once a decision is made.",
+    "submit": "Submit application"
+  },
   "login": {
     "title": "Admin",
     "username": "Username",
@@ -177,7 +205,15 @@
     "reset_placeholder": "New password (min 6 chars)",
     "reset_confirm": "Confirm",
     "reset_cancel": "Cancel",
-    "reset_btn": "Reset PW"
+    "reset_btn": "Reset PW",
+    "tab_applications": "Applications",
+    "applications_title": "Pending Applications",
+    "applications_empty": "No pending applications.",
+    "app_rbq": "RBQ:",
+    "app_years": "Years in business:",
+    "app_areas": "Service areas:",
+    "app_approve": "Approve",
+    "app_reject": "Reject"
   },
   "get_quote": {
     "title": "Describe your project once. Certified contractors compete for your contract.",

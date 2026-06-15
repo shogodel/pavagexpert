@@ -19,7 +19,8 @@
     "services_retaining_walls": "Murs de soutènement",
     "services_landscaping": "Aménagement paysager",
     "services_turf": "Gazon & Tourbe",
-    "services_drainage": "Drainage"
+    "services_drainage": "Drainage",
+    "apply": "Devenir entrepreneur"
   },
   "hero": {
     "title": "Le meilleur de l'aménagement extérieur, réuni en un lieu.",
@@ -120,6 +121,33 @@
     "filter_postal": "Filtrer par code postal...",
     "filter_status_all": "Tous les statuts"
   },
+  "apply": {
+    "title": "Devenir entrepreneur",
+    "subtitle": "Remplissez le formulaire ci-dessous pour soumettre votre candidature. Nous l'examinerons sous 48 heures.",
+    "company": "Nom de l'entreprise",
+    "rbq": "Numéro RBQ",
+    "phone": "Téléphone",
+    "email": "Courriel",
+    "years": "Années d'expérience",
+    "areas": "Secteurs d'activité",
+    "area_residential": "Résidentiel",
+    "area_commercial": "Commercial",
+    "area_industrial": "Industriel",
+    "area_roadwork": "Voirie",
+    "area_municipal": "Municipal",
+    "company_required": "Le nom de l'entreprise est requis.",
+    "rbq_invalid": "Format RBQ invalide (ex: RBQ 1234-5675-01).",
+    "phone_invalid": "Format de téléphone invalide.",
+    "email_invalid": "Format de courriel invalide.",
+    "email_taken": "Ce courriel est déjà utilisé.",
+    "years_invalid": "Nombre d'années invalide.",
+    "areas_required": "Sélectionnez au moins un secteur.",
+    "error_generic": "Une erreur est survenue. Veuillez réessayer.",
+    "error_network": "Erreur réseau. Vérifiez votre connexion.",
+    "success_title": "Candidature reçue !",
+    "success_body": "Merci pour votre candidature. Notre équipe l'examinera sous 48 heures. Vous recevrez un courriel dès qu'une décision sera prise.",
+    "submit": "Soumettre ma candidature"
+  },
   "login": {
     "title": "Administration",
     "username": "Nom d'utilisateur",
@@ -177,7 +205,15 @@
     "reset_placeholder": "Nouveau mot de passe (min 6 car.)",
     "reset_confirm": "Confirmer",
     "reset_cancel": "Annuler",
-    "reset_btn": "MDP"
+    "reset_btn": "MDP",
+    "tab_applications": "Candidatures",
+    "applications_title": "Candidatures en attente",
+    "applications_empty": "Aucune candidature en attente.",
+    "app_rbq": "RBQ :",
+    "app_years": "Années d'expérience :",
+    "app_areas": "Secteurs :",
+    "app_approve": "Approuver",
+    "app_reject": "Rejeter"
   },
   "get_quote": {
     "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",

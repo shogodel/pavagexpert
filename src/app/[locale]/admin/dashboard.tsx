@@ -23,6 +23,18 @@ interface User {
   createdAt: string;
 }
 
+interface ApplicationItem {
+  id: string;
+  company: string;
+  email: string;
+  phone: string;
+  rbqLicense: string;
+  yearsInBusiness: number;
+  serviceAreas: string[];
+  username: string;
+  createdAt: string;
+}
+
 interface Contractor {
   id: string;
   username: string;
@@ -37,10 +49,11 @@ export default function AdminDashboard() {
   const t = useTranslations("admin");
   const locale = useLocale() as "fr" | "en";
   const router = useRouter();
-  const [tab, setTab] = useState<"analytics" | "users" | "contractors">("analytics");
+  const [tab, setTab] = useState<"analytics" | "users" | "contractors" | "applications">("analytics");
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [contractors, setContractors] = useState<Contractor[]>([]);
+  const [applications, setApplications] = useState<ApplicationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({ name: "", email: "", phone: "", notes: "" });
@@ -61,22 +74,25 @@ export default function AdminDashboard() {
     setLoading(true);
     setFetchError("");
     try {
-      const [aRes, uRes, cRes] = await Promise.all([
+      const [aRes, uRes, cRes, appRes] = await Promise.all([
         fetch("/api/admin/analytics"),
         fetch("/api/admin/leads"),
         fetch("/api/admin/contractors"),
+        fetch("/api/admin/applications"),
       ]);
-      if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401) {
+      if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401 || appRes.status === 401) {
         router.push(`/${locale}/login`);
         return;
       }
-      const ok = aRes.ok && uRes.ok && cRes.ok;
+      const ok = aRes.ok && uRes.ok && cRes.ok && appRes.ok;
       const aData = ok ? await aRes.json() : null;
       const uData = ok ? await uRes.json() : null;
       const cData = ok ? await cRes.json() : null;
+      const appData = ok ? await appRes.json() : null;
       if (aData?.ok) setAnalytics(aData.data);
       if (uData?.ok) setUsers(uData.data);
       if (cData?.ok) setContractors(cData.data);
+      if (appData?.ok) setApplications(appData.data);
       if (!ok) setFetchError(t("fetch_error"));
     } catch (err) {
       console.error("Dashboard fetch error:", err);
@@ -89,7 +105,7 @@ export default function AdminDashboard() {
   useEffect(() => { fetchData(); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
 
   async function handleLogout() {
-    await fetch("/api/admin/logout", { method: "POST" });
+    await fetch("/api/logout", { method: "POST" });
     router.push(`/${locale}/login`);
   }
 
@@ -165,6 +181,22 @@ export default function AdminDashboard() {
     }
   }
 
+  async function handleApplicationAction(id: string, action: "approve" | "reject") {
+    setContractorActionError("");
+    try {
+      const res = await fetch("/api/admin/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action }),
+      });
+      const data = await res.json();
+      if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
+      fetchData();
+    } catch {
+      setContractorActionError(t("network_error"));
+    }
+  }
+
   async function handleResetContractorPw() {
     if (!resetPw || !resetPwValue || resetPwValue.length < 6) return;
     setContractorActionError("");
@@ -221,6 +253,7 @@ export default function AdminDashboard() {
           <button onClick={() => setTab("analytics")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "analytics" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_analytics")}</button>
           <button onClick={() => setTab("users")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "users" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_users")}</button>
           <button onClick={() => setTab("contractors")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "contractors" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_contractors")}</button>
+          <button onClick={() => setTab("applications")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "applications" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_applications")}</button>
           <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-4">{t("logout")}</button>
         </div>
       </header>
@@ -463,6 +496,55 @@ export default function AdminDashboard() {
                 <p className="text-center text-stone-500 py-8">{t("contractors_empty")}</p>
               )}
             </div>
+          </>
+        )}
+
+        {tab === "applications" && (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-lg font-semibold text-white">{t("applications_title")}</h2>
+            </div>
+            {contractorActionError && (
+              <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
+                {contractorActionError}
+              </div>
+            )}
+            {applications.length === 0 ? (
+              <p className="text-center text-stone-500 py-8">{t("applications_empty")}</p>
+            ) : (
+              <div className="space-y-3">
+                {applications.map((app) => (
+                  <div key={app.id} className="bg-stone-800 rounded-xl p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h4 className="text-white font-semibold truncate">{app.company}</h4>
+                        <p className="text-sm text-stone-400 mt-0.5">{app.email} | {app.phone}</p>
+                        <p className="text-sm text-stone-500">{t("app_rbq")} {app.rbqLicense}</p>
+                        <p className="text-sm text-stone-500">{t("app_years")} {app.yearsInBusiness}</p>
+                        {app.serviceAreas.length > 0 && (
+                          <p className="text-sm text-stone-500">{t("app_areas")} {app.serviceAreas.join(", ")}</p>
+                        )}
+                        <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(app.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => handleApplicationAction(app.id, "approve")}
+                          className="bg-green-700 hover:bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors"
+                        >
+                          {t("app_approve")}
+                        </button>
+                        <button
+                          onClick={() => handleApplicationAction(app.id, "reject")}
+                          className="bg-red-700 hover:bg-red-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors"
+                        >
+                          {t("app_reject")}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

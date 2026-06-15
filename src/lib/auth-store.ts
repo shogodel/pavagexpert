@@ -20,8 +20,14 @@ export interface Contractor {
   company: string;
   phone: string;
   email: string;
-  status: "active" | "paused" | "deleted";
+  status: "pending" | "active" | "paused" | "deleted" | "rejected";
   createdAt: string;
+}
+
+export interface Application extends Contractor {
+  rbqLicense: string;
+  yearsInBusiness: number;
+  serviceAreas: string[];
 }
 
 interface ContractorRow {
@@ -33,6 +39,24 @@ interface ContractorRow {
   status: string;
   created_at: Date;
   password_hash: string;
+  rbq_license?: string;
+  years_in_business?: number;
+  service_areas?: string[];
+}
+
+function mapApplication(row: ContractorRow): Application {
+  return {
+    id: row.id,
+    username: row.username,
+    company: row.company,
+    phone: row.phone,
+    email: row.email,
+    status: row.status as Application["status"],
+    createdAt: row.created_at.toISOString(),
+    rbqLicense: row.rbq_license || "",
+    yearsInBusiness: row.years_in_business || 0,
+    serviceAreas: row.service_areas || [],
+  };
 }
 
 interface AdminRow {
@@ -50,6 +74,63 @@ function mapContractor(row: ContractorRow): Contractor {
     status: row.status as Contractor["status"],
     createdAt: row.created_at.toISOString(),
   };
+}
+
+export async function getPendingApplications(): Promise<Application[]> {
+  const rows = await query<ContractorRow>(
+    `SELECT id, username, company, email, phone, rbq_license, years_in_business, service_areas,
+            password_hash, status, created_at
+     FROM contractors WHERE status = 'pending' ORDER BY created_at DESC`
+  );
+  return rows.map(mapApplication);
+}
+
+export async function createApplication(input: {
+  company: string; rbqLicense: string; phone: string; email: string;
+  yearsInBusiness: number; serviceAreas: string[];
+}): Promise<{ username: string }> {
+  const existing = await query<{ id: string }>(
+    "SELECT id FROM contractors WHERE email = $1",
+    [input.email]
+  );
+  if (existing.length > 0) {
+    throw new Error("Email already registered");
+  }
+  const slug = input.company.toLowerCase().replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "").slice(0, 20);
+  const suffix = crypto.randomBytes(3).toString("hex");
+  const username = slug ? `${slug}_${suffix}` : `contractor_${suffix}`;
+  const rows = await query<{ username: string }>(
+    `INSERT INTO contractors (company, email, phone, rbq_license, years_in_business, service_areas, username, status, password_hash)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending', '')
+     RETURNING username`,
+    [input.company, input.email, input.phone, input.rbqLicense, input.yearsInBusiness, input.serviceAreas, username]
+  );
+  return { username: rows[0].username };
+}
+
+export async function approveApplication(id: string): Promise<{ company: string; email: string; username: string; password: string } | null> {
+  const rows = await query<ContractorRow>(
+    "SELECT company, email, username FROM contractors WHERE id = $1 AND status = 'pending'",
+    [id]
+  );
+  if (rows.length === 0) return null;
+  const c = rows[0];
+  const password = crypto.randomBytes(6).toString("hex");
+  const hash = scryptHash(password);
+  await query(
+    "UPDATE contractors SET status = 'active', password_hash = $1, updated_at = now() WHERE id = $2",
+    [hash, id]
+  );
+  return { company: c.company, email: c.email, username: c.username, password };
+}
+
+export async function rejectApplication(id: string): Promise<{ company: string; email: string } | null> {
+  const rows = await query<{ company: string; email: string }>(
+    "UPDATE contractors SET status = 'rejected', updated_at = now() WHERE id = $1 AND status = 'pending' RETURNING company, email",
+    [id]
+  );
+  if (rows.length === 0) return null;
+  return rows[0];
 }
 
 export async function verifyAdmin(username: string, password: string): Promise<boolean> {

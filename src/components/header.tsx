@@ -164,15 +164,26 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <Link
-                href={`/${locale}/login`}
-                className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                  isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-                }`}
-                aria-current={isActive("login") ? "page" : undefined}
-              >
-                {t("login")}
-              </Link>
+              <>
+                <Link
+                  href={`/${locale}/apply`}
+                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+                    isActive("apply") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+                  }`}
+                  aria-current={isActive("apply") ? "page" : undefined}
+                >
+                  {t("apply")}
+                </Link>
+                <Link
+                  href={`/${locale}/login`}
+                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+                    isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+                  }`}
+                  aria-current={isActive("login") ? "page" : undefined}
+                >
+                  {t("login")}
+                </Link>
+              </>
             )}
           </nav>
 
@@ -285,13 +296,22 @@ export default function Header() {
                   </button>
                 </>
               ) : (
-                <Link
-                  href={`/${locale}/login`}
-                  className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {t("login")}
-                </Link>
+                <>
+                  <Link
+                    href={`/${locale}/apply`}
+                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("apply") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {t("apply")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/login`}
+                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {t("login")}
+                  </Link>
+                </>
               )}
 
               <Link
