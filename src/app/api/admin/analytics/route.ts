@@ -8,5 +8,5 @@ export async function GET(req: NextRequest) {
   if (!token) return NextResponse.json({ ok: false }, { status: 401 });
   const payload = await verifyToken(token);
   if (!payload || payload.role !== "admin") return NextResponse.json({ ok: false }, { status: 401 });
-  return NextResponse.json({ ok: true, data: getAnalytics() });
+  return NextResponse.json({ ok: true, data: await getAnalytics() });
 }
