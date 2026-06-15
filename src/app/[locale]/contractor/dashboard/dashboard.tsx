@@ -27,14 +27,16 @@ export default function ContractorDashboard() {
       .then((r) => r.json())
       .then((d) => {
         if (d.ok) setProfile(d.data);
-        else router.push(`/${locale}/contractor/login`);
-      });
-    fetch("/api/leads")
+        else router.push(`/${locale}/login`);
+      })
+      .catch(() => router.push(`/${locale}/login`));
+    fetch("/api/jobs")
       .then((r) => r.json())
-      .then((d) => {
-        if (d.ok) setLeads(d.data);
+      .then((data) => {
+        if (Array.isArray(data)) setLeads(data);
         setLoading(false);
-      });
+      })
+      .catch(() => setLoading(false));
   }, [router, locale]);
 
   const handleLogout = () => {
