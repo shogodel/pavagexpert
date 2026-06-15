@@ -85,17 +85,35 @@ export async function getContractors(): Promise<Contractor[]> {
 }
 
 export async function addContractor(input: { username: string; password: string; company: string; phone: string; email: string }): Promise<Contractor> {
+  // Check for duplicate active username
+  const existing = await query<ContractorRow>(
+    "SELECT * FROM contractors WHERE username = $1",
+    [input.username]
+  );
+  if (existing.length > 0) {
+    if (existing[0].status !== "deleted") {
+      throw new Error("Username already taken");
+    }
+    // Reactivate soft-deleted contractor
+    const hash = scryptHash(input.password);
+    const rows = await query<ContractorRow>(
+      `UPDATE contractors SET company=$1, email=$2, phone=$3, password_hash=$4, status='active', updated_at=now() WHERE id=$5 RETURNING *`,
+      [input.company, input.email, input.phone, hash, existing[0].id]
+    );
+    return mapContractor(rows[0]);
+  }
+  // Check for duplicate email on a different contractor
+  const emailDup = await query<ContractorRow>(
+    "SELECT id FROM contractors WHERE email = $1 AND status != 'deleted'",
+    [input.email]
+  );
+  if (emailDup.length > 0) {
+    throw new Error("Email already in use by another contractor");
+  }
   const hash = scryptHash(input.password);
   const rows = await query<ContractorRow>(
     `INSERT INTO contractors (username, company, email, phone, password_hash, status)
      VALUES ($1, $2, $3, $4, $5, 'active')
-     ON CONFLICT (username) WHERE username != '' DO UPDATE SET
-       company = EXCLUDED.company,
-       email = EXCLUDED.email,
-       phone = EXCLUDED.phone,
-       password_hash = EXCLUDED.password_hash,
-       status = 'active',
-       updated_at = now()
      RETURNING *`,
     [input.username, input.company, input.email, input.phone, hash]
   );

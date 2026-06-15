@@ -50,6 +50,7 @@ export default function AdminDashboard() {
   const [showAddContractor, setShowAddContractor] = useState(false);
   const [contractorForm, setContractorForm] = useState({ username: "", password: "", company: "", phone: "", email: "" });
   const [contractorError, setContractorError] = useState("");
+  const [contractorActionError, setContractorActionError] = useState("");
   const [resetPw, setResetPw] = useState<{ id: string; username: string } | null>(null);
   const [resetPwValue, setResetPwValue] = useState("");
 
@@ -137,29 +138,50 @@ export default function AdminDashboard() {
   }
 
   async function handleContractorStatus(id: string, status: string) {
-    await fetch("/api/admin/contractors", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status }),
-    });
-    fetchData();
+    setContractorActionError("");
+    try {
+      const res = await fetch("/api/admin/contractors", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await res.json();
+      if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
+      fetchData();
+    } catch {
+      setContractorActionError(t("network_error"));
+    }
   }
 
   async function handleDeleteContractor(id: string) {
-    await fetch(`/api/admin/contractors?id=${id}`, { method: "DELETE" });
-    fetchData();
+    setContractorActionError("");
+    try {
+      const res = await fetch(`/api/admin/contractors?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
+      fetchData();
+    } catch {
+      setContractorActionError(t("network_error"));
+    }
   }
 
   async function handleResetContractorPw() {
     if (!resetPw || !resetPwValue || resetPwValue.length < 6) return;
-    await fetch("/api/admin/contractors", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: resetPw.id, password: resetPwValue }),
-    });
-    setResetPw(null);
-    setResetPwValue("");
-    fetchData();
+    setContractorActionError("");
+    try {
+      const res = await fetch("/api/admin/contractors", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resetPw.id, password: resetPwValue }),
+      });
+      const data = await res.json();
+      if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
+      setResetPw(null);
+      setResetPwValue("");
+      fetchData();
+    } catch {
+      setContractorActionError(t("network_error"));
+    }
   }
 
   async function handleChangePw(e: React.FormEvent) {
@@ -369,6 +391,11 @@ export default function AdminDashboard() {
 
         {tab === "contractors" && (
           <>
+            {contractorActionError && (
+              <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
+                {contractorActionError}
+              </div>
+            )}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-white">{t("contractors_title")}</h2>
               <button onClick={() => setShowAddContractor(!showAddContractor)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
@@ -384,7 +411,7 @@ export default function AdminDashboard() {
                   <input required type="password" placeholder={t("password_placeholder")} value={contractorForm.password} onChange={(e) => setContractorForm({ ...contractorForm, password: e.target.value })} minLength={6} className="px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
                   <input required placeholder={t("company_placeholder")} value={contractorForm.company} onChange={(e) => setContractorForm({ ...contractorForm, company: e.target.value })} className="px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
                   <input required placeholder={t("phone_placeholder")} value={contractorForm.phone} onChange={(e) => setContractorForm({ ...contractorForm, phone: e.target.value })} className="px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
-                  <input placeholder={t("email_placeholder")} type="email" value={contractorForm.email} onChange={(e) => setContractorForm({ ...contractorForm, email: e.target.value })} className="px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                  <input required placeholder={t("email_placeholder")} type="email" value={contractorForm.email} onChange={(e) => setContractorForm({ ...contractorForm, email: e.target.value })} className="px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
                 </div>
                 <button type="submit" className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{t("add")}</button>
               </form>

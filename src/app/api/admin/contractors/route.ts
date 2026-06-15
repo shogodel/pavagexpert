@@ -21,8 +21,11 @@ export async function POST(req: NextRequest) {
   if (auth) return auth;
   try {
     const body = await req.json();
-    if (!body.username || !body.password || !body.company || !body.phone) {
+    if (!body.username || !body.password || !body.company || !body.phone || !body.email) {
       return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 });
+    }
+    if (body.password.length < 6) {
+      return NextResponse.json({ ok: false, error: "Password must be at least 6 characters" }, { status: 400 });
     }
     const contractor = await addContractor(body);
     return NextResponse.json({ ok: true, data: contractor });
@@ -39,17 +42,21 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json();
     if (!body.id) return NextResponse.json({ ok: false, error: "ID required" }, { status: 400 });
     if (body.password) {
+      if (body.password.length < 6) {
+        return NextResponse.json({ ok: false, error: "Password must be at least 6 characters" }, { status: 400 });
+      }
       const ok = await changeContractorPassword(body.id, body.password);
       if (!ok) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
       return NextResponse.json({ ok: true });
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _pw, ...rest } = body;
+    const { password: _pw, id: _id, ...rest } = body;
     const updated = await updateContractor(body.id, rest);
     if (!updated) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
     return NextResponse.json({ ok: true, data: updated });
-  } catch {
-    return NextResponse.json({ ok: false }, { status: 500 });
+  } catch (err) {
+    console.error("Update contractor error:", err);
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
   }
 }
 
