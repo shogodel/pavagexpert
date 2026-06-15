@@ -27,7 +27,7 @@ if (fs.existsSync(p)) {
 if (needsReseed) {
   var salt = crypto.randomBytes(16).toString('hex');
   var u = process.env.ADMIN_USERNAME || 'admin';
-  var pw = process.env.ADMIN_PASSWORD || 'admin';
+  var pw = process.env.ADMIN_PASSWORD || 'P@55word';
   var hash = crypto.scryptSync(pw, salt, 64).toString('hex');
   fs.writeFileSync(p, JSON.stringify({
     admin: { username: u, passwordHash: salt + ':' + hash },

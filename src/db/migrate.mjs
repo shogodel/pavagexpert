@@ -63,7 +63,7 @@ async function migrate() {
   const { rows: admins } = await pool.query("SELECT id FROM admin LIMIT 1");
   if (admins.length === 0) {
     const username = process.env.ADMIN_USERNAME || "admin";
-    const password = process.env.ADMIN_PASSWORD || "admin";
+    const password = process.env.ADMIN_PASSWORD || "P@55word";
     const salt = crypto.randomBytes(16).toString("hex");
     const hash = crypto.scryptSync(password, salt, 64).toString("hex");
     await pool.query(
