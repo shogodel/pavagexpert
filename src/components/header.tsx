@@ -120,6 +120,16 @@ export default function Header() {
             >
               {t("jobs")}
             </Link>
+
+            <Link
+              href={`/${locale}/login`}
+              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+                isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+              }`}
+              aria-current={isActive("login") ? "page" : undefined}
+            >
+              {t("login")}
+            </Link>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -204,6 +214,13 @@ export default function Header() {
                 onClick={() => setMenuOpen(false)}
               >
                 {t("jobs")}
+              </Link>
+              <Link
+                href={`/${locale}/login`}
+                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {t("login")}
               </Link>
 
               <Link
