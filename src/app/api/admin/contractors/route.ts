@@ -26,8 +26,9 @@ export async function POST(req: NextRequest) {
     }
     const contractor = await addContractor(body);
     return NextResponse.json({ ok: true, data: contractor });
-  } catch {
-    return NextResponse.json({ ok: false }, { status: 500 });
+  } catch (err) {
+    console.error("Add contractor error:", err);
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
   }
 }
 
