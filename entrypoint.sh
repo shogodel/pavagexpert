@@ -1,0 +1,42 @@
+#!/bin/sh
+set -e
+
+mkdir -p /data
+chown nextjs:nodejs /data
+
+# Run database migration (connects to PostgreSQL, seeds admin if empty)
+node /app/db/migrate.mjs
+
+# Seed auth.json from environment (fallback for existing JSON operations)
+cd /app
+node -e "
+const fs = require('fs');
+const crypto = require('crypto');
+const p = '/data/auth.json';
+var needsReseed = false;
+if (fs.existsSync(p)) {
+  try {
+    var existing = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    if (existing.admin && existing.admin.passwordHash && existing.admin.passwordHash.startsWith('\$2b\$')) {
+      needsReseed = true;
+      console.log('[entrypoint] detected bcrypt format, re-seeding with scrypt');
+    }
+  } catch(e) { needsReseed = true; }
+} else { needsReseed = true; }
+
+if (needsReseed) {
+  var salt = crypto.randomBytes(16).toString('hex');
+  var u = process.env.ADMIN_USERNAME || 'admin';
+  var pw = process.env.ADMIN_PASSWORD || 'admin';
+  var hash = crypto.scryptSync(pw, salt, 64).toString('hex');
+  fs.writeFileSync(p, JSON.stringify({
+    admin: { username: u, passwordHash: salt + ':' + hash },
+    contractors: [],
+  }, null, 2));
+  console.log('[entrypoint] auth.json seeded from env (' + u + ')');
+}
+"
+
+if [ -f /data/auth.json ]; then chown nextjs:nodejs /data/auth.json; fi
+
+exec su-exec nextjs:nodejs node server.js

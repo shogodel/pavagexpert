@@ -1,0 +1,111 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy on droplet
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DROPLET_SSH }}
+          envs: GHCR_TOKEN,GHCR_USER
+          script: |
+            set -e
+            cd ~/apps
+
+            # Clean up pavagexpert artifacts left by old awk-based deploys
+            if [ -f docker-compose.yaml ]; then
+              awk '
+              BEGIN { skip = 0 }
+              /^  pavagexpert(-db)?:/ { skip = 1; next }
+              skip && /^  [a-z]|^volumes|^networks/ { skip = 0 }
+              skip { next }
+              /^  (jobs_data|pavagexpert_pg_data):$/ { next }
+              { print }
+              ' docker-compose.yaml > .dc.clean
+              if [ -s .dc.clean ]; then
+                mv .dc.clean docker-compose.yaml
+              else
+                rm -f .dc.clean
+              fi
+            fi
+
+            # Remove stale pavagexpert containers
+            docker rm -f pavagexpert 2>/dev/null || true
+            docker rm -f pavagexpert-pavexpert-1 2>/dev/null || true
+
+            # Preserve secrets across deploys
+            if [ -f .env ]; then
+              OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-) || :
+              OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-) || :
+            fi
+
+            echo "ADMIN_USERNAME=admin" > .env
+            echo "ADMIN_PASSWORD=P@55word" >> .env
+            echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
+            echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+
+            # Ensure dedicated volumes
+            docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
+            docker volume inspect pavagexpert_pg_data >/dev/null 2>&1 || docker volume create pavagexpert_pg_data
+
+            # Download compose file from repo (avoids heredoc YAML issues)
+            curl -sSL -o docker-compose.pavagexpert.yaml \
+              https://raw.githubusercontent.com/shogodel/pavagexpert/master/docker-compose.pavagexpert.yaml
+
+            # Pull latest image and deploy
+            docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
+
+            # Start DB first (migrate.mjs retries if not ready)
+            docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert-db
+            sleep 3
+
+            # Start app (no service_healthy gate — migrate.mjs handles retries)
+            docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert --force-recreate
+            sleep 5
+
+            docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert pavagexpert-db
+            docker restart swag 2>/dev/null || true
+            docker image prune -f
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
