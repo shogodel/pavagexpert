@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addJob, ensureJobPhotoDir, readJobs, writeJobs } from "@/lib/job-store";
+import { addJob, ensureJobPhotoDir } from "@/lib/job-store";
 import { checkRateLimit } from "@/lib/rate-limit";
 import fs from "fs";
 
@@ -51,26 +51,26 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const job = addJob({ name, email, postalCode: postalCode || "", phone, budget, description });
-    const photoDir = ensureJobPhotoDir(job.id);
-
+    // Save photos to disk and collect filenames
     const savedPhotos: string[] = [];
     for (const file of photoEntries) {
       if (file.size === 0) continue;
       const ext = file.name.split(".").pop() || "jpg";
       const filename = `${crypto.randomUUID()}.${ext}`;
-      const buffer = Buffer.from(await file.arrayBuffer());
-      fs.writeFileSync(`${photoDir}/${filename}`, buffer);
       savedPhotos.push(filename);
     }
 
-    if (savedPhotos.length > 0) {
-      const jobs = readJobs();
-      const idx = jobs.findIndex((j) => j.id === job.id);
-      if (idx !== -1) {
-        jobs[idx].photos = savedPhotos;
-        writeJobs(jobs);
-      }
+    // Create client + job + photo records in a DB transaction
+    const job = await addJob({ name, email, postalCode: postalCode || "", phone, budget, description, photos: savedPhotos });
+    const photoDir = ensureJobPhotoDir(job.id);
+
+    // Write photo files to disk
+    let fileIdx = 0;
+    for (const file of photoEntries) {
+      if (file.size === 0) continue;
+      const buffer = Buffer.from(await file.arrayBuffer());
+      fs.writeFileSync(`${photoDir}/${savedPhotos[fileIdx]}`, buffer);
+      fileIdx++;
     }
 
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {

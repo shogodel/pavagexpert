@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { query, transaction } from "./db";
 
 export type JobStatus = "new" | "in_progress" | "completed";
 
@@ -16,6 +17,8 @@ export interface Job {
   photos: string[];
 }
 
+const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
+
 export function getPhotoPath(jobId: string, filename: string): string {
   return path.join(dataDir, "photos", jobId, filename);
 }
@@ -26,44 +29,92 @@ export function ensureJobPhotoDir(jobId: string): string {
   return dir;
 }
 
-const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
-const filePath = path.join(dataDir, "jobs.json");
-
-function ensureDataDir() {
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
+interface JobRow {
+  id: string;
+  client_id: string;
+  title: string;
+  description: string;
+  postal_code: string;
+  budget: string;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
+  name: string;
+  email: string;
+  phone: string;
 }
 
-export function readJobs(): Job[] {
-  ensureDataDir();
-  try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+interface PhotoRow {
+  filename: string;
 }
 
-export function writeJobs(jobs: Job[]) {
-  ensureDataDir();
-  fs.writeFileSync(filePath, JSON.stringify(jobs, null, 2), "utf-8");
-}
-
-export function getJobs(): Job[] {
-  return readJobs().reverse();
-}
-
-export function addJob(job: Omit<Job, "id" | "createdAt" | "status" | "photos"> & { photos?: string[] }): Job {
-  const jobs = readJobs();
-  const newJob: Job = {
-    ...job,
-    id: crypto.randomUUID(),
-    photos: job.photos || [],
-    status: "new",
-    createdAt: new Date().toISOString(),
+function mapJob(row: JobRow, photos: string[] = []): Job {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    postalCode: row.postal_code,
+    budget: row.budget,
+    description: row.description,
+    status: row.status as JobStatus,
+    createdAt: row.created_at.toISOString(),
+    photos,
   };
-  jobs.push(newJob);
-  writeJobs(jobs);
-  return newJob;
+}
+
+export async function getJobs(): Promise<Job[]> {
+  const rows = await query<JobRow>(
+    `SELECT j.*, c.name, c.email, c.phone
+     FROM jobs j
+     JOIN clients c ON c.id = j.client_id
+     ORDER BY j.created_at DESC`
+  );
+  const jobs: Job[] = [];
+  for (const row of rows) {
+    const photos = await query<PhotoRow>(
+      "SELECT filename FROM job_photos WHERE job_id = $1 ORDER BY created_at",
+      [row.id]
+    );
+    jobs.push(mapJob(row, photos.map((p) => p.filename)));
+  }
+  return jobs;
+}
+
+export async function addJob(
+  input: { name: string; email: string; phone: string; postalCode: string; budget: string; description: string } & { photos?: string[] }
+): Promise<Job> {
+  return transaction(async (q) => {
+    const clientRows = await q<{ id: string }>(
+      "INSERT INTO clients (name, email, phone) VALUES ($1, $2, $3) RETURNING id",
+      [input.name, input.email, input.phone]
+    );
+    const clientId = clientRows[0].id;
+
+    const jobRows = await q<JobRow>(
+      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status)
+       VALUES ($1, $2, $3, $4, $5, 'new')
+       RETURNING *`,
+      [clientId, `Projet de ${input.name}`, input.description, input.postalCode, input.budget]
+    );
+    const job = jobRows[0];
+
+    const photoFiles = input.photos || [];
+    for (const filename of photoFiles) {
+      await q(
+        "INSERT INTO job_photos (job_id, filename) VALUES ($1, $2)",
+        [job.id, filename]
+      );
+    }
+
+    return mapJob(job, photoFiles);
+  });
+}
+
+export async function updateJobStatus(id: string, status: JobStatus): Promise<boolean> {
+  const rows = await query<{ id: string }>(
+    "UPDATE jobs SET status = $1, updated_at = now() WHERE id = $2 RETURNING id",
+    [status, id]
+  );
+  return rows.length > 0;
 }

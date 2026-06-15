@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   if (!token) return NextResponse.json({ ok: false }, { status: 401 });
   const payload = await verifyToken(token);
   if (!payload || payload.role !== "contractor") return NextResponse.json({ ok: false }, { status: 401 });
-  const contractors = getContractors();
+  const contractors = await getContractors();
   const me = contractors.find((c) => c.id === payload.sub);
   if (!me) return NextResponse.json({ ok: false }, { status: 404 });
   return NextResponse.json({ ok: true, data: me });
@@ -21,7 +21,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
     const { company, phone, email } = body;
-    const updated = updateContractor(payload.sub, { company, phone, email });
+    const updated = await updateContractor(payload.sub, { company, phone, email });
     if (!updated) return NextResponse.json({ ok: false }, { status: 404 });
     return NextResponse.json({ ok: true, data: updated });
   } catch {

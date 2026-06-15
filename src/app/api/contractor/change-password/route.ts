@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     if (!currentPassword || !newPassword || newPassword.length < 6) {
       return NextResponse.json({ ok: false, error: "Invalid input" }, { status: 400 });
     }
-    if (!verifyContractorPasswordById(payload.sub, currentPassword)) {
+    if (!await verifyContractorPasswordById(payload.sub, currentPassword)) {
       return NextResponse.json({ ok: false, error: "Wrong password" }, { status: 403 });
     }
     const ok = await changeContractorPassword(payload.sub, newPassword);

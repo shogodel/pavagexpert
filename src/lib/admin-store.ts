@@ -1,9 +1,4 @@
-import fs from "fs";
-import path from "path";
-import { getJobs } from "./job-store";
-
-const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
-const usersFile = path.join(dataDir, "admin-users.json");
+import { query } from "./db";
 
 export interface AdminUser {
   id: string;
@@ -15,83 +10,93 @@ export interface AdminUser {
   createdAt: string;
 }
 
-function ensureDir() {
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+interface ClientRow {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  notes: string;
+  status: string;
+  created_at: Date;
 }
 
-function readUsers(): AdminUser[] {
-  ensureDir();
-  try {
-    return JSON.parse(fs.readFileSync(usersFile, "utf-8"));
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users: AdminUser[]) {
-  ensureDir();
-  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2), "utf-8");
-}
-
-export function getUsers(): AdminUser[] {
-  return readUsers().reverse();
-}
-
-export function addUser(input: { name: string; email: string; phone?: string; notes?: string }): AdminUser {
-  const users = readUsers();
-  const user: AdminUser = {
-    id: crypto.randomUUID(),
-    name: input.name,
-    email: input.email,
-    phone: input.phone || "",
-    notes: input.notes || "",
-    status: "active",
-    createdAt: new Date().toISOString(),
+function mapUser(row: ClientRow): AdminUser {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    notes: row.notes,
+    status: row.status as AdminUser["status"],
+    createdAt: row.created_at.toISOString(),
   };
-  users.push(user);
-  writeUsers(users);
-  return user;
 }
 
-export function updateUser(id: string, data: Partial<Pick<AdminUser, "name" | "email" | "phone" | "notes" | "status">>): AdminUser | null {
-  const users = readUsers();
-  const idx = users.findIndex((u) => u.id === id);
-  if (idx === -1) return null;
-  users[idx] = { ...users[idx], ...data };
-  writeUsers(users);
-  return users[idx];
+export async function getUsers(): Promise<AdminUser[]> {
+  const rows = await query<ClientRow>(
+    "SELECT * FROM clients ORDER BY created_at DESC"
+  );
+  return rows.map(mapUser);
 }
 
-export function deleteUser(id: string): boolean {
-  const users = readUsers();
-  const filtered = users.filter((u) => u.id !== id);
-  if (filtered.length === users.length) return false;
-  writeUsers(filtered);
-  return true;
+export async function addUser(input: { name: string; email: string; phone?: string; notes?: string }): Promise<AdminUser> {
+  const rows = await query<ClientRow>(
+    "INSERT INTO clients (name, email, phone, notes) VALUES ($1, $2, $3, $4) RETURNING *",
+    [input.name, input.email, input.phone || "", input.notes || ""]
+  );
+  return mapUser(rows[0]);
 }
 
-export function getAnalytics() {
-  const jobs = getJobs();
-  const users = readUsers();
+export async function updateUser(id: string, data: Partial<Pick<AdminUser, "name" | "email" | "phone" | "notes" | "status">>): Promise<AdminUser | null> {
+  const setClauses: string[] = [];
+  const values: unknown[] = [];
+  let idx = 1;
+  if (data.name !== undefined) { setClauses.push(`name = $${idx++}`); values.push(data.name); }
+  if (data.email !== undefined) { setClauses.push(`email = $${idx++}`); values.push(data.email); }
+  if (data.phone !== undefined) { setClauses.push(`phone = $${idx++}`); values.push(data.phone); }
+  if (data.notes !== undefined) { setClauses.push(`notes = $${idx++}`); values.push(data.notes); }
+  if (data.status !== undefined) { setClauses.push(`status = $${idx++}`); values.push(data.status); }
+  if (setClauses.length === 0) return null;
+  values.push(id);
+  const rows = await query<ClientRow>(
+    `UPDATE clients SET ${setClauses.join(", ")} WHERE id = $${idx} RETURNING *`,
+    values
+  );
+  if (rows.length === 0) return null;
+  return mapUser(rows[0]);
+}
+
+export async function deleteUser(id: string): Promise<boolean> {
+  const rows = await query<{ id: string }>(
+    "DELETE FROM clients WHERE id = $1 RETURNING id",
+    [id]
+  );
+  return rows.length > 0;
+}
+
+export async function getAnalytics() {
+  const jobs = await query<{ status: string; created_at: Date }>(
+    "SELECT status, created_at FROM jobs"
+  );
+  const clients = await query<{ status: string }>(
+    "SELECT status FROM clients"
+  );
 
   const projectTypeCount: Record<string, number> = {};
   const statusCount: Record<string, number> = {};
   const dailyCount: Record<string, number> = {};
 
   for (const job of jobs) {
-    const type = "other";
-    projectTypeCount[type] = (projectTypeCount[type] || 0) + 1;
-
+    projectTypeCount["other"] = (projectTypeCount["other"] || 0) + 1;
     statusCount[job.status] = (statusCount[job.status] || 0) + 1;
-
-    const day = job.createdAt.slice(0, 10);
+    const day = job.created_at.toISOString().slice(0, 10);
     dailyCount[day] = (dailyCount[day] || 0) + 1;
   }
 
   return {
     totalLeads: jobs.length,
-    totalUsers: users.length,
-    activeUsers: users.filter((u) => u.status === "active").length,
+    totalUsers: clients.length,
+    activeUsers: clients.filter((c) => c.status === "active").length,
     leadsByType: projectTypeCount,
     leadsByStatus: statusCount,
     leadsPerDay: Object.entries(dailyCount)

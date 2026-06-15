@@ -136,6 +136,44 @@ describe("migrate.mjs", () => {
   });
 });
 
+describe("002_phase0_tweaks.sql", () => {
+  const sqlPath = path.join(__dirname, "..", "src", "db", "migrations", "002_phase0_tweaks.sql");
+  let sql: string;
+
+  beforeAll(() => {
+    sql = fs.readFileSync(sqlPath, "utf-8");
+  });
+
+  it("exists and is non-empty", () => {
+    expect(fs.existsSync(sqlPath)).toBe(true);
+    expect(sql.length).toBeGreaterThan(50);
+  });
+
+  it("adds username column to contractors", () => {
+    expect(sql).toContain("ALTER TABLE contractors ADD COLUMN IF NOT EXISTS username");
+  });
+
+  it("creates unique index on contractors.username", () => {
+    expect(sql).toContain("CREATE UNIQUE INDEX IF NOT EXISTS idx_contractors_username");
+  });
+
+  it("extends contractors status CHECK to include active and deleted", () => {
+    expect(sql).toContain("'active','deleted'");
+  });
+
+  it("extends jobs status CHECK to include new", () => {
+    expect(sql).toContain("'new'");
+  });
+
+  it("adds notes column to clients", () => {
+    expect(sql).toContain("ALTER TABLE clients ADD COLUMN IF NOT EXISTS notes");
+  });
+
+  it("adds status column to clients", () => {
+    expect(sql).toContain("ALTER TABLE clients ADD COLUMN IF NOT EXISTS status");
+  });
+});
+
 describe("entrypoint.sh", () => {
   const entrypointPath = path.join(__dirname, "..", "entrypoint.sh");
 

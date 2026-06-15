@@ -13,7 +13,7 @@ async function checkAdmin(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const auth = await checkAdmin(req);
   if (auth) return auth;
-  return NextResponse.json({ ok: true, data: getContractors() });
+  return NextResponse.json({ ok: true, data: await getContractors() });
 }
 
 export async function POST(req: NextRequest) {
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (!body.username || !body.password || !body.company || !body.phone) {
       return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 });
     }
-    const contractor = addContractor(body);
+    const contractor = await addContractor(body);
     return NextResponse.json({ ok: true, data: contractor });
   } catch {
     return NextResponse.json({ ok: false }, { status: 500 });
@@ -44,7 +44,7 @@ export async function PATCH(req: NextRequest) {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _pw, ...rest } = body;
-    const updated = updateContractor(body.id, rest);
+    const updated = await updateContractor(body.id, rest);
     if (!updated) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
     return NextResponse.json({ ok: true, data: updated });
   } catch {
@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ ok: false, error: "ID required" }, { status: 400 });
-  const deleted = deleteContractor(id);
+  const deleted = await deleteContractor(id);
   if (!deleted) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getJobs } from "@/lib/job-store";
 
 export async function GET(req: NextRequest) {
-  let jobs = getJobs();
+  let jobs = await getJobs();
   const { searchParams } = new URL(req.url);
   const postalCode = searchParams.get("postalCode")?.trim();
   const status = searchParams.get("status")?.trim();
