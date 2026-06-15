@@ -19,15 +19,19 @@ export default function LoginForm() {
     setError(false);
 
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+      const data = await res.json();
+      if (!data.ok) throw new Error();
 
-      if (!res.ok) throw new Error();
-
-      router.push(`/${locale}/admin`);
+      if (data.role === "admin") {
+        router.push(`/${locale}/admin`);
+      } else if (data.role === "contractor") {
+        router.push(`/${locale}/contractor/dashboard`);
+      }
     } catch {
       setError(true);
     } finally {

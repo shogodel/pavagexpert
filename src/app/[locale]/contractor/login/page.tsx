@@ -1,9 +1,10 @@
-import ContractorLoginForm from "./form";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "Connexion entrepreneur - Pavagexpert",
-};
-
-export default function ContractorLoginPage() {
-  return <ContractorLoginForm />;
+export default async function ContractorLoginPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect(`/${locale}/login`);
 }
