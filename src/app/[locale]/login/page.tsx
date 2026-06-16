@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title,
     description,
+    robots: { index: false, follow: false },
     alternates: { canonical: `https://pavagexpert.space/${locale}/login` },
     openGraph: { title, description },
     twitter: { title, description },

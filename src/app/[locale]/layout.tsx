@@ -12,7 +12,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const messages = await getMessages(locale);
   return {
+    title: messages.seo?.home_title,
+    description: messages.seo?.home_desc,
     alternates: {
       canonical: `https://pavagexpert.space/${locale}`,
     },
