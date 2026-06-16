@@ -52,8 +52,7 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
             <div className="flex flex-col gap-2 text-sm text-stone-400">
-              <span>1234 Rue Principal</span>
-              <span>Montréal, QC H3Z 2Y7</span>
+              <span>Laval, QC H7N 2C2</span>
               <a href={`tel:${CONTACT_PHONE_TEL}`} className="hover:text-white transition-colors">{CONTACT_PHONE}</a>
               <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors">{CONTACT_EMAIL}</a>
             </div>
