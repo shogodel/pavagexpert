@@ -1,22 +1,44 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "@/lib/use-translations";
+
+let deferredPrompt: Event | null = null;
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+}
 
 export default function PwaBanner() {
   const t = useTranslations("pwa");
-  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [installPrompt, setInstallPrompt] = useState<Event | null>(deferredPrompt);
   const [dismissed, setDismissed] = useState(false);
+  const [installed, setInstalled] = useState(false);
+  const promptRef = useRef<Event | null>(deferredPrompt);
 
   useEffect(() => {
+    setInstalled(window.matchMedia("(display-mode: standalone)").matches);
+
     const handler = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e);
+      promptRef.current = e;
     };
     window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+
+    const appInstalledHandler = () => setInstalled(true);
+    window.addEventListener("appinstalled", appInstalledHandler);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("appinstalled", appInstalledHandler);
+    };
   }, []);
 
+  if (installed) return null;
   if (!installPrompt || dismissed) return null;
 
   return (

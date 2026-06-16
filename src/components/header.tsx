@@ -344,7 +344,7 @@ export default function Header() {
         )}
       </div>
       {auth?.role === "contractor" && <PwaRegister isContractor={true} />}
-      {auth?.role === "contractor" && <PwaBanner />}
+      {auth?.authenticated && <PwaBanner />}
     </header>
   );
 }
