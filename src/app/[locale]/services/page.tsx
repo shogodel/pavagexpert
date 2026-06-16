@@ -4,6 +4,7 @@ import { getMessages } from "@/i18n/get-messages";
 import { servicesList } from "@/lib/services-data";
 import ContactPreview from "@/components/contact-preview";
 import Link from "next/link";
+import FaqJsonLd from "@/components/faq-json-ld";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -24,8 +25,23 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   const messages = await getMessages(locale) as Record<string, unknown>;
   const t = (messages.services as Record<string, unknown>) || {};
 
+  const faqsEn = [
+    { question: "What is the difference between interlocking pavers and asphalt?", answer: "Interlocking pavers last 30-50 years, offer more design options, and require simple maintenance. Asphalt is cheaper upfront ($5-$12/sq ft vs $15-$35) but needs resurfacing every 5-7 years." },
+    { question: "Which paving service is best for a driveway?", answer: "Interlocking pavers are ideal for driveways due to their durability, load-bearing capacity, and easy repair. Asphalt works well for large surfaces. Concrete is best for modern aesthetics." },
+    { question: "Do you serve my area?", answer: "Pavagexpert serves 40+ cities across Greater Montreal including Montreal, Laval, Longueuil, Brossard, the South Shore, North Shore, and West Island. Check our service areas page for the full list." },
+    { question: "Are your contractors licensed?", answer: "All Pavagexpert contractors hold a valid RBQ license and are in good standing with APCHQ and CCQ. Each contractor is verified before joining our network." },
+  ];
+  const faqsFr = [
+    { question: "Quelle est la différence entre le pavé uni et l'asphalte?", answer: "Le pavé uni dure 30-50 ans, offre plus d'options de design et nécessite un entretien simple. L'asphalte est moins cher initialement (5-$12/pi² vs 15-$35) mais doit être refait tous les 5-7 ans." },
+    { question: "Quel service de pavage est le meilleur pour une entrée?", answer: "Le pavé uni est idéal pour les entrées grâce à sa durabilité et sa réparation facile. L'asphalte convient bien aux grandes surfaces. Le béton est parfait pour un style moderne." },
+    { question: "Desservez-vous ma région?", answer: "Pavagexpert dessert plus de 40 villes du Grand Montréal incluant Montréal, Laval, Longueuil, Brossard, la Rive-Sud, la Rive-Nord et le West Island. Consultez notre page des zones desservies." },
+    { question: "Vos entrepreneurs sont-ils licenciés?", answer: "Tous les entrepreneurs Pavagexpert détiennent une licence RBQ valide et sont membres en règle de l'APCHQ et de la CCQ. Chaque entrepreneur est vérifié avant de rejoindre notre réseau." },
+  ];
+  const faqItems = locale === "fr" ? faqsFr : faqsEn;
+
   return (
     <>
+      <FaqJsonLd items={faqItems} />
       <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold">{t.title as string || "Nos Services"}</h1>

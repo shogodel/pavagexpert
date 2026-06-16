@@ -7,6 +7,7 @@ import I18nProvider from "@/components/i18n-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import JsonLd from "@/components/json-ld";
+import BreadcrumbJsonLd from "@/components/breadcrumb-json-ld";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -48,6 +49,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${inter.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
         <JsonLd locale={locale} />
+        <BreadcrumbJsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>
           <Header />
           <main className="flex-1">{children}</main>

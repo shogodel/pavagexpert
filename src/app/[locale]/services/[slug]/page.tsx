@@ -5,6 +5,7 @@ import { servicesList } from "@/lib/services-data";
 import Link from "next/link";
 import ContactPreview from "@/components/contact-preview";
 import type { Metadata } from "next";
+import ServiceJsonLd from "@/components/service-json-ld";
 
 const slugToId: Record<string, string> = {};
 for (const s of servicesList) slugToId[s.slug] = s.id;
@@ -37,6 +38,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   if (!service) return notFound();
 
   const t = (messages.nav as Record<string, string>) || {};
+  const seo = (messages.seo as Record<string, string>) || {};
+  const seoKey = `services_${id}_title` as string;
+  const seoDescKey = `services_${id}_desc` as string;
 
   const subservices = [
     { key: "asphalt", slug: "asphalt" },
@@ -51,6 +55,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
   return (
     <>
+      <ServiceJsonLd
+        name={seo[seoKey] || service.title}
+        description={seo[seoDescKey] || service.content || service.desc}
+        url={`https://pavagexpert.space/${locale}/services/${slug}`}
+      />
       <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
