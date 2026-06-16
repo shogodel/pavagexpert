@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     const { username, password } = await req.json();
     if (!username || !password) {
-      return NextResponse.json({ ok: false }, { status: 400 });
+      return NextResponse.json({ ok: false, code: "missing_fields" }, { status: 400 });
     }
 
     const isHttps = req.headers.get("x-forwarded-proto") === "https";
@@ -36,9 +36,9 @@ export async function POST(req: NextRequest) {
       return res;
     }
 
-    return NextResponse.json({ ok: false }, { status: 401 });
+    return NextResponse.json({ ok: false, code: "invalid_credentials" }, { status: 401 });
   } catch (err) {
     console.error("Login error:", err);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    return NextResponse.json({ ok: false, code: "server_error" }, { status: 500 });
   }
 }

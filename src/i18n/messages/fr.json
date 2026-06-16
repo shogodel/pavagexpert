@@ -167,11 +167,16 @@
     "submit": "Soumettre ma candidature"
   },
   "login": {
-    "title": "Administration",
+    "title": "Connexion",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "submit": "Se connecter",
-    "error": "Identifiants invalides"
+    "error": "Identifiants invalides",
+    "error_missing_fields": "Nom d'utilisateur et mot de passe requis",
+    "error_server": "Erreur du serveur. Veuillez réessayer.",
+    "redirect_banner": "Veuillez vous connecter pour continuer",
+    "show_password": "Afficher le mot de passe",
+    "hide_password": "Masquer le mot de passe"
   },
   "admin": {
     "loading": "Chargement...",

@@ -130,18 +130,17 @@ export default function Header() {
               {t("blog")}
             </Link>
 
-            <Link
-              href={`/${locale}/jobs`}
-              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-              }`}
-              aria-current={isActive("jobs") ? "page" : undefined}
-            >
-              {t("jobs")}
-            </Link>
-
             {auth === null ? null : auth.authenticated ? (
               <>
+                <Link
+                  href={`/${locale}/jobs`}
+                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+                    isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+                  }`}
+                  aria-current={isActive("jobs") ? "page" : undefined}
+                >
+                  {t("jobs")}
+                </Link>
                 <Link
                   href={dashboardHref()}
                   className={`text-sm font-medium uppercase tracking-wider transition-colors text-stone-600 hover:text-stone-900`}
@@ -263,15 +262,15 @@ export default function Header() {
               >
                 {t("blog")}
               </Link>
-              <Link
-                href={`/${locale}/jobs`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("jobs")}
-              </Link>
               {auth === null ? null : auth.authenticated ? (
                 <>
+                  <Link
+                    href={`/${locale}/jobs`}
+                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {t("jobs")}
+                  </Link>
                   <Link
                     href={dashboardHref()}
                     className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900"

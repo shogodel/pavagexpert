@@ -167,11 +167,16 @@
     "submit": "Submit application"
   },
   "login": {
-    "title": "Admin",
+    "title": "Sign in",
     "username": "Username",
     "password": "Password",
     "submit": "Sign in",
-    "error": "Invalid credentials"
+    "error": "Invalid credentials",
+    "error_missing_fields": "Username and password are required",
+    "error_server": "Server error. Please try again.",
+    "redirect_banner": "Please log in to continue",
+    "show_password": "Show password",
+    "hide_password": "Hide password"
   },
   "admin": {
     "loading": "Loading...",
