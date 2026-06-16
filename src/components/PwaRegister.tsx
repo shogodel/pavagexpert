@@ -13,23 +13,30 @@ export default function PwaRegister({ isContractor }: { isContractor: boolean })
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
 
-    navigator.serviceWorker.register("/sw.js").then((reg) => {
-      if (!isContractor) return;
+    let cancelled = false;
 
-      const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-      if (!vapidKey) return;
+    (async () => {
+      const reg = await navigator.serviceWorker.register("/sw.js").catch(() => null);
+      if (!reg || !isContractor || cancelled) return;
+
+      const res = await fetch("/api/vapid-public-key").catch(() => null);
+      if (!res || !res.ok) return;
+      const { publicKey } = await res.json().catch(() => ({ publicKey: null }));
+      if (!publicKey || cancelled) return;
 
       reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidKey) as unknown as BufferSource,
+        applicationServerKey: urlBase64ToUint8Array(publicKey) as unknown as BufferSource,
       }).then((sub) => {
         fetch("/api/push/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(sub.toJSON()),
-        });
+        }).catch(() => {});
       }).catch(() => {});
-    }).catch(() => {});
+    })();
+
+    return () => { cancelled = true; };
   }, [isContractor]);
 
   return null;

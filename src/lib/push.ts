@@ -1,11 +1,34 @@
 import webpush from "web-push";
+import fs from "fs";
+import path from "path";
 import { query } from "./db";
 
-webpush.setVapidDetails(
-  "mailto:pavagexpertmtl@gmail.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "",
-  process.env.VAPID_PRIVATE_KEY || ""
-);
+function loadVapidKeys(): { publicKey: string; privateKey: string } {
+  const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const priv = process.env.VAPID_PRIVATE_KEY;
+  if (pub && priv) return { publicKey: pub, privateKey: priv };
+
+  try {
+    const p = path.join(process.env.DATA_DIR || "/data", "vapid-keys.json");
+    if (fs.existsSync(p)) {
+      return JSON.parse(fs.readFileSync(p, "utf-8"));
+    }
+  } catch {
+    // ignore
+  }
+
+  return { publicKey: "", privateKey: "" };
+}
+
+const vapid = loadVapidKeys();
+
+if (vapid.publicKey && vapid.privateKey) {
+  webpush.setVapidDetails(
+    "mailto:pavagexpertmtl@gmail.com",
+    vapid.publicKey,
+    vapid.privateKey
+  );
+}
 
 interface PushPayload {
   title: string;
