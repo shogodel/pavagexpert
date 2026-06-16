@@ -8,7 +8,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const locale = isLocale(raw) ? raw : defaultLocale;
   const messages = await getMessages(locale);
   const profileTitle = messages.profile?.title ? `${messages.profile.title} - Pavagexpert` : "Mon profil - Pavagexpert";
-  return { title: profileTitle, description: profileTitle, robots: { index: false, follow: false } };
+  return {
+    title: profileTitle,
+    description: profileTitle,
+    robots: { index: false, follow: false },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/contractor/profile`, languages: { "x-default": "/fr/contractor/profile", fr: "/fr/contractor/profile", en: "/en/contractor/profile" } },
+    openGraph: { title: profileTitle, description: profileTitle },
+    twitter: { title: profileTitle, description: profileTitle },
+  };
 }
 
 export default function ContractorProfilePage() {

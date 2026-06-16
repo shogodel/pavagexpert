@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
   const article = getArticle(slug, locale);
-  if (!article) return {};
+  if (!article) notFound();
   const messages = await getMessages(locale);
   return {
     title: `${article.title} | ${messages.seo?.blog_title || "Blog"}`,

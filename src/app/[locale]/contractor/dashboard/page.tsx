@@ -9,7 +9,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: "Tableau de bord - Pavagexpert",
     description: "Tableau de bord - Pavagexpert",
     robots: { index: false, follow: false },
-    alternates: { canonical: `https://pavagexpert.space/${locale}/contractor/dashboard` },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/contractor/dashboard`, languages: { "x-default": "/fr/contractor/dashboard", fr: "/fr/contractor/dashboard", en: "/en/contractor/dashboard" } },
+    openGraph: { title: "Tableau de bord - Pavagexpert", description: "Tableau de bord - Pavagexpert" },
+    twitter: { title: "Tableau de bord - Pavagexpert", description: "Tableau de bord - Pavagexpert" },
   };
 }
 

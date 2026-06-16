@@ -10,6 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: "Admin — Pavagexpert",
     robots: { index: false, follow: false },
     alternates: { canonical: `https://pavagexpert.space/${locale}/admin` },
+    openGraph: { title: "Admin — Pavagexpert", description: "Admin — Pavagexpert" },
+    twitter: { title: "Admin — Pavagexpert", description: "Admin — Pavagexpert" },
   };
 }
 

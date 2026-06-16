@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title,
     description,
-    alternates: { canonical: `https://pavagexpert.space/${locale}/apply` },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/apply`, languages: { "x-default": "/fr/apply", fr: "/fr/apply", en: "/en/apply" } },
     openGraph: { title, description, images: [{ url: "/images/icon-512.png" }] },
     twitter: { title, description },
   };

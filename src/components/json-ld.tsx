@@ -41,7 +41,6 @@ export default function JsonLd({ locale = "fr" }: { locale?: string }) {
       { "@type": "OpeningHoursSpecification", dayOfWeek: "Friday", opens: "08:00", closes: "18:00" },
       { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "16:00" },
     ],
-    sameAs: ["https://pavagexpert.space"],
     priceRange: "$$",
   };
 
