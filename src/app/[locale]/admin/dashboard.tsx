@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 
 interface Analytics {
@@ -45,20 +45,55 @@ interface Contractor {
   createdAt: string;
 }
 
+type Tab = "analytics" | "users" | "contractors" | "applications";
+
+function statusBadgeClass(status: string): string {
+  switch (status) {
+    case "active": return "bg-green-900 text-green-300";
+    case "pending": return "bg-blue-900 text-blue-300";
+    case "rejected": return "bg-red-900 text-red-300";
+    case "paused": return "bg-amber-900 text-amber-300";
+    default: return "bg-red-900 text-red-300";
+  }
+}
+
+function statusLabelKey(status: string): string {
+  switch (status) {
+    case "active": return "status_active";
+    case "pending": return "status_pending";
+    case "rejected": return "status_rejected";
+    case "paused": return "status_paused";
+    default: return "status_deleted";
+  }
+}
+
 export default function AdminDashboard() {
   const t = useTranslations("admin");
   const locale = useLocale() as "fr" | "en";
   const router = useRouter();
-  const [tab, setTab] = useState<"analytics" | "users" | "contractors" | "applications">("analytics");
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get("tab") as Tab | null;
+  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications"];
+  const [tab, setTabState] = useState<Tab>(tabFromUrl && validTabs.includes(tabFromUrl) ? tabFromUrl : "analytics");
+
+  function setTab(newTab: Tab) {
+    setTabState(newTab);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", newTab);
+    router.replace(`/${locale}/admin?${params.toString()}`, { scroll: false });
+  }
+
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [contractors, setContractors] = useState<Contractor[]>([]);
   const [applications, setApplications] = useState<ApplicationItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({ name: "", email: "", phone: "", notes: "" });
   const [error, setError] = useState("");
   const [fetchError, setFetchError] = useState("");
+  const [actionSuccess, setActionSuccess] = useState("");
 
   const [showAddContractor, setShowAddContractor] = useState(false);
   const [contractorForm, setContractorForm] = useState({ username: "", password: "", company: "", phone: "", email: "" });
@@ -67,12 +102,18 @@ export default function AdminDashboard() {
   const [resetPw, setResetPw] = useState<{ id: string; username: string } | null>(null);
   const [resetPwValue, setResetPwValue] = useState("");
 
+  const [deleteConfirm, setDeleteConfirm] = useState<{ type: "user" | "contractor"; id: string; label: string } | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [showPwChange, setShowPwChange] = useState(false);
   const [pwForm, setPwForm] = useState({ current: "", new: "" });
   const [pwMsg, setPwMsg] = useState("");
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (isInitial = false) => {
+    if (isInitial) setInitialLoading(true);
+    else setRefreshing(true);
     setFetchError("");
+    setActionSuccess("");
     try {
       const [aRes, uRes, cRes, appRes] = await Promise.all([
         fetch("/api/admin/analytics"),
@@ -98,11 +139,12 @@ export default function AdminDashboard() {
       console.error("Dashboard fetch error:", err);
       setFetchError(t("network_error"));
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
+      setRefreshing(false);
     }
   }, [router, locale, t]);
 
-  useEffect(() => { fetchData(); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchData(true); }, [fetchData]);
 
   async function handleLogout() {
     await fetch("/api/logout", { method: "POST" });
@@ -121,6 +163,7 @@ export default function AdminDashboard() {
     if (!data.ok) { setError(t("user_error")); return; }
     setShowAdd(false);
     setAddForm({ name: "", email: "", phone: "", notes: "" });
+    setActionSuccess(t("user_added"));
     fetchData();
   }
 
@@ -133,8 +176,18 @@ export default function AdminDashboard() {
     fetchData();
   }
 
-  async function handleDelete(id: string) {
-    await fetch(`/api/admin/leads?id=${id}`, { method: "DELETE" });
+  function confirmDeleteUser(id: string, name: string) {
+    setDeleteConfirm({ type: "user", id, label: name });
+  }
+
+  async function executeDelete() {
+    if (!deleteConfirm) return;
+    if (deleteConfirm.type === "user") {
+      await fetch(`/api/admin/leads?id=${deleteConfirm.id}`, { method: "DELETE" });
+    } else {
+      await fetch(`/api/admin/contractors?id=${deleteConfirm.id}`, { method: "DELETE" });
+    }
+    setDeleteConfirm(null);
     fetchData();
   }
 
@@ -150,6 +203,7 @@ export default function AdminDashboard() {
     if (!data.ok) { setContractorError(data.error || t("contractor_error")); return; }
     setShowAddContractor(false);
     setContractorForm({ username: "", password: "", company: "", phone: "", email: "" });
+    setActionSuccess(t("contractor_added"));
     fetchData();
   }
 
@@ -169,20 +223,13 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleDeleteContractor(id: string) {
-    setContractorActionError("");
-    try {
-      const res = await fetch(`/api/admin/contractors?id=${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
-      fetchData();
-    } catch {
-      setContractorActionError(t("network_error"));
-    }
+  function confirmDeleteContractor(id: string, label: string) {
+    setDeleteConfirm({ type: "contractor", id, label });
   }
 
   async function handleApplicationAction(id: string, action: "approve" | "reject") {
     setContractorActionError("");
+    setActionSuccess("");
     try {
       const res = await fetch("/api/admin/applications", {
         method: "POST",
@@ -191,6 +238,7 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
       if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
+      setActionSuccess(action === "approve" ? t("app_approved") : t("app_rejected"));
       fetchData();
     } catch {
       setContractorActionError(t("network_error"));
@@ -210,6 +258,7 @@ export default function AdminDashboard() {
       if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
       setResetPw(null);
       setResetPwValue("");
+      setActionSuccess(t("pw_reset"));
       fetchData();
     } catch {
       setContractorActionError(t("network_error"));
@@ -237,7 +286,13 @@ export default function AdminDashboard() {
     }
   }
 
-  if (loading) {
+  const filteredContractors = contractors.filter((c) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return c.company.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.username.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q);
+  });
+
+  if (initialLoading) {
     return (
       <div className="min-h-screen bg-stone-900 flex items-center justify-center">
         <p className="text-stone-400">{t("loading")}</p>
@@ -254,18 +309,66 @@ export default function AdminDashboard() {
           <button onClick={() => setTab("users")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "users" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_users")}</button>
           <button onClick={() => setTab("contractors")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "contractors" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_contractors")}</button>
           <button onClick={() => setTab("applications")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "applications" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_applications")}</button>
-          <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-4">{t("logout")}</button>
+          <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white transition-colors ml-2" title={t("pw_title")}>{t("pw_short")}</button>
+          <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-2">{t("logout")}</button>
         </div>
       </header>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
+        {refreshing && (
+          <div className="flex justify-center mb-4">
+            <span className="text-stone-500 text-xs animate-pulse">{t("refreshing")}</span>
+          </div>
+        )}
+
+        {actionSuccess && (
+          <div className="bg-green-900/50 border border-green-700 text-green-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
+            {actionSuccess}
+          </div>
+        )}
+
         {fetchError && (
           <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
             {fetchError}
           </div>
         )}
 
-        {/* Password Change - visible on analytics tab */}
+        {/* Delete confirmation modal */}
+        {deleteConfirm && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div className="bg-stone-800 rounded-xl p-6 w-full max-w-sm mx-4">
+              <h3 className="text-white font-semibold mb-2">{t("delete_title")}</h3>
+              <p className="text-stone-400 text-sm mb-4">{t("delete_confirm")} <strong className="text-white">{deleteConfirm.label}</strong>?</p>
+              <div className="flex gap-3">
+                <button onClick={executeDelete} className="bg-red-700 hover:bg-red-600 text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{t("delete_btn")}</button>
+                <button onClick={() => setDeleteConfirm(null)} className="text-stone-400 hover:text-white text-sm px-6 py-2">{t("reset_cancel")}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Password change modal */}
+        {showPwChange && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div className="bg-stone-800 rounded-xl p-6 w-full max-w-md mx-4">
+              <h3 className="text-white font-semibold mb-4">{t("pw_title")}</h3>
+              <form onSubmit={handleChangePw} className="space-y-4">
+                <div>
+                  <input placeholder={t("pw_current")} type="password" value={pwForm.current} onChange={(e) => setPwForm({ ...pwForm, current: e.target.value })} required className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                </div>
+                <div>
+                  <input placeholder={t("pw_new")} type="password" value={pwForm.new} onChange={(e) => setPwForm({ ...pwForm, new: e.target.value })} required minLength={6} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                </div>
+                {pwMsg && <p className={`text-sm ${pwMsg === t("pw_success") ? "text-green-400" : "text-red-400"}`}>{pwMsg}</p>}
+                <div className="flex gap-3">
+                  <button type="submit" className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{t("pw_change")}</button>
+                  <button type="button" onClick={() => { setShowPwChange(false); setPwMsg(""); }} className="text-stone-400 hover:text-white text-sm px-6 py-2">{t("reset_cancel")}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         {tab === "analytics" && (
           <>
             {analytics && (
@@ -349,21 +452,6 @@ export default function AdminDashboard() {
                 </div>
               </>
             )}
-
-            {/* Admin Password Change */}
-            <div className="bg-stone-800 rounded-xl p-6">
-              <h3 className="text-white font-semibold mb-4">{t("pw_title")}</h3>
-              <form onSubmit={handleChangePw} className="space-y-4 max-w-md">
-                <div>
-                  <input placeholder={t("pw_current")} type="password" value={pwForm.current} onChange={(e) => setPwForm({ ...pwForm, current: e.target.value })} required className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
-                </div>
-                <div>
-                  <input placeholder={t("pw_new")} type="password" value={pwForm.new} onChange={(e) => setPwForm({ ...pwForm, new: e.target.value })} required minLength={6} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
-                </div>
-                {pwMsg && <p className={`text-sm ${pwMsg === t("pw_success") ? "text-green-400" : "text-red-400"}`}>{pwMsg}</p>}
-                <button type="submit" className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{t("pw_change")}</button>
-              </form>
-            </div>
           </>
         )}
 
@@ -400,7 +488,7 @@ export default function AdminDashboard() {
                     <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(user.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${user.status === "active" ? "bg-green-900 text-green-300" : user.status === "paused" ? "bg-amber-900 text-amber-300" : "bg-red-900 text-red-300"}`}>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(user.status)}`}>
                       {user.status === "active" ? t("status_active") : user.status === "paused" ? t("status_paused") : t("status_deleted")}
                     </span>
                     {user.status === "active" && (
@@ -410,7 +498,7 @@ export default function AdminDashboard() {
                       <button onClick={() => handleStatus(user.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
                     )}
                     {user.status !== "deleted" && (
-                      <button onClick={() => handleDelete(user.id)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                      <button onClick={() => confirmDeleteUser(user.id, user.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
                     )}
                   </div>
                 </div>
@@ -429,9 +517,16 @@ export default function AdminDashboard() {
                 {contractorActionError}
               </div>
             )}
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-white">{t("contractors_title")}</h2>
-              <button onClick={() => setShowAddContractor(!showAddContractor)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <input
+                type="text"
+                placeholder={t("search_placeholder")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 min-w-[200px] px-4 py-2 rounded-lg bg-stone-800 border border-stone-600 text-white placeholder-stone-500 outline-none text-sm"
+              />
+              <button onClick={() => setShowAddContractor(!showAddContractor)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shrink-0">
                 {showAddContractor ? t("cancel") : t("add")}
               </button>
             </div>
@@ -465,7 +560,7 @@ export default function AdminDashboard() {
             )}
 
             <div className="space-y-3">
-              {contractors.map((c) => (
+              {filteredContractors.map((c) => (
                 <div key={c.id} className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <h4 className="text-white font-semibold truncate">{c.company}</h4>
@@ -474,8 +569,8 @@ export default function AdminDashboard() {
                     <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(c.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${c.status === "active" ? "bg-green-900 text-green-300" : c.status === "paused" ? "bg-amber-900 text-amber-300" : "bg-red-900 text-red-300"}`}>
-                      {c.status === "active" ? t("status_active") : c.status === "paused" ? t("status_paused") : t("status_deleted")}
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(c.status)}`}>
+                      {t(statusLabelKey(c.status))}
                     </span>
                     {c.status === "active" && (
                       <button onClick={() => handleContractorStatus(c.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
@@ -483,17 +578,17 @@ export default function AdminDashboard() {
                     {c.status === "paused" && (
                       <button onClick={() => handleContractorStatus(c.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
                     )}
-                    {c.status !== "deleted" && (
+                    {c.status !== "deleted" && c.status !== "rejected" && (
                       <button onClick={() => { setResetPw({ id: c.id, username: c.username }); setResetPwValue(""); }} className="text-xs text-stone-500 hover:text-blue-400 transition-colors">{t("reset_btn")}</button>
                     )}
                     {c.status !== "deleted" && (
-                      <button onClick={() => handleDeleteContractor(c.id)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                      <button onClick={() => confirmDeleteContractor(c.id, c.company)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
                     )}
                   </div>
                 </div>
               ))}
-              {contractors.length === 0 && (
-                <p className="text-center text-stone-500 py-8">{t("contractors_empty")}</p>
+              {filteredContractors.length === 0 && (
+                <p className="text-center text-stone-500 py-8">{searchQuery ? t("search_empty") : t("contractors_empty")}</p>
               )}
             </div>
           </>
