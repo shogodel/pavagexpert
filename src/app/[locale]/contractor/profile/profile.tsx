@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useLocale } from "@/lib/use-translations";
+import { useTranslations, useLocale } from "@/lib/use-translations";
 
 export default function ContractorProfileClient() {
+  const t = useTranslations("profile");
   const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -14,9 +15,14 @@ export default function ContractorProfileClient() {
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [rbqLicense, setRbqLicense] = useState("");
+  const [yearsInBusiness, setYearsInBusiness] = useState(0);
+  const [serviceAreas, setServiceAreas] = useState<string[]>([]);
+  const [username, setUsername] = useState("");
 
   const [pwCurrent, setPwCurrent] = useState("");
   const [pwNew, setPwNew] = useState("");
+  const [pwConfirm, setPwConfirm] = useState("");
   const [pwMessage, setPwMessage] = useState("");
 
   useEffect(() => {
@@ -27,29 +33,46 @@ export default function ContractorProfileClient() {
         setCompany(d.data.company || "");
         setPhone(d.data.phone || "");
         setEmail(d.data.email || "");
+        setRbqLicense(d.data.rbqLicense || "");
+        setYearsInBusiness(d.data.yearsInBusiness || 0);
+        setServiceAreas(d.data.serviceAreas || []);
+        setUsername(d.data.username || "");
         setLoading(false);
       });
   }, [router, locale]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage("");
+    if (!phone || !/^\(?\d{3}\)?\s?\d{3}-?\d{4}$/.test(phone.trim())) {
+      setMessage(t("phone_invalid"));
+      return;
+    }
+    if (!email || !email.includes("@")) {
+      setMessage(t("email_invalid"));
+      return;
+    }
     setSaving(true);
     const res = await fetch("/api/contractor/profile", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ company, phone, email }),
+      body: JSON.stringify({ company, phone: phone.trim(), email: email.trim().toLowerCase() }),
     });
     const d = await res.json();
     setSaving(false);
-    setMessage(d.ok ? "Profil mis à jour" : "Erreur");
+    if (d.ok) {
+      setMessage(t("saved"));
+    } else {
+      setMessage(d.error || t("error"));
+    }
   };
 
   const handlePwChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!pwCurrent || !pwNew || pwNew.length < 6) {
-      setPwMessage("Le nouveau mot de passe doit contenir au moins 6 caractères");
-      return;
-    }
+    setPwMessage("");
+    if (!pwCurrent) { setPwMessage(t("pw_current_required")); return; }
+    if (!pwNew || pwNew.length < 6) { setPwMessage(t("pw_too_short")); return; }
+    if (pwNew !== pwConfirm) { setPwMessage(t("pw_no_match")); return; }
     const res = await fetch("/api/contractor/change-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,54 +80,90 @@ export default function ContractorProfileClient() {
     });
     const d = await res.json();
     if (d.ok) {
-      setPwMessage("Mot de passe changé avec succès");
+      setPwMessage(t("pw_success"));
       setPwCurrent("");
       setPwNew("");
+      setPwConfirm("");
     } else {
-      setPwMessage(d.error || "Erreur");
+      setPwMessage(d.error || t("error"));
     }
   };
 
-  if (loading) return <p className="text-center py-10">Chargement...</p>;
+  if (loading) return <p className="text-center py-10 text-stone-500">{t("loading")}</p>;
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4 space-y-8">
-      <h1 className="text-2xl font-bold">Mon profil</h1>
+    <div className="min-h-screen bg-stone-50 py-8 px-4">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <h1 className="text-2xl font-bold text-stone-800">{t("title")}</h1>
 
-      <form onSubmit={handleSave} className="space-y-4 bg-white rounded-lg shadow p-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Entreprise</label>
-          <input value={company} onChange={(e) => setCompany(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2" />
+        {/* Account info badge */}
+        <div className="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+          <div className="flex items-center gap-2 text-sm text-stone-500 mb-1">
+            <span className="font-medium text-stone-700">{t("username")}:</span>
+            <span>@{username}</span>
+          </div>
+          {rbqLicense && (
+            <div className="flex items-center gap-2 text-sm text-stone-500">
+              <span className="font-medium text-stone-700">RBQ:</span>
+              <span>{rbqLicense}</span>
+            </div>
+          )}
+          {yearsInBusiness > 0 && (
+            <div className="flex items-center gap-2 text-sm text-stone-500">
+              <span className="font-medium text-stone-700">{t("years")}:</span>
+              <span>{yearsInBusiness} {t("years_unit")}</span>
+            </div>
+          )}
+          {serviceAreas.length > 0 && (
+            <div className="flex items-center gap-2 text-sm text-stone-500 mt-1">
+              <span className="font-medium text-stone-700">{t("areas")}:</span>
+              <span>{serviceAreas.join(", ")}</span>
+            </div>
+          )}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Téléphone</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Courriel</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2" />
-        </div>
-        {message && <p className="text-sm text-green-600">{message}</p>}
-        <button type="submit" disabled={saving} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50">
-          {saving ? "Sauvegarde..." : "Sauvegarder"}
-        </button>
-      </form>
 
-      <form onSubmit={handlePwChange} className="space-y-4 bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold">Changer le mot de passe</h2>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
-          <input value={pwCurrent} onChange={(e) => setPwCurrent(e.target.value)} type="password" required className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-          <input value={pwNew} onChange={(e) => setPwNew(e.target.value)} type="password" required minLength={6} className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2" />
-        </div>
-        {pwMessage && <p className={`text-sm ${pwMessage.includes("succès") ? "text-green-600" : "text-red-600"}`}>{pwMessage}</p>}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Changer le mot de passe
-        </button>
-      </form>
+        {/* Edit profile */}
+        <form onSubmit={handleSave} className="bg-white rounded-xl shadow-sm border border-stone-200 p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-stone-800">{t("edit_title")}</h2>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("company")}</label>
+            <input value={company} onChange={(e) => setCompany(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("phone")}</label>
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="514 555-1234" className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("email")}</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          {message && <p className={`text-sm ${message === t("saved") ? "text-green-600" : "text-red-600"}`}>{message}</p>}
+          <button type="submit" disabled={saving} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors disabled:opacity-50">
+            {saving ? t("saving") : t("save")}
+          </button>
+        </form>
+
+        {/* Change password */}
+        <form onSubmit={handlePwChange} className="bg-white rounded-xl shadow-sm border border-stone-200 p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-stone-800">{t("pw_title")}</h2>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("pw_current")}</label>
+            <input value={pwCurrent} onChange={(e) => setPwCurrent(e.target.value)} type="password" required className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("pw_new")}</label>
+            <input value={pwNew} onChange={(e) => setPwNew(e.target.value)} type="password" required minLength={6} className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-stone-700 mb-1">{t("pw_confirm")}</label>
+            <input value={pwConfirm} onChange={(e) => setPwConfirm(e.target.value)} type="password" required className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-terracotta/50 outline-none" />
+          </div>
+          {pwMessage && <p className={`text-sm ${pwMessage === t("pw_success") ? "text-green-600" : "text-red-600"}`}>{pwMessage}</p>}
+          <button type="submit" className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">
+            {t("pw_change")}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

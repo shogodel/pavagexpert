@@ -22,13 +22,12 @@ export interface Contractor {
   email: string;
   status: "pending" | "active" | "paused" | "deleted" | "rejected";
   createdAt: string;
-}
-
-export interface Application extends Contractor {
   rbqLicense: string;
   yearsInBusiness: number;
   serviceAreas: string[];
 }
+
+export type Application = Contractor;
 
 interface ContractorRow {
   id: string;
@@ -42,21 +41,6 @@ interface ContractorRow {
   rbq_license?: string;
   years_in_business?: number;
   service_areas?: string[];
-}
-
-function mapApplication(row: ContractorRow): Application {
-  return {
-    id: row.id,
-    username: row.username,
-    company: row.company,
-    phone: row.phone,
-    email: row.email,
-    status: row.status as Application["status"],
-    createdAt: row.created_at.toISOString(),
-    rbqLicense: row.rbq_license || "",
-    yearsInBusiness: row.years_in_business || 0,
-    serviceAreas: row.service_areas || [],
-  };
 }
 
 interface AdminRow {
@@ -73,6 +57,9 @@ function mapContractor(row: ContractorRow): Contractor {
     email: row.email,
     status: row.status as Contractor["status"],
     createdAt: row.created_at.toISOString(),
+    rbqLicense: row.rbq_license || "",
+    yearsInBusiness: row.years_in_business || 0,
+    serviceAreas: row.service_areas || [],
   };
 }
 
@@ -82,7 +69,7 @@ export async function getPendingApplications(): Promise<Application[]> {
             password_hash, status, created_at
      FROM contractors WHERE status = 'pending' ORDER BY created_at DESC`
   );
-  return rows.map(mapApplication);
+  return rows.map(mapContractor);
 }
 
 export async function createApplication(input: {
