@@ -293,7 +293,10 @@
     "pw_too_short": "Le nouveau mot de passe doit contenir au moins 6 caractères.",
     "pw_no_match": "Les mots de passe ne correspondent pas.",
     "pw_success": "Mot de passe changé avec succès.",
-    "pw_change": "Changer le mot de passe"
+    "pw_change": "Changer le mot de passe",
+    "back": "← Retour au tableau de bord",
+    "show_password": "Afficher le mot de passe",
+    "hide_password": "Masquer le mot de passe"
   },
   "get_quote": {
     "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",

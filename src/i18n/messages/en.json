@@ -293,7 +293,10 @@
     "pw_too_short": "New password must be at least 6 characters.",
     "pw_no_match": "Passwords do not match.",
     "pw_success": "Password changed successfully.",
-    "pw_change": "Change password"
+    "pw_change": "Change password",
+    "back": "← Back to dashboard",
+    "show_password": "Show password",
+    "hide_password": "Hide password"
   },
   "get_quote": {
     "title": "Describe your project once. Certified contractors compete for your contract.",

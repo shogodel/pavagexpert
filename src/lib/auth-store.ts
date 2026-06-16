@@ -188,7 +188,7 @@ export async function addContractor(input: { username: string; password: string;
   return mapContractor(rows[0]);
 }
 
-export async function updateContractor(id: string, p: Partial<Pick<Contractor, "company" | "phone" | "email" | "status">>): Promise<Contractor | null> {
+export async function updateContractor(id: string, p: Partial<Pick<Contractor, "company" | "phone" | "email" | "status" | "rbqLicense" | "yearsInBusiness" | "serviceAreas">>): Promise<Contractor | null> {
   const setClauses: string[] = [];
   const values: unknown[] = [];
   let idx = 1;
@@ -196,6 +196,9 @@ export async function updateContractor(id: string, p: Partial<Pick<Contractor, "
   if (p.phone !== undefined) { setClauses.push(`phone = $${idx++}`); values.push(p.phone); }
   if (p.email !== undefined) { setClauses.push(`email = $${idx++}`); values.push(p.email); }
   if (p.status !== undefined) { setClauses.push(`status = $${idx++}`); values.push(p.status); }
+  if (p.rbqLicense !== undefined) { setClauses.push(`rbq_license = $${idx++}`); values.push(p.rbqLicense); }
+  if (p.yearsInBusiness !== undefined) { setClauses.push(`years_in_business = $${idx++}`); values.push(p.yearsInBusiness); }
+  if (p.serviceAreas !== undefined) { setClauses.push(`service_areas = $${idx++}`); values.push(p.serviceAreas); }
   if (setClauses.length === 0) return null;
   setClauses.push(`updated_at = now()`);
   values.push(id);

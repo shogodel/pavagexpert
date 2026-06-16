@@ -20,8 +20,8 @@ export async function PATCH(req: NextRequest) {
   if (!payload || payload.role !== "contractor") return NextResponse.json({ ok: false }, { status: 401 });
   try {
     const body = await req.json();
-    const { company, phone, email } = body;
-    const updated = await updateContractor(payload.sub, { company, phone, email });
+    const { company, phone, email, rbqLicense, yearsInBusiness, serviceAreas } = body;
+    const updated = await updateContractor(payload.sub, { company, phone, email, rbqLicense, yearsInBusiness, serviceAreas });
     if (!updated) return NextResponse.json({ ok: false }, { status: 404 });
     return NextResponse.json({ ok: true, data: updated });
   } catch {
