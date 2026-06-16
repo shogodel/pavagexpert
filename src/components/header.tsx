@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,18 +23,35 @@ export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
+  const [switchingLocale, setSwitchingLocale] = useState(false);
+  const isTouchRef = useRef(false);
+
+  useEffect(() => {
+    isTouchRef.current = "ontouchstart" in window;
+  }, []);
 
   useEffect(() => {
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then(setAuth)
       .catch(() => setAuth({ authenticated: false }));
+
+    const onFocus = () => {
+      fetch("/api/auth/me")
+        .then((r) => r.json())
+        .then(setAuth)
+        .catch(() => setAuth({ authenticated: false }));
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
   async function handleLogout() {
     await fetch("/api/logout", { method: "POST" });
     setAuth({ authenticated: false });
+    setMenuOpen(false);
     router.push(`/${locale}`);
   }
 
@@ -42,21 +59,42 @@ export default function Header() {
     if (auth?.role === "contractor") return `/${locale}/contractor/dashboard`;
     return `/${locale}/admin`;
   }
+
   const otherLocale = locale === "fr" ? "en" : "fr";
 
   function isActive(page: string): boolean {
     if (page === "home") return pathname === `/${locale}` || pathname === "/fr" || pathname === "/en";
+    if (page === "dashboard") {
+      return pathname === `/${locale}/admin` || pathname === `/${locale}/contractor/dashboard`;
+    }
+    if (page === "profile") return pathname === `/${locale}/contractor/profile`;
     return pathname === `/${locale}/${page}` || pathname === `/${page}`;
   }
 
   function isServiceActive(): boolean {
-    return serviceLinks.some((s) => pathname.includes(`/services/${s.slug}`));
+    return serviceLinks.some((s) => pathname.startsWith(`/${locale}/services/${s.slug}`));
   }
 
-  function switchLocale() {
+  async function switchLocale() {
+    setSwitchingLocale(true);
     document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax;${process.env.NODE_ENV === "production" ? " Secure;" : ""}`;
-    router.push(`/${otherLocale}`);
+    setMenuOpen(false);
+    await router.push(`/${otherLocale}`);
+    setSwitchingLocale(false);
   }
+
+  const navLink = (href: string, label: string, active: boolean, onClick?: () => void) => (
+    <Link
+      href={href}
+      className={`text-sm font-medium uppercase tracking-wider transition-colors ${
+        active ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
+      }`}
+      aria-current={active ? "page" : undefined}
+      onClick={onClick}
+    >
+      {label}
+    </Link>
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-stone-200">
@@ -66,41 +104,44 @@ export default function Header() {
             <img src="/images/logo.svg" alt="Pavagexpert" className="h-8 w-auto" />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6">
-            <Link
-              href={`/${locale}`}
-              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                isActive("home") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-              }`}
-              aria-current={isActive("home") ? "page" : undefined}
-            >
-              {t("home")}
-            </Link>
+          <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
+            {navLink(`/${locale}`, t("home"), isActive("home"))}
 
             <div
               className="relative"
-              onMouseEnter={() => setServicesOpen(true)}
-              onMouseLeave={() => setServicesOpen(false)}
+              onMouseEnter={() => { if (!isTouchRef.current) setServicesOpen(true); }}
+              onMouseLeave={() => { if (!isTouchRef.current) setServicesOpen(false); }}
+              onFocus={() => setServicesOpen(true)}
+              onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setServicesOpen(false); }}
             >
-              <Link
-                href={`/${locale}/services`}
-                className={`text-sm font-medium uppercase tracking-wider transition-colors inline-flex items-center gap-1 ${
+              <button
+                type="button"
+                onClick={() => setServicesOpen((o) => !o)}
+                className={`text-sm font-medium uppercase tracking-wider transition-colors inline-flex items-center gap-1 cursor-pointer ${
                   isServiceActive() ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
                 }`}
+                aria-haspopup="true"
+                aria-expanded={servicesOpen}
+                aria-label={t("services")}
               >
                 {t("services")}
                 <svg className={`w-3 h-3 transition-transform ${servicesOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </Link>
+              </button>
               {servicesOpen && (
-                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-stone-200 py-2 z-50">
+                <div
+                  role="menu"
+                  aria-label={t("services")}
+                  className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-stone-200 py-2 z-50"
+                >
                   {serviceLinks.map((s) => (
                     <Link
                       key={s.slug}
+                      role="menuitem"
                       href={`/${locale}/services/${s.slug}`}
                       className={`block px-4 py-2 text-sm transition-colors ${
-                        pathname.includes(`/services/${s.slug}`) ? "text-terracotta font-semibold bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                        pathname.startsWith(`/${locale}/services/${s.slug}`) ? "text-terracotta font-semibold bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
                       }`}
                     >
                       {t(`services_${s.key}`)}
@@ -110,52 +151,18 @@ export default function Header() {
               )}
             </div>
 
-            <Link
-              href={`/${locale}/calculator`}
-              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                isActive("calculator") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-              }`}
-              aria-current={isActive("calculator") ? "page" : undefined}
-            >
-              {t("calculator")}
-            </Link>
+            {navLink(`/${locale}/calculator`, t("calculator"), isActive("calculator"))}
+            {navLink(`/${locale}/blog`, t("blog"), isActive("blog"))}
 
-            <Link
-              href={`/${locale}/blog`}
-              className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                isActive("blog") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-              }`}
-              aria-current={isActive("blog") ? "page" : undefined}
-            >
-              {t("blog")}
-            </Link>
-
-            {auth === null ? null : auth.authenticated ? (
+            {auth === null ? (
+              <div className="flex items-center gap-6"><div className="h-5 w-48" /></div>
+            ) : auth.authenticated ? (
               <>
-                <Link
-                  href={`/${locale}/jobs`}
-                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                    isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-                  }`}
-                  aria-current={isActive("jobs") ? "page" : undefined}
-                >
-                  {t("jobs")}
-                </Link>
-                <Link
-                  href={dashboardHref()}
-                  className={`text-sm font-medium uppercase tracking-wider transition-colors text-stone-600 hover:text-stone-900`}
-                >
-                  {t("dashboard")}
-                </Link>
-                {auth.role === "contractor" && (
-                  <Link
-                    href={`/${locale}/contractor/profile`}
-                    className={`text-sm font-medium uppercase tracking-wider transition-colors text-stone-600 hover:text-stone-900`}
-                  >
-                    {t("profile")}
-                  </Link>
-                )}
+                {navLink(`/${locale}/jobs`, t("jobs"), isActive("jobs"))}
+                {navLink(dashboardHref(), t("dashboard"), isActive("dashboard"))}
+                {auth.role === "contractor" && navLink(`/${locale}/contractor/profile`, t("profile"), isActive("profile"))}
                 <button
+                  type="button"
                   onClick={handleLogout}
                   className="text-sm font-medium uppercase tracking-wider text-stone-600 hover:text-stone-900 cursor-pointer"
                 >
@@ -164,34 +171,21 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Link
-                  href={`/${locale}/apply`}
-                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                    isActive("apply") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-                  }`}
-                  aria-current={isActive("apply") ? "page" : undefined}
-                >
-                  {t("apply")}
-                </Link>
-                <Link
-                  href={`/${locale}/login`}
-                  className={`text-sm font-medium uppercase tracking-wider transition-colors ${
-                    isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
-                  }`}
-                  aria-current={isActive("login") ? "page" : undefined}
-                >
-                  {t("login")}
-                </Link>
+                {navLink(`/${locale}/apply`, t("apply"), isActive("apply"))}
+                {navLink(`/${locale}/login`, t("login"), isActive("login"))}
               </>
             )}
           </nav>
 
           <div className="flex items-center gap-4">
             <button
+              type="button"
               onClick={switchLocale}
-              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer"
+              disabled={switchingLocale}
+              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer disabled:opacity-50"
+              aria-label={`Switch language to ${otherLocale === "fr" ? "French" : "English"}`}
             >
-              {otherLocale === "fr" ? "FR" : "EN"}
+              {switchingLocale ? "..." : otherLocale === "fr" ? "FR" : "EN"}
             </button>
 
             <Link
@@ -201,8 +195,17 @@ export default function Header() {
               {t("get_quote")}
             </Link>
 
+            {menuOpen && (
+              <div
+                className="fixed inset-0 z-40 bg-black/20 lg:hidden"
+                onClick={() => setMenuOpen(false)}
+                aria-hidden="true"
+              />
+            )}
+
             <button
-              className="lg:hidden p-2 text-stone-600"
+              type="button"
+              className="lg:hidden p-2 text-stone-600 relative z-50 cursor-pointer"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
@@ -219,8 +222,8 @@ export default function Header() {
         </div>
 
         {menuOpen && (
-          <div className="lg:hidden pb-4 border-t border-stone-100 pt-4">
-            <nav className="flex flex-col gap-3">
+          <div className="lg:hidden pb-4 border-t border-stone-100 pt-4 relative z-50 bg-white">
+            <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
               <Link
                 href={`/${locale}`}
                 className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("home") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
@@ -230,23 +233,31 @@ export default function Header() {
                 {t("home")}
               </Link>
 
-              <Link
-                href={`/${locale}/services`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isServiceActive() ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                onClick={() => setMenuOpen(false)}
+              <button
+                type="button"
+                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors flex items-center justify-between text-left cursor-pointer ${isServiceActive() ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                aria-expanded={mobileServicesOpen}
               >
                 {t("services")}
-              </Link>
-              {serviceLinks.map((s) => (
-                <Link
-                  key={s.slug}
-                  href={`/${locale}/services/${s.slug}`}
-                  className={`text-sm pl-4 py-1.5 transition-colors ${pathname.includes(`/services/${s.slug}`) ? "text-terracotta font-semibold" : "text-stone-500 hover:text-stone-900"}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {t(`services_${s.key}`)}
-                </Link>
-              ))}
+                <svg className={`w-3 h-3 transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {mobileServicesOpen && (
+                <div className="flex flex-col ml-4 border-l-2 border-stone-200 pl-3">
+                  {serviceLinks.map((s) => (
+                    <Link
+                      key={s.slug}
+                      href={`/${locale}/services/${s.slug}`}
+                      className={`text-sm py-1.5 transition-colors ${pathname.startsWith(`/${locale}/services/${s.slug}`) ? "text-terracotta font-semibold" : "text-stone-500 hover:text-stone-900"}`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {t(`services_${s.key}`)}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               <Link
                 href={`/${locale}/calculator`}
@@ -262,6 +273,9 @@ export default function Header() {
               >
                 {t("blog")}
               </Link>
+
+              <hr className="my-2 border-stone-200" />
+
               {auth === null ? null : auth.authenticated ? (
                 <>
                   <Link
@@ -273,7 +287,7 @@ export default function Header() {
                   </Link>
                   <Link
                     href={dashboardHref()}
-                    className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900"
+                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("dashboard") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
                     onClick={() => setMenuOpen(false)}
                   >
                     {t("dashboard")}
@@ -281,13 +295,14 @@ export default function Header() {
                   {auth.role === "contractor" && (
                     <Link
                       href={`/${locale}/contractor/profile`}
-                      className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900"
+                      className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("profile") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
                       onClick={() => setMenuOpen(false)}
                     >
                       {t("profile")}
                     </Link>
                   )}
                   <button
+                    type="button"
                     onClick={() => { handleLogout(); setMenuOpen(false); }}
                     className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900 text-left cursor-pointer"
                   >
@@ -313,13 +328,15 @@ export default function Header() {
                 </>
               )}
 
-              <Link
-                href={`/${locale}/get-quote`}
-                className="bg-terracotta text-white text-center text-sm font-semibold px-5 py-2.5 rounded-lg mt-2"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("get_quote")}
-              </Link>
+              <div className="mt-3 pt-3 border-t border-stone-200">
+                <Link
+                  href={`/${locale}/get-quote`}
+                  className="block bg-terracotta text-white text-center text-sm font-semibold px-5 py-2.5 rounded-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("get_quote")}
+                </Link>
+              </div>
             </nav>
           </div>
         )}
