@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "@/lib/use-translations";
 
 let deferredPrompt: Event | null = null;
@@ -17,7 +17,6 @@ export default function PwaBanner() {
   const [installPrompt, setInstallPrompt] = useState<Event | null>(deferredPrompt);
   const [dismissed, setDismissed] = useState(false);
   const [installed, setInstalled] = useState(false);
-  const promptRef = useRef<Event | null>(deferredPrompt);
 
   useEffect(() => {
     setInstalled(window.matchMedia("(display-mode: standalone)").matches);
@@ -25,7 +24,6 @@ export default function PwaBanner() {
     const handler = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e);
-      promptRef.current = e;
     };
     window.addEventListener("beforeinstallprompt", handler);
 

@@ -36,7 +36,6 @@ export default function Header() {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
   const [switchingLocale, setSwitchingLocale] = useState(false);
-  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
   const [installed, setInstalled] = useState(false);
   const isTouchRef = useRef(false);
   const installPromptRef = useRef<Event | null>(null);
@@ -49,12 +48,10 @@ export default function Header() {
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
-      setInstallPrompt(e);
       installPromptRef.current = e;
     };
     window.addEventListener("beforeinstallprompt", handler);
     if (deferredInstallPrompt) {
-      setInstallPrompt(deferredInstallPrompt);
       installPromptRef.current = deferredInstallPrompt;
     }
     const appInstalledHandler = () => setInstalled(true);
@@ -194,11 +191,14 @@ export default function Header() {
                 {navLink(`/${locale}/jobs`, t("jobs"), isActive("jobs"))}
                 {navLink(dashboardHref(), t("dashboard"), isActive("dashboard"))}
                 {auth.role === "contractor" && navLink(`/${locale}/contractor/profile`, t("profile"), isActive("profile"))}
-                {!installed && installPrompt && (
+                {!installed && (
                   <button
                     type="button"
                     onClick={() => {
-                      (installPrompt as unknown as { prompt: () => Promise<void> }).prompt();
+                      if (installPromptRef.current) {
+                        (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
+                        installPromptRef.current = null;
+                      }
                     }}
                     className="text-sm font-medium uppercase tracking-wider text-terracotta hover:text-terracotta-dark cursor-pointer"
                   >
@@ -345,12 +345,15 @@ export default function Header() {
                       {t("profile")}
                     </Link>
                   )}
-                  {!installed && installPrompt && (
+                  {!installed && (
                     <button
                       type="button"
                       onClick={() => {
-                        (installPrompt as unknown as { prompt: () => Promise<void> }).prompt();
-                        setMenuOpen(false);
+                        if (installPromptRef.current) {
+                          (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
+                          installPromptRef.current = null;
+                          setMenuOpen(false);
+                        }
                       }}
                       className="text-sm font-medium py-2 uppercase tracking-wider text-terracotta hover:text-terracotta-dark text-left cursor-pointer"
                     >
