@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Job } from "@/lib/job-store";
 
 type SortKey = "newest" | "oldest" | "budget_high" | "budget_low";
@@ -12,21 +12,34 @@ function parseBudget(budget: string): number {
 }
 
 function formatBudget(budget: string): string {
+  if (!budget) return "";
   const num = parseBudget(budget);
   if (num === 0) return budget;
   return `$${num.toLocaleString("en-CA", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
-function statusBadge(job: Job): { label: string; className: string } {
-  switch (job.status) {
-    case "new":
-      return { label: "status_new", className: "bg-amber-100 text-amber-700" };
-    case "in_progress":
-      return { label: "status_in_progress", className: "bg-blue-100 text-blue-700" };
-    case "completed":
-      return { label: "status_completed", className: "bg-green-100 text-green-700" };
-    default:
-      return { label: job.status, className: "bg-stone-100 text-stone-600" };
+function relativeTime(dateStr: string, locale: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return locale === "fr" ? "À l'instant" : "Just now";
+  if (minutes < 60) return locale === "fr" ? `Il y a ${minutes} min` : `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return locale === "fr" ? `Il y a ${hours}h` : `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return locale === "fr" ? `Il y a ${days}j` : `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA");
+}
+
+function shortId(id: string): string {
+  return id.slice(0, 8).toUpperCase();
+}
+
+function borderClass(status: string): string {
+  switch (status) {
+    case "new": return "border-l-amber-400";
+    case "in_progress": return "border-l-blue-400";
+    case "completed": return "border-l-green-400";
+    default: return "border-l-stone-300";
   }
 }
 
@@ -40,6 +53,8 @@ export default function JobsBoard() {
   const [sort, setSort] = useState<SortKey>("newest");
   const [debouncedPostal, setDebouncedPostal] = useState("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [revealedId, setRevealedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -95,9 +110,9 @@ export default function JobsBoard() {
               className="px-4 py-2 rounded-lg border border-stone-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="">{t("filter_status_all")}</option>
-              <option value="new">{t("job_status_new")}</option>
-              <option value="in_progress">{t("job_status_in_progress")}</option>
-              <option value="completed">{t("job_status_completed")}</option>
+              <option value="new">{t("status_new")}</option>
+              <option value="in_progress">{t("status_in_progress")}</option>
+              <option value="completed">{t("status_completed")}</option>
             </select>
             <select
               value={sort}
@@ -122,31 +137,136 @@ export default function JobsBoard() {
           ) : (
             <div className="space-y-4">
               {sorted.map((job, i) => {
-                const badge = statusBadge(job);
+                const isExpanded = expandedId === job.id;
+                const isRevealed = revealedId === job.id;
+                const firstPhoto = job.photos?.[0];
                 return (
                   <motion.div
                     key={job.id}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
-                    className="bg-white rounded-xl p-5 md:p-6 shadow-sm border border-stone-200 hover:shadow-md hover:border-stone-300 transition-shadow"
+                    className={`bg-white rounded-xl shadow-sm border border-stone-200 border-l-4 ${borderClass(job.status)} hover:shadow-md transition-shadow`}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-stone-800 truncate">{job.name}</h3>
-                        {job.description && (
-                          <p className="text-sm text-stone-600 mt-1 line-clamp-3">{job.description}</p>
-                        )}
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-stone-500">
-                          <span>{t("postal")} {job.postalCode || "—"}</span>
-                          {job.budget && <span className="text-green-700 font-medium">{formatBudget(job.budget)}</span>}
-                          <span>{new Date(job.createdAt).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA")}</span>
+                    <div
+                      className="p-5 md:p-6 cursor-pointer"
+                      onClick={() => setExpandedId(isExpanded ? null : job.id)}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-semibold text-stone-800 truncate">{job.name}</h3>
+                            <span className="text-[10px] font-mono text-stone-400 tracking-wider bg-stone-100 px-1.5 py-0.5 rounded">
+                              #{shortId(job.id)}
+                            </span>
+                          </div>
+                          {!isExpanded && job.description && (
+                            <p className="text-sm text-stone-600 mt-1 line-clamp-2">{job.description}</p>
+                          )}
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-stone-500">
+                            <span className="inline-flex items-center gap-1">
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                              {job.postalCode || "—"}
+                            </span>
+                            {job.budget && <span className="text-green-700 font-medium">{formatBudget(job.budget)}</span>}
+                            <span className="inline-flex items-center gap-1">
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                              {relativeTime(job.createdAt, locale)}
+                            </span>
+                          </div>
                         </div>
+                        <span className="shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600">
+                          {isExpanded ? t("hide_details") : t("view_details")}
+                        </span>
                       </div>
-                      <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${badge.className}`}>
-                        {t(badge.label)}
-                      </span>
+
+                      {firstPhoto && (
+                        <div className="mt-3 flex gap-2">
+                          <img
+                            src={`/api/photos/${job.id}?file=${encodeURIComponent(firstPhoto)}`}
+                            alt=""
+                            className="w-16 h-16 rounded-lg object-cover border border-stone-200"
+                          />
+                        </div>
+                      )}
                     </div>
+
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-stone-100 pt-4 space-y-4">
+                            {job.description && (
+                              <div>
+                                <p className="text-xs font-medium text-stone-400 uppercase tracking-wider mb-1">{t("description")}</p>
+                                <p className="text-sm text-stone-700 whitespace-pre-wrap">{job.description}</p>
+                              </div>
+                            )}
+
+                            {job.photos && job.photos.length > 0 && (
+                              <div>
+                                <p className="text-xs font-medium text-stone-400 uppercase tracking-wider mb-1">
+                                  {t("photos")} ({job.photos.length})
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  {job.photos.map((photo) => (
+                                    <img
+                                      key={photo}
+                                      src={`/api/photos/${job.id}?file=${encodeURIComponent(photo)}`}
+                                      alt=""
+                                      className="w-20 h-20 md:w-24 md:h-24 rounded-lg object-cover border border-stone-200 hover:opacity-90 transition-opacity"
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <div>
+                              <p className="text-xs font-medium text-stone-400 uppercase tracking-wider mb-2">{t("contact")}</p>
+                              {!isRevealed ? (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setRevealedId(job.id); }}
+                                  className="text-sm px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium"
+                                >
+                                  {t("reveal_contact")}
+                                </button>
+                              ) : (
+                                <div className="flex flex-wrap gap-2">
+                                  <a
+                                    href={`tel:${job.phone}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors font-medium"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    {t("call_now")}
+                                  </a>
+                                  <a
+                                    href={`mailto:${job.email}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-stone-700 text-white hover:bg-stone-800 transition-colors font-medium"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    {t("email")}
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={(e) => { e.stopPropagation(); alert(t("interest_alert")); }}
+                              className="text-sm px-4 py-2 rounded-lg border border-amber-300 text-amber-700 hover:bg-amber-50 transition-colors font-medium"
+                            >
+                              {t("express_interest")}
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 );
               })}

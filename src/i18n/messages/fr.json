@@ -127,7 +127,17 @@
     "no_results": "Aucun projet ne correspond à vos filtres.",
     "status_new": "Nouveau",
     "status_in_progress": "En cours",
-    "status_completed": "Terminé"
+    "status_completed": "Terminé",
+    "view_details": "Voir les détails",
+    "hide_details": "Masquer les détails",
+    "description": "Description",
+    "photos": "Photos",
+    "contact": "Contact",
+    "reveal_contact": "Afficher les coordonnées",
+    "call_now": "Appeler",
+    "email": "Courriel",
+    "express_interest": "Manifester mon intérêt",
+    "interest_alert": "Intérêt enregistré! Le client sera informé."
   },
   "apply": {
     "title": "Devenir entrepreneur",

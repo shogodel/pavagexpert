@@ -127,7 +127,17 @@
     "no_results": "No projects match your filters.",
     "status_new": "New",
     "status_in_progress": "In progress",
-    "status_completed": "Completed"
+    "status_completed": "Completed",
+    "view_details": "View details",
+    "hide_details": "Hide details",
+    "description": "Description",
+    "photos": "Photos",
+    "contact": "Contact",
+    "reveal_contact": "Reveal contact info",
+    "call_now": "Call now",
+    "email": "Email",
+    "express_interest": "Express interest",
+    "interest_alert": "Interest logged! The client will be notified."
   },
   "apply": {
     "title": "Become a Contractor",
