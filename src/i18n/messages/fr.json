@@ -396,7 +396,11 @@
     "get_quote_title": "Estimation Pavé Uni | Montréal, Laval, Longueuil | Pavagexpert",
     "get_quote_desc": "Obtenez une estimation personnalisée pour votre projet de pavé uni à Montréal, Laval ou sur la Rive-Sud. Lancez votre projet et recevez des offres sous 24h.",
     "jobs_title": "Projets de Pavé Uni en Cours | Montréal, Laval, Rive-Sud | Pavagexpert",
-    "jobs_desc": "Consultez les projets de pavé uni récents soumis par des propriétaires à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal."
+    "jobs_desc": "Consultez les projets de pavé uni récents soumis par des propriétaires à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal.",
+    "apply_title": "Devenir Entrepreneur | Pavagexpert Montréal, Laval, Rive-Sud",
+    "apply_desc": "Postulez pour rejoindre notre réseau d'entrepreneurs certifiés en pavé uni à Montréal, Laval et la Rive-Sud. Licence RBQ requise.",
+    "login_title": "Connexion Entrepreneur & Administrateur | Pavagexpert",
+    "login_desc": "Accédez à votre tableau de bord entrepreneur ou au panneau d'administration Pavagexpert. Gérez projets, soumissions et paramètres de compte."
   },
   "privacy": {
     "title": "Politique de confidentialité",

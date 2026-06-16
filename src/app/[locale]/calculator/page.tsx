@@ -11,7 +11,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: messages.seo?.calculator_title,
     description: messages.seo?.calculator_desc,
-    alternates: { languages: { "x-default": "/fr/calculator", fr: "/fr/calculator", en: "/en/calculator" } },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/calculator`, languages: { "x-default": "/fr/calculator", fr: "/fr/calculator", en: "/en/calculator" } },
+    openGraph: { title: messages.seo?.calculator_title, description: messages.seo?.calculator_desc },
+    twitter: { title: messages.seo?.calculator_title, description: messages.seo?.calculator_desc },
   };
 }
 

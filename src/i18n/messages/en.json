@@ -396,7 +396,11 @@
     "get_quote_title": "Paver Estimate | Montreal, Laval, Longueuil | Pavagexpert",
     "get_quote_desc": "Get a personalized estimate for your interlocking paver project in Montreal, Laval or the South Shore. Launch your project and receive offers within 24h.",
     "jobs_title": "Active Paver Projects | Montreal, Laval, South Shore | Pavagexpert",
-    "jobs_desc": "Browse recent paver projects from homeowners in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal."
+    "jobs_desc": "Browse recent paver projects from homeowners in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal.",
+    "apply_title": "Become a Contractor | Pavagexpert Montreal, Laval, South Shore",
+    "apply_desc": "Apply to join our network of certified interlocking paver contractors in Montreal, Laval and the South Shore. RBQ license required.",
+    "login_title": "Contractor & Admin Login | Pavagexpert",
+    "login_desc": "Access your Pavagexpert contractor dashboard or admin panel. Manage projects, quotes and account settings."
   },
   "privacy": {
     "title": "Privacy Policy",

@@ -12,7 +12,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: messages.seo?.services_title,
     description: messages.seo?.services_desc,
-    alternates: { languages: { "x-default": "/fr/services", fr: "/fr/services", en: "/en/services" } },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/services`, languages: { "x-default": "/fr/services", fr: "/fr/services", en: "/en/services" } },
+    openGraph: { title: messages.seo?.services_title, description: messages.seo?.services_desc },
+    twitter: { title: messages.seo?.services_title, description: messages.seo?.services_desc },
   };
 }
 

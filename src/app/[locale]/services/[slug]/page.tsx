@@ -21,6 +21,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: seo?.[seoKey] || `Pavagexpert | ${slug}`,
     description: seo?.[seoDescKey] || "",
+    alternates: { canonical: `https://pavagexpert.space/${locale}/services/${slug}`, languages: { "x-default": `/fr/services/${slug}`, fr: `/fr/services/${slug}`, en: `/en/services/${slug}` } },
+    openGraph: { title: seo?.[seoKey], description: seo?.[seoDescKey] },
+    twitter: { title: seo?.[seoKey], description: seo?.[seoDescKey] },
   };
 }
 

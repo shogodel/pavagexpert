@@ -7,7 +7,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   const locale = isLocale(raw) ? raw : defaultLocale;
   const messages = await getMessages(locale);
-  return { title: messages.profile?.title ? `${messages.profile.title} - Pavagexpert` : "Mon profil - Pavagexpert" };
+  const profileTitle = messages.profile?.title ? `${messages.profile.title} - Pavagexpert` : "Mon profil - Pavagexpert";
+  return { title: profileTitle, description: profileTitle, robots: { index: false, follow: false } };
 }
 
 export default function ContractorProfilePage() {

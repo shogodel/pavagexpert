@@ -9,7 +9,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const messages = await getMessages(locale);
   return {
     title: messages.privacy?.title || "Privacy",
-    alternates: { languages: { "x-default": "/fr/privacy", fr: "/fr/privacy", en: "/en/privacy" } },
+    description: messages.privacy?.title ? `${messages.privacy.title} — Pavagexpert` : "Privacy Policy — Pavagexpert",
+    alternates: { canonical: `https://pavagexpert.space/${locale}/privacy`, languages: { "x-default": "/fr/privacy", fr: "/fr/privacy", en: "/en/privacy" } },
+    openGraph: { title: messages.privacy?.title, description: messages.privacy?.title ? `${messages.privacy.title} — Pavagexpert` : "Privacy Policy — Pavagexpert" },
+    twitter: { title: messages.privacy?.title, description: messages.privacy?.title ? `${messages.privacy.title} — Pavagexpert` : "Privacy Policy — Pavagexpert" },
   };
 }
 

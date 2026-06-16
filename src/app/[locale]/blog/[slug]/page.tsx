@@ -14,7 +14,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${article.title} | ${messages.seo?.blog_title || "Blog"}`,
     description: article.desc,
-    alternates: { languages: { "x-default": `/fr/blog/${slug}`, fr: `/fr/blog/${slug}`, en: `/en/blog/${slug}` } },
+    alternates: { canonical: `https://pavagexpert.space/${locale}/blog/${slug}`, languages: { "x-default": `/fr/blog/${slug}`, fr: `/fr/blog/${slug}`, en: `/en/blog/${slug}` } },
+    openGraph: { title: article.title, description: article.desc },
+    twitter: { title: article.title, description: article.desc },
   };
 }
 
