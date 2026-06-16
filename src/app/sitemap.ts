@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllSlugs } from "@/lib/blog-data";
+import { getAllSlugs, getArticle } from "@/lib/blog-data";
 import { servicesList } from "@/lib/services-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -26,14 +26,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  const blogSlugs = getAllSlugs("fr");
+  const allSlugs = new Set([...getAllSlugs("fr"), ...getAllSlugs("en")]);
   const blogEntries = locales.flatMap((locale) =>
-    blogSlugs.map((slug) => ({
-      url: `${baseUrl}/${locale}/blog/${slug}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }))
+    [...allSlugs].map((slug) => {
+      const article = getArticle(slug, locale);
+      return {
+        url: `${baseUrl}/${locale}/blog/${slug}`,
+        lastModified: article?.date ? new Date(article.date) : new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      };
+    })
   );
 
   const serviceEntries = locales.flatMap((locale) =>

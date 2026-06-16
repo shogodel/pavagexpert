@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Pavagexpert — Portail entrepreneurs",
+    name: "Pavagexpert",
     short_name: "Pavagexpert",
-    description: "Consultez les projets de pavage à Montréal, Laval et la Rive-Sud. Recevez des notifications quand un nouveau projet est publié.",
+    description: "Pavagexpert — Interlocking paver projects in Montreal, Laval and the South Shore. Projets de pavé uni à Montréal, Laval et la Rive-Sud.",
     start_url: "/fr/login",
     display: "standalone",
     background_color: "#fafaf9",
@@ -15,7 +15,6 @@ export default function manifest(): MetadataRoute.Manifest {
       { src: "/images/icon-192.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any" },
       { src: "/images/icon-512.svg", sizes: "512x512", type: "image/svg+xml", purpose: "any" },
     ],
-    lang: "fr",
     scope: "/",
   };
 }

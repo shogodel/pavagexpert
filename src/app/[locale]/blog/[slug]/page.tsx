@@ -26,8 +26,20 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ lo
   const article = getArticle(slug, locale);
   if (!article) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.desc,
+    datePublished: article.date,
+    author: { "@type": "Organization", name: "Pavagexpert" },
+    publisher: { "@type": "Organization", name: "Pavagexpert", url: "https://pavagexpert.space" },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://pavagexpert.space/${locale}/blog/${slug}` },
+  };
+
   return (
     <div className="min-h-screen bg-stone-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="pt-24 pb-8 bg-stone-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href={`/${locale}/blog`} className="text-sm text-terracotta hover:underline mb-4 inline-block">&larr; Blog</Link>
