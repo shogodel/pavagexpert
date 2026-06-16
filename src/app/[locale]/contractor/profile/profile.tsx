@@ -38,7 +38,8 @@ export default function ContractorProfileClient() {
         setServiceAreas(d.data.serviceAreas || []);
         setUsername(d.data.username || "");
         setLoading(false);
-      });
+      })
+      .catch(() => router.push(`/${locale}/contractor/login`));
   }, [router, locale]);
 
   const handleSave = async (e: React.FormEvent) => {
