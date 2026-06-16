@@ -77,8 +77,8 @@ export default function JobsBoard() {
     if (debouncedPostal) params.set("postalCode", debouncedPostal);
     if (filterStatus) params.set("status", filterStatus);
     fetch(`/api/jobs?${params.toString()}`)
-      .then((r) => r.json())
-      .then(setJobs)
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .then((data) => { if (Array.isArray(data)) setJobs(data); })
       .catch(() => setJobs([]))
       .finally(() => setLoading(false));
   }, [debouncedPostal, filterStatus]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 
@@ -22,7 +22,6 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -114,7 +113,6 @@ export default function LoginForm() {
             <label className="block text-sm text-stone-400 mb-1" htmlFor="password">{t("password")}</label>
             <div className="relative">
               <input
-                ref={passwordRef}
                 id="password"
                 type={showPw ? "text" : "password"}
                 required
