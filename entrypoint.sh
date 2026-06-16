@@ -40,7 +40,7 @@ if (needsReseed) {
 if [ -f /data/auth.json ]; then chown nextjs:nodejs /data/auth.json; fi
 
 # Generate VAPID push notification keys using Node crypto if missing
-if [ -z "$NEXT_PUBLIC_VAPID_PUBLIC_KEY" ] && [ -z "$VAPID_PRIVATE_KEY" ]; then
+if [ -z "$NEXT_PUBLIC_VAPID_PUBLIC_KEY" ] || [ -z "$VAPID_PRIVATE_KEY" ]; then
   if [ ! -f /data/vapid-keys.json ]; then
     echo "[entrypoint] generating VAPID keys..."
     node -e "

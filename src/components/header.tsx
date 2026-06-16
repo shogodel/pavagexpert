@@ -37,6 +37,7 @@ export default function Header() {
   const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
   const [switchingLocale, setSwitchingLocale] = useState(false);
   const [installed, setInstalled] = useState(false);
+  const [installHint, setInstallHint] = useState(false);
   const isTouchRef = useRef(false);
   const installPromptRef = useRef<Event | null>(null);
 
@@ -192,18 +193,27 @@ export default function Header() {
                 {navLink(dashboardHref(), t("dashboard"), isActive("dashboard"))}
                 {auth.role === "contractor" && navLink(`/${locale}/contractor/profile`, t("profile"), isActive("profile"))}
                 {!installed && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (installPromptRef.current) {
-                        (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
-                        installPromptRef.current = null;
-                      }
-                    }}
-                    className="text-sm font-medium uppercase tracking-wider text-terracotta hover:text-terracotta-dark cursor-pointer"
-                  >
-                    {t("install_app")}
-                  </button>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (installPromptRef.current) {
+                          (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
+                          installPromptRef.current = null;
+                        } else {
+                          setInstallHint(true);
+                        }
+                      }}
+                      className="text-sm font-medium uppercase tracking-wider text-terracotta hover:text-terracotta-dark cursor-pointer"
+                    >
+                      {t("install_app")}
+                    </button>
+                    {installHint && (
+                      <div className="absolute top-full mt-1 right-0 w-56 bg-stone-800 text-white text-xs rounded-lg p-2 shadow-lg z-50" onClick={() => setInstallHint(false)}>
+                        <p>Ouvrez le menu du navigateur et sélectionnez « Installer l'application » ou « Ajouter à l'écran d'accueil ».</p>
+                      </div>
+                    )}
+                  </div>
                 )}
                 <button
                   type="button"
@@ -346,19 +356,28 @@ export default function Header() {
                     </Link>
                   )}
                   {!installed && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (installPromptRef.current) {
-                          (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
-                          installPromptRef.current = null;
-                          setMenuOpen(false);
-                        }
-                      }}
-                      className="text-sm font-medium py-2 uppercase tracking-wider text-terracotta hover:text-terracotta-dark text-left cursor-pointer"
-                    >
-                      {t("install_app")}
-                    </button>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (installPromptRef.current) {
+                            (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
+                            installPromptRef.current = null;
+                            setMenuOpen(false);
+                          } else {
+                            setInstallHint(true);
+                          }
+                        }}
+                        className="text-sm font-medium py-2 uppercase tracking-wider text-terracotta hover:text-terracotta-dark text-left cursor-pointer"
+                      >
+                        {t("install_app")}
+                      </button>
+                      {installHint && (
+                        <div className="absolute top-full mt-1 left-0 w-56 bg-stone-800 text-white text-xs rounded-lg p-2 shadow-lg z-50" onClick={() => setInstallHint(false)}>
+                          <p>Ouvrez le menu du navigateur et sélectionnez « Installer l'application » ou « Ajouter à l'écran d'accueil ».</p>
+                        </div>
+                      )}
+                    </div>
                   )}
                   <button
                     type="button"

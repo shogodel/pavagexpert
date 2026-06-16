@@ -47,7 +47,7 @@ export default function PwaBanner() {
         <button
           type="button"
           onClick={() => {
-            (installPrompt as unknown as { prompt: () => Promise<void> }).prompt();
+            (installPrompt as unknown as { prompt: () => Promise<void> }).prompt().catch(() => {});
             setInstallPrompt(null);
           }}
           className="flex-1 text-sm px-3 py-1.5 rounded-lg bg-terracotta text-white hover:bg-terracotta-dark transition-colors font-medium cursor-pointer"
