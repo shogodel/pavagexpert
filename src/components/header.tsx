@@ -18,6 +18,14 @@ const serviceLinks = [
   { key: "drainage", slug: "drainage" },
 ];
 
+let deferredInstallPrompt: Event | null = null;
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+  });
+}
+
 export default function Header() {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -28,10 +36,33 @@ export default function Header() {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
   const [switchingLocale, setSwitchingLocale] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [installed, setInstalled] = useState(false);
   const isTouchRef = useRef(false);
+  const installPromptRef = useRef<Event | null>(null);
 
   useEffect(() => {
     isTouchRef.current = "ontouchstart" in window;
+    setInstalled(window.matchMedia("(display-mode: standalone)").matches);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+      installPromptRef.current = e;
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    if (deferredInstallPrompt) {
+      setInstallPrompt(deferredInstallPrompt);
+      installPromptRef.current = deferredInstallPrompt;
+    }
+    const appInstalledHandler = () => setInstalled(true);
+    window.addEventListener("appinstalled", appInstalledHandler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("appinstalled", appInstalledHandler);
+    };
   }, []);
 
   useEffect(() => {
@@ -163,6 +194,17 @@ export default function Header() {
                 {navLink(`/${locale}/jobs`, t("jobs"), isActive("jobs"))}
                 {navLink(dashboardHref(), t("dashboard"), isActive("dashboard"))}
                 {auth.role === "contractor" && navLink(`/${locale}/contractor/profile`, t("profile"), isActive("profile"))}
+                {!installed && installPrompt && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      (installPrompt as unknown as { prompt: () => Promise<void> }).prompt();
+                    }}
+                    className="text-sm font-medium uppercase tracking-wider text-terracotta hover:text-terracotta-dark cursor-pointer"
+                  >
+                    {t("install_app")}
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={handleLogout}
@@ -302,6 +344,18 @@ export default function Header() {
                     >
                       {t("profile")}
                     </Link>
+                  )}
+                  {!installed && installPrompt && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        (installPrompt as unknown as { prompt: () => Promise<void> }).prompt();
+                        setMenuOpen(false);
+                      }}
+                      className="text-sm font-medium py-2 uppercase tracking-wider text-terracotta hover:text-terracotta-dark text-left cursor-pointer"
+                    >
+                      {t("install_app")}
+                    </button>
                   )}
                   <button
                     type="button"
