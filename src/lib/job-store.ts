@@ -118,3 +118,33 @@ export async function updateJobStatus(id: string, status: JobStatus): Promise<bo
   );
   return rows.length > 0;
 }
+
+export async function updateJob(
+  id: string,
+  input: Partial<{ title: string; description: string; postalCode: string; budget: string; status: string }>
+): Promise<boolean> {
+  const setClauses: string[] = [];
+  const values: unknown[] = [];
+  let idx = 1;
+  if (input.title !== undefined) { setClauses.push(`title = $${idx++}`); values.push(input.title); }
+  if (input.description !== undefined) { setClauses.push(`description = $${idx++}`); values.push(input.description); }
+  if (input.postalCode !== undefined) { setClauses.push(`postal_code = $${idx++}`); values.push(input.postalCode); }
+  if (input.budget !== undefined) { setClauses.push(`budget = $${idx++}`); values.push(input.budget); }
+  if (input.status !== undefined) { setClauses.push(`status = $${idx++}`); values.push(input.status); }
+  if (setClauses.length === 0) return false;
+  setClauses.push("updated_at = now()");
+  values.push(id);
+  const rows = await query<{ id: string }>(
+    `UPDATE jobs SET ${setClauses.join(", ")} WHERE id = $${idx} RETURNING id`,
+    values
+  );
+  return rows.length > 0;
+}
+
+export async function deleteJob(id: string): Promise<boolean> {
+  const rows = await query<{ id: string }>(
+    "DELETE FROM jobs WHERE id = $1 RETURNING id",
+    [id]
+  );
+  return rows.length > 0;
+}

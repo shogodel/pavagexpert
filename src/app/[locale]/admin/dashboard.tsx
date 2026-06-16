@@ -35,6 +35,18 @@ interface ApplicationItem {
   createdAt: string;
 }
 
+interface AdminJob {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  postalCode: string;
+  budget: string;
+  description: string;
+  status: string;
+  createdAt: string;
+}
+
 interface Contractor {
   id: string;
   username: string;
@@ -45,7 +57,7 @@ interface Contractor {
   createdAt: string;
 }
 
-type Tab = "analytics" | "users" | "contractors" | "applications";
+type Tab = "analytics" | "users" | "contractors" | "applications" | "jobs";
 
 function statusBadgeClass(status: string): string {
   switch (status) {
@@ -67,13 +79,24 @@ function statusLabelKey(status: string): string {
   }
 }
 
+function jobStatusBadgeClass(status: string): string {
+  switch (status) {
+    case "new": return "bg-blue-900 text-blue-300";
+    case "in_progress": return "bg-amber-900 text-amber-300";
+    case "completed": return "bg-green-900 text-green-300";
+    case "published": return "bg-cyan-900 text-cyan-300";
+    case "draft": return "bg-stone-700 text-stone-300";
+    default: return "bg-stone-700 text-stone-300";
+  }
+}
+
 export default function AdminDashboard() {
   const t = useTranslations("admin");
   const locale = useLocale() as "fr" | "en";
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabFromUrl = searchParams.get("tab") as Tab | null;
-  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications"];
+  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications", "jobs"];
   const [tab, setTabState] = useState<Tab>(tabFromUrl && validTabs.includes(tabFromUrl) ? tabFromUrl : "analytics");
 
   function setTab(newTab: Tab) {
@@ -87,6 +110,11 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [contractors, setContractors] = useState<Contractor[]>([]);
   const [applications, setApplications] = useState<ApplicationItem[]>([]);
+  const [jobs, setJobs] = useState<AdminJob[]>([]);
+  const [showAddJob, setShowAddJob] = useState(false);
+  const [editJob, setEditJob] = useState<AdminJob | null>(null);
+  const [jobForm, setJobForm] = useState({ name: "", email: "", phone: "", description: "", postalCode: "", budget: "" });
+  const [jobError, setJobError] = useState("");
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -102,7 +130,7 @@ export default function AdminDashboard() {
   const [resetPw, setResetPw] = useState<{ id: string; username: string } | null>(null);
   const [resetPwValue, setResetPwValue] = useState("");
 
-  const [deleteConfirm, setDeleteConfirm] = useState<{ type: "user" | "contractor"; id: string; label: string } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ type: "user" | "contractor" | "job"; id: string; label: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [showPwChange, setShowPwChange] = useState(false);
@@ -115,25 +143,28 @@ export default function AdminDashboard() {
     setFetchError("");
     setActionSuccess("");
     try {
-      const [aRes, uRes, cRes, appRes] = await Promise.all([
+      const [aRes, uRes, cRes, appRes, jRes] = await Promise.all([
         fetch("/api/admin/analytics"),
         fetch("/api/admin/leads"),
         fetch("/api/admin/contractors"),
         fetch("/api/admin/applications"),
+        fetch("/api/admin/jobs"),
       ]);
-      if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401 || appRes.status === 401) {
+      if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401 || appRes.status === 401 || jRes.status === 401) {
         router.push(`/${locale}/login`);
         return;
       }
-      const ok = aRes.ok && uRes.ok && cRes.ok && appRes.ok;
+      const ok = aRes.ok && uRes.ok && cRes.ok && appRes.ok && jRes.ok;
       const aData = ok ? await aRes.json() : null;
       const uData = ok ? await uRes.json() : null;
       const cData = ok ? await cRes.json() : null;
       const appData = ok ? await appRes.json() : null;
+      const jData = ok ? await jRes.json() : null;
       if (aData?.ok) setAnalytics(aData.data);
       if (uData?.ok) setUsers(uData.data);
       if (cData?.ok) setContractors(cData.data);
       if (appData?.ok) setApplications(appData.data);
+      if (jData?.ok) setJobs(jData.data);
       if (!ok) setFetchError(t("fetch_error"));
     } catch (err) {
       console.error("Dashboard fetch error:", err);
@@ -184,8 +215,10 @@ export default function AdminDashboard() {
     if (!deleteConfirm) return;
     if (deleteConfirm.type === "user") {
       await fetch(`/api/admin/leads?id=${deleteConfirm.id}`, { method: "DELETE" });
-    } else {
+    } else if (deleteConfirm.type === "contractor") {
       await fetch(`/api/admin/contractors?id=${deleteConfirm.id}`, { method: "DELETE" });
+    } else {
+      await fetch(`/api/admin/jobs?id=${deleteConfirm.id}`, { method: "DELETE" });
     }
     setDeleteConfirm(null);
     fetchData();
@@ -286,6 +319,52 @@ export default function AdminDashboard() {
     }
   }
 
+  function openAddJob() {
+    setJobForm({ name: "", email: "", phone: "", description: "", postalCode: "", budget: "" });
+    setEditJob(null);
+    setShowAddJob(true);
+  }
+
+  function openEditJob(job: AdminJob) {
+    setJobForm({ name: job.name, email: job.email, phone: job.phone, description: job.description, postalCode: job.postalCode, budget: job.budget });
+    setEditJob(job);
+    setShowAddJob(true);
+  }
+
+  async function handleSaveJob(e: React.FormEvent) {
+    e.preventDefault();
+    setJobError("");
+    try {
+      const url = editJob ? "/api/admin/jobs" : "/api/admin/jobs";
+      const method = editJob ? "PATCH" : "POST";
+      const body = editJob
+        ? { id: editJob.id, title: jobForm.name, description: jobForm.description, postalCode: jobForm.postalCode, budget: jobForm.budget }
+        : { name: jobForm.name, email: jobForm.email, phone: jobForm.phone, description: jobForm.description, postalCode: jobForm.postalCode, budget: jobForm.budget };
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!data.ok) { setJobError(data.error || t("user_error")); return; }
+      setShowAddJob(false);
+      setEditJob(null);
+      setActionSuccess(editJob ? t("job_updated") : t("job_added"));
+      fetchData();
+    } catch {
+      setJobError(t("network_error"));
+    }
+  }
+
+  async function handleJobStatus(id: string, status: string) {
+    await fetch("/api/admin/jobs", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status }),
+    });
+    fetchData();
+  }
+
+  function confirmDeleteJob(id: string, label: string) {
+    setDeleteConfirm({ type: "job", id, label });
+  }
+
   const filteredContractors = contractors.filter((c) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -309,6 +388,7 @@ export default function AdminDashboard() {
           <button onClick={() => setTab("users")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "users" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_users")}</button>
           <button onClick={() => setTab("contractors")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "contractors" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_contractors")}</button>
           <button onClick={() => setTab("applications")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "applications" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_applications")}</button>
+          <button onClick={() => setTab("jobs")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "jobs" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_jobs")}</button>
           <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white transition-colors ml-2" title={t("pw_title")}>{t("pw_short")}</button>
           <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-2">{t("logout")}</button>
         </div>
@@ -589,6 +669,110 @@ export default function AdminDashboard() {
               ))}
               {filteredContractors.length === 0 && (
                 <p className="text-center text-stone-500 py-8">{searchQuery ? t("search_empty") : t("contractors_empty")}</p>
+              )}
+            </div>
+          </>
+        )}
+
+        {tab === "jobs" && (
+          <>
+            {jobError && (
+              <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm text-center">
+                {jobError}
+              </div>
+            )}
+
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-lg font-semibold text-white">{t("jobs_title")}</h2>
+              <button onClick={openAddJob} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+                {t("add")}
+              </button>
+            </div>
+
+            {/* Add/Edit job modal */}
+            {showAddJob && (
+              <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                <div className="bg-stone-800 rounded-xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+                  <h3 className="text-white font-semibold mb-4">{editJob ? t("job_edit_title") : t("job_add_title")}</h3>
+                  <form onSubmit={handleSaveJob} className="space-y-4">
+                    <div>
+                      <label className="text-stone-400 text-sm block mb-1">{t("name_placeholder")}</label>
+                      <input required value={jobForm.name} onChange={(e) => setJobForm({ ...jobForm, name: e.target.value })} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-stone-400 text-sm block mb-1">{t("email_placeholder")}</label>
+                        <input type="email" value={jobForm.email} onChange={(e) => setJobForm({ ...jobForm, email: e.target.value })} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                      </div>
+                      <div>
+                        <label className="text-stone-400 text-sm block mb-1">{t("phone_placeholder")}</label>
+                        <input value={jobForm.phone} onChange={(e) => setJobForm({ ...jobForm, phone: e.target.value })} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-stone-400 text-sm block mb-1">{t("job_postal")}</label>
+                        <input value={jobForm.postalCode} onChange={(e) => setJobForm({ ...jobForm, postalCode: e.target.value })} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                      </div>
+                      <div>
+                        <label className="text-stone-400 text-sm block mb-1">{t("job_budget")}</label>
+                        <input value={jobForm.budget} onChange={(e) => setJobForm({ ...jobForm, budget: e.target.value })} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-stone-400 text-sm block mb-1">{t("job_description")}</label>
+                      <textarea required value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} rows={3} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none resize-none" />
+                    </div>
+                    <div className="flex gap-3">
+                      <button type="submit" className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{editJob ? t("job_save") : t("add")}</button>
+                      <button type="button" onClick={() => { setShowAddJob(false); setEditJob(null); }} className="text-stone-400 hover:text-white text-sm px-6 py-2">{t("reset_cancel")}</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              {jobs.map((job) => (
+                <div key={job.id} className="bg-stone-800 rounded-xl p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="text-white font-semibold truncate">{job.name}</h4>
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${jobStatusBadgeClass(job.status)}`}>
+                          {t(`job_status_${job.status}`)}
+                        </span>
+                      </div>
+                      {job.description && <p className="text-sm text-stone-500 line-clamp-2">{job.description}</p>}
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-stone-500">
+                        <span>{job.email}</span>
+                        {job.phone && <span>{job.phone}</span>}
+                        {job.postalCode && <span>{t("job_postal")} {job.postalCode}</span>}
+                        {job.budget && <span className="text-green-400">{job.budget}</span>}
+                        <span>{t("created_prefix")} {new Date(job.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {job.status !== "completed" && (
+                        <select
+                          value={job.status}
+                          onChange={(e) => handleJobStatus(job.id, e.target.value)}
+                          className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1 outline-none"
+                        >
+                          <option value="new">{t("job_status_new")}</option>
+                          <option value="published">{t("job_status_published")}</option>
+                          <option value="in_progress">{t("job_status_in_progress")}</option>
+                          <option value="completed">{t("job_status_completed")}</option>
+                        </select>
+                      )}
+                      <button onClick={() => openEditJob(job)} className="text-xs text-stone-500 hover:text-blue-400 transition-colors">{t("job_edit")}</button>
+                      <button onClick={() => confirmDeleteJob(job.id, job.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {jobs.length === 0 && (
+                <p className="text-center text-stone-500 py-8">{t("jobs_empty")}</p>
               )}
             </div>
           </>
