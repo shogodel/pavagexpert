@@ -19,4 +19,12 @@ export const suburbs = [
   "Montréal", "Laval", "Longueuil", "Brossard",
   "Repentigny", "Terrebonne", "Saint-Laurent",
   "Kirkland", "Dollard-Des-Ormeaux",
+  "Pointe-Claire", "Beaconsfield", "Dorval", "Pierrefonds",
+  "Roxboro", "Île-Bizard", "Sainte-Geneviève",
+  "Boisbriand", "Blainville", "Sainte-Thérèse", "Rosemère", "Lorraine",
+  "Boucherville", "Saint-Bruno", "Saint-Lambert", "Candiac", "La Prairie",
+  "Châteauguay", "Mercier", "Vaudreuil-Dorion", "Rigaud",
+  "Montréal-Est", "Pointe-aux-Trembles", "Rivière-des-Prairies",
+  "Anjou", "Saint-Léonard", "Mont-Royal", "Outremont",
+  "Hampstead", "Côte-Saint-Luc", "Westmount",
 ];

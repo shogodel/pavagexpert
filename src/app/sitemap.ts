@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://pavagexpert.space";
   const locales = ["fr", "en"];
   const pages = ["", "/services", "/calculator", "/blog", "/gallery", "/get-quote", "/jobs"];
-  const extras = ["/privacy", "/terms"];
+  const extras = ["/privacy", "/terms", "/service-area"];
 
   const staticEntries = locales.flatMap((locale) =>
     pages.map((page) => ({
