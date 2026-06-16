@@ -119,7 +119,15 @@
     "empty": "Soyez le premier à lancer votre projet. Les entrepreneurs les plus qualifiés vous attendent.",
     "postal": "Code postal :",
     "filter_postal": "Filtrer par code postal...",
-    "filter_status_all": "Tous les statuts"
+    "filter_status_all": "Tous les statuts",
+    "sort_newest": "Plus récents",
+    "sort_oldest": "Plus anciens",
+    "sort_budget_high": "Budget : élevé à faible",
+    "sort_budget_low": "Budget : faible à élevé",
+    "no_results": "Aucun projet ne correspond à vos filtres.",
+    "status_new": "Nouveau",
+    "status_in_progress": "En cours",
+    "status_completed": "Terminé"
   },
   "apply": {
     "title": "Devenir entrepreneur",

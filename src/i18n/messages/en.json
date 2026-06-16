@@ -119,7 +119,15 @@
     "empty": "Be the first to launch your project. The most qualified contractors are waiting for you.",
     "postal": "Postal code:",
     "filter_postal": "Filter by postal code...",
-    "filter_status_all": "All statuses"
+    "filter_status_all": "All statuses",
+    "sort_newest": "Newest first",
+    "sort_oldest": "Oldest first",
+    "sort_budget_high": "Budget: high to low",
+    "sort_budget_low": "Budget: low to high",
+    "no_results": "No projects match your filters.",
+    "status_new": "New",
+    "status_in_progress": "In progress",
+    "status_completed": "Completed"
   },
   "apply": {
     "title": "Become a Contractor",
