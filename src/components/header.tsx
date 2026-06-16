@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import PwaRegister from "@/components/PwaRegister";
+import PwaBanner from "@/components/PwaBanner";
 
 const serviceLinks = [
   { key: "pavers", slug: "pavers" },
@@ -341,6 +343,8 @@ export default function Header() {
           </div>
         )}
       </div>
+      {auth?.role === "contractor" && <PwaRegister isContractor={true} />}
+      {auth?.role === "contractor" && <PwaBanner />}
     </header>
   );
 }

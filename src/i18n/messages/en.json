@@ -298,6 +298,12 @@
     "show_password": "Show password",
     "hide_password": "Hide password"
   },
+  "pwa": {
+    "banner_title": "Install the app",
+    "banner_desc": "Get push notifications when new projects are posted.",
+    "install": "Install",
+    "dismiss": "Not now"
+  },
   "get_quote": {
     "title": "Describe your project once. Certified contractors compete for your contract.",
     "subtitle": "Tell us about your project in a few words",

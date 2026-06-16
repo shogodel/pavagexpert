@@ -77,12 +77,17 @@ jobs:
               OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-) || :
               OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-) || :
               OLD_ADMIN_PASS=$(grep ADMIN_PASSWORD .env | cut -d= -f2-) || :
+              OLD_VAPID_PUB=$(grep NEXT_PUBLIC_VAPID_PUBLIC_KEY .env | cut -d= -f2-) || :
+              OLD_VAPID_PRIV=$(grep VAPID_PRIVATE_KEY .env | cut -d= -f2-) || :
             fi
 
             echo "ADMIN_USERNAME=admin" > .env
             echo "ADMIN_PASSWORD=${OLD_ADMIN_PASS:-P@55word}" >> .env
             echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}" >> .env
             echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}" >> .env
+            echo "NEXT_PUBLIC_VAPID_PUBLIC_KEY=${OLD_VAPID_PUB}" >> .env
+            echo "VAPID_PRIVATE_KEY=${OLD_VAPID_PRIV}" >> .env
+            echo "VAPID_SUBJECT=mailto:pavagexpertmtl@gmail.com" >> .env
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
             # Ensure dedicated volumes

@@ -298,6 +298,12 @@
     "show_password": "Afficher le mot de passe",
     "hide_password": "Masquer le mot de passe"
   },
+  "pwa": {
+    "banner_title": "Installer l'application",
+    "banner_desc": "Recevez des notifications quand un nouveau projet est publié.",
+    "install": "Installer",
+    "dismiss": "Pas maintenant"
+  },
   "get_quote": {
     "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",
     "subtitle": "Racontez-nous votre projet en toute simplicité",

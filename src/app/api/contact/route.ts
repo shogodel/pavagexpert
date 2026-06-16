@@ -62,6 +62,18 @@ export async function POST(req: NextRequest) {
 
     // Create client + job + photo records in a DB transaction
     const job = await addJob({ name, email, postalCode: postalCode || "", phone, budget, description, photos: savedPhotos });
+
+    // Notify subscribed contractors of the new job
+    if (job) {
+      try {
+        const { sendPushToAll } = await import("@/lib/push");
+        await sendPushToAll({
+          title: `Nouveau projet${job.postalCode ? " — " + job.postalCode : ""}`,
+          body: `Budget: ${job.budget || "—"} • ${job.name}`,
+          url: `/fr/jobs`,
+        });
+      } catch { /* push notifications are best-effort */ }
+    }
     const photoDir = ensureJobPhotoDir(job.id);
 
     // Write photo files to disk
