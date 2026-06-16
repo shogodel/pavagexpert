@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import LoginForm from "./form";
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-stone-900" />}>
+      <LoginForm />
+    </Suspense>
+  );
 }

@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 
 export default function LoginForm() {
   const t = useTranslations("login");
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -27,7 +29,9 @@ export default function LoginForm() {
       const data = await res.json();
       if (!data.ok) throw new Error();
 
-      if (data.role === "admin") {
+      if (redirectTo) {
+        router.push(redirectTo);
+      } else if (data.role === "admin") {
         router.push(`/${locale}/admin`);
       } else if (data.role === "contractor") {
         router.push(`/${locale}/contractor/dashboard`);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Job } from "@/lib/job-store";
@@ -46,6 +47,7 @@ function borderClass(status: string): string {
 export default function JobsBoard() {
   const t = useTranslations("jobs");
   const locale = useLocale();
+  const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterPostal, setFilterPostal] = useState("");
@@ -55,6 +57,13 @@ export default function JobsBoard() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [revealedId, setRevealedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => { if (!data.authenticated || data.role !== "contractor") router.push(`/${locale}/login?redirect=/${locale}/jobs`); })
+      .catch(() => router.push(`/${locale}/login?redirect=/${locale}/jobs`));
+  }, []);
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
