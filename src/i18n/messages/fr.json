@@ -405,6 +405,23 @@
     "login_title": "Connexion Entrepreneur & Administrateur | Pavagexpert",
     "login_desc": "Accédez à votre tableau de bord entrepreneur en pavage ou au panneau d'administration Pavagexpert. Gérez projets locaux, soumissions et paramètres de compte."
   },
+  "client": {
+    "project_title": "Mon projet",
+    "field_name": "Nom",
+    "field_email": "Courriel",
+    "field_phone": "Téléphone",
+    "field_postal": "Code postal",
+    "field_budget": "Budget",
+    "field_created": "Soumis le",
+    "field_desc": "Description",
+    "photos": "Photos",
+    "status_new": "Nouveau",
+    "status_in_progress": "En cours",
+    "status_completed": "Terminé",
+    "complete_hint": "Votre projet est terminé ? Confirmez-le pour informer notre équipe.",
+    "mark_complete": "Marquer comme terminé",
+    "completing": "Mise à jour..."
+  },
   "privacy": {
     "title": "Politique de confidentialité",
     "content": [

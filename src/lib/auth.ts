@@ -4,7 +4,7 @@ const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production-min-32-chars!!"
 );
 
-export type UserRole = "admin" | "contractor";
+export type UserRole = "admin" | "contractor" | "client";
 
 export interface AuthPayload {
   sub: string;

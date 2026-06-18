@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addJob, ensureJobPhotoDir } from "@/lib/job-store";
+import { generateMagicLink } from "@/lib/client-store";
+import { sendEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
 import fs from "fs";
 
@@ -85,6 +87,41 @@ export async function POST(req: NextRequest) {
       fileIdx++;
     }
 
+    // Send magic link email to the client
+    if (job) {
+      try {
+        const link = await generateMagicLink(job.id);
+        const origin = req.headers.get("origin") || "https://pavagexpert.space";
+        const magicUrl = `${origin}/api/auth/client?token=${link.token}`;
+        await sendEmail({
+          to: email,
+          subject: "Votre demande a été reçue — Pavagexpert",
+          html: `
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+              <div style="background:#c87d5d;padding:24px;border-radius:12px 12px 0 0">
+                <h1 style="color:white;margin:0;font-size:20px">Pavagexpert</h1>
+              </div>
+              <div style="background:#fafaf9;padding:24px;border-radius:0 0 12px 12px">
+                <p style="color:#292524;font-size:16px">Bonjour ${name},</p>
+                <p style="color:#57534e;font-size:14px;line-height:1.6">
+                  Votre projet a bien été transmis à notre réseau d'entrepreneurs certifiés RBQ.
+                  Vous recevrez bientôt des offres adaptées à vos besoins.
+                </p>
+                <a href="${magicUrl}" style="display:inline-block;background:#c87d5d;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin:16px 0">
+                  Suivre l'avancement de mon projet
+                </a>
+                <p style="color:#a8a29e;font-size:12px;line-height:1.4">
+                  Ce lien est personnel et sécurisé. Il expire dans 7 jours.
+                  Utilisez-le pour consulter le statut de votre projet à tout moment.
+                </p>
+              </div>
+            </div>
+          `.trim(),
+        });
+      } catch { /* magic link email is best-effort */ }
+    }
+
+    // Send notification to admin
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import("resend");
       const resend = new Resend(process.env.RESEND_API_KEY);

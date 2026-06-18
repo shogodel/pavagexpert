@@ -405,6 +405,23 @@
     "login_title": "Contractor & Admin Login | Pavagexpert",
     "login_desc": "Access your Pavagexpert paving contractor dashboard or admin panel. Manage local projects, quotes and account settings."
   },
+  "client": {
+    "project_title": "My Project",
+    "field_name": "Name",
+    "field_email": "Email",
+    "field_phone": "Phone",
+    "field_postal": "Postal code",
+    "field_budget": "Budget",
+    "field_created": "Submitted on",
+    "field_desc": "Description",
+    "photos": "Photos",
+    "status_new": "New",
+    "status_in_progress": "In progress",
+    "status_completed": "Completed",
+    "complete_hint": "Is your project complete? Let us know so we can follow up.",
+    "mark_complete": "Mark as complete",
+    "completing": "Updating..."
+  },
   "privacy": {
     "title": "Privacy Policy",
     "content": [

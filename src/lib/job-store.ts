@@ -81,6 +81,22 @@ export async function getJobs(): Promise<Job[]> {
   return jobs;
 }
 
+export async function getJobById(id: string): Promise<Job | null> {
+  const rows = await query<JobRow>(
+    `SELECT j.*, c.name, c.email, c.phone
+     FROM jobs j
+     JOIN clients c ON c.id = j.client_id
+     WHERE j.id = $1`,
+    [id]
+  );
+  if (rows.length === 0) return null;
+  const photos = await query<PhotoRow>(
+    "SELECT filename FROM job_photos WHERE job_id = $1 ORDER BY created_at",
+    [id]
+  );
+  return mapJob(rows[0], photos.map((p) => p.filename));
+}
+
 export async function addJob(
   input: { name: string; email: string; phone: string; postalCode: string; budget: string; description: string } & { photos?: string[] }
 ): Promise<Job> {

@@ -37,6 +37,10 @@ function isJobBoardPath(pathname: string): boolean {
   return pathname === "/jobs" || locales.some((l) => pathname === `/${l}/jobs`);
 }
 
+function isClientPath(pathname: string): boolean {
+  return pathname.startsWith("/mon-projet/") || locales.some((l) => pathname.startsWith(`/${l}/mon-projet/`));
+}
+
 function isLoginPath(pathname: string): boolean {
   return pathname === "/login" || locales.some((l) => pathname === `/${l}/login`);
 }
@@ -107,6 +111,32 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL(`${prefix}/login`, request.url);
     loginUrl.search = `redirect=${prefix}/jobs`;
     return NextResponse.redirect(loginUrl);
+  }
+
+  // --- Client auth check (magic link session) ---
+  if (isClientPath(pathname)) {
+    const token = request.cookies.get("client_token")?.value;
+    if (token) {
+      const { verifyToken } = await import("./lib/auth");
+      const payload = await verifyToken(token);
+      if (payload?.role === "client") {
+        const requestHeaders = new Headers(request.headers);
+        requestHeaders.set("X-Client-Job-Id", payload.sub);
+        const response = NextResponse.next({
+          request: { headers: requestHeaders },
+        });
+        const found = findLocale(pathname);
+        if (found) return response;
+        const locale = defaultLocale;
+        const url = new URL(`/${locale}/mon-projet`, request.url);
+        return NextResponse.redirect(url);
+      }
+    }
+    const found = findLocale(pathname);
+    if (found) {
+      const locale = found;
+      return NextResponse.next();
+    }
   }
 
   // --- Locale detection ---
