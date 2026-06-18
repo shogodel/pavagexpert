@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://pavagexpert.space"),
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/images/favicon.svg", type: "image/svg+xml" },
       { url: "/images/icon-192.png", type: "image/png", sizes: "any" },
     ],
     apple: "/images/icon-192.png",
