@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { locales, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
 import I18nProvider from "@/components/i18n-provider";
@@ -48,6 +49,10 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${inter.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
+        <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18245853211" strategy="afterInteractive" />
+        <Script id="google-ads-config" strategy="afterInteractive" dangerouslySetInnerHTML={{
+          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18245853211');`,
+        }} />
         <JsonLd locale={locale} />
         <BreadcrumbJsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>
