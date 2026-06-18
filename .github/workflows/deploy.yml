@@ -46,7 +46,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DROPLET_SSH }}
-          envs: GHCR_TOKEN,GHCR_USER
+          envs: GHCR_TOKEN,GHCR_USER,RESEND_API_KEY
           script: |
             set -e
             cd ~/apps
@@ -79,6 +79,7 @@ jobs:
               OLD_ADMIN_PASS=$(grep ADMIN_PASSWORD .env | cut -d= -f2-) || :
               OLD_VAPID_PUB=$(grep NEXT_PUBLIC_VAPID_PUBLIC_KEY .env | cut -d= -f2-) || :
               OLD_VAPID_PRIV=$(grep VAPID_PRIVATE_KEY .env | cut -d= -f2-) || :
+              OLD_RESEND_KEY=$(grep RESEND_API_KEY .env | cut -d= -f2-) || :
             fi
 
             echo "ADMIN_USERNAME=admin" > .env
@@ -88,6 +89,8 @@ jobs:
             echo "NEXT_PUBLIC_VAPID_PUBLIC_KEY=${OLD_VAPID_PUB}" >> .env
             echo "VAPID_PRIVATE_KEY=${OLD_VAPID_PRIV}" >> .env
             echo "VAPID_SUBJECT=mailto:pavagexpertmtl@gmail.com" >> .env
+            echo "RESEND_API_KEY=${OLD_RESEND_KEY:-$RESEND_API_KEY}" >> .env
+            echo "NOTIFICATION_EMAIL=pavagexpertmtl@gmail.com" >> .env
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
             # Ensure dedicated volumes
@@ -115,3 +118,4 @@ jobs:
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GHCR_USER: ${{ github.actor }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}

@@ -85,18 +85,13 @@ export async function POST(req: NextRequest) {
       fileIdx++;
     }
 
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-      const nodemailer = await import("nodemailer");
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT) || 587,
-        secure: process.env.SMTP_SECURE === "true",
-        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-      });
-      await transporter.sendMail({
-        from: `"${name}" <${process.env.SMTP_FROM}>`,
-        replyTo: process.env.SMTP_FROM,
-        to: process.env.SMTP_TO,
+    if (process.env.RESEND_API_KEY) {
+      const { Resend } = await import("resend");
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: "Pavagexpert <noreply@pavagexpert.space>",
+        replyTo: email,
+        to: process.env.NOTIFICATION_EMAIL || "pavagexpertmtl@gmail.com",
         subject: "Nouveau devis - Pavagexpert",
         html: `
           <h2>Nouvelle demande de devis</h2>

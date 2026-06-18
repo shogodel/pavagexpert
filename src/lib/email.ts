@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 interface EmailPayload {
   to: string;
@@ -7,25 +7,18 @@ interface EmailPayload {
 }
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
-  if (!process.env.SMTP_HOST) {
+  if (!process.env.RESEND_API_KEY) {
     console.log(`[EMAIL] To: ${payload.to}`);
     console.log(`[EMAIL] Subject: ${payload.subject}`);
     console.log(`[EMAIL] Body: ${payload.html}`);
     return;
   }
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_SECURE === "true",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || "noreply@pavagexpert.space",
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const { error } = await resend.emails.send({
+    from: "Pavagexpert <noreply@pavagexpert.space>",
     to: payload.to,
     subject: payload.subject,
     html: payload.html,
   });
+  if (error) console.error("[EMAIL] Resend error:", error);
 }
