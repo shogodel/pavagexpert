@@ -4,9 +4,9 @@ import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 
 const principles = [
-  { value: "Chaque projet", key: "projects" },
-  { value: "Chaque surface", key: "area" },
-  { value: "Chaque geste", key: "satisfaction" },
+  { value: "3", key: "projects" },
+  { value: "48 h", key: "area" },
+  { value: "100 %", key: "satisfaction" },
 ];
 
 export default function SocialProof() {

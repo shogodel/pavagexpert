@@ -5,18 +5,18 @@ import { motion } from "framer-motion";
 const badges = [
   {
     title: "RBQ",
-    subtitle: "Entrepreneurs sélectionnés, chacun certifié RBQ — licence exigée pour tous nos membres",
-    subtitleEn: "Hand-picked contractors, each RBQ-certified — license required for every member",
+    subtitle: "Tous nos entrepreneurs sont certifiés RBQ — exigence obligatoire avant d'intégrer notre réseau",
+    subtitleEn: "Every contractor is RBQ-certified — mandatory before joining our network",
   },
   {
     title: "APCHQ / CCQ",
-    subtitle: "Nos entrepreneurs sont membres en règle de l'APCHQ et de la CCQ. Sélection rigoureuse.",
-    subtitleEn: "Our contractors are members in good standing of APCHQ and CCQ. Rigorously vetted.",
+    subtitle: "Chaque entrepreneur est membre en règle de l'APCHQ et de la CCQ. Sélection rigoureuse garantie.",
+    subtitleEn: "Each contractor is a member in good standing of APCHQ and CCQ. Rigorously vetted.",
   },
   {
     title: "100 % gratuit",
-    subtitle: "Estimation sans frais, sans engagement, sans surprise. Vous ne payez que si vous choisissez.",
-    subtitleEn: "Free estimate, no obligation, no surprises. You only pay if you choose to build.",
+    subtitle: "Devis gratuit, sans engagement, sans surprise. Vous ne payez que si vous signez un contrat.",
+    subtitleEn: "Free quote, no obligation, no surprises. You only pay when you sign a contract.",
   },
 ];
 

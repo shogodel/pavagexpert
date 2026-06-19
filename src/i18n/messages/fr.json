@@ -25,12 +25,12 @@
     "service_area": "Zones desservies"
   },
   "hero": {
-    "title": "Votre extérieur raconte qui vous êtes.",
-    "subtitle": "Une entrée de cour, une terrasse, un aménagement — ce n'est pas seulement de la pierre et du béton. C'est l'image que vous projetez, l'accueil que vous offrez, l'espace où vous vous retrouvez. Chaque projet commence par une décision. La vôtre commence ici.",
-    "cta_estimate": "C'est gratuit et sans engagement — Obtenir mon estimation",
+    "title": "Jusqu'à 3 devis gratuits pour votre projet d'aménagement extérieur.",
+    "subtitle": "Décrivez votre projet une fois. Recevez jusqu'à 3 soumissions d'entrepreneurs certifiés RBQ, sélectionnés pour vous. Comparez, choisissez — sans frais, sans engagement.",
+    "cta_estimate": "Obtenir mes 3 devis gratuits",
     "trust_badge_1": "Entrepreneurs certifiés RBQ",
-    "trust_badge_2": "Gratuit, sans engagement",
-    "trust_badge_3": "Entrepreneurs sélectionnés"
+    "trust_badge_2": "Soumission sous 48 h",
+    "trust_badge_3": "Sans engagement"
   },
   "services": {
     "title": "Nos Services",
@@ -459,26 +459,26 @@
     "project_desc": "Description détaillée",
     "desc_hint": "Racontez-nous votre projet : depuis combien de temps l'entrée est fissurée ? Qu'avez-vous imaginé ?",
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
-    "submit": "Lancer mon projet",
-    "success_title": "Félicitations !",
-    "success_msg": "Votre projet a été publié. Des entrepreneurs certifiés vous contacteront sous 24h.",
+    "submit": "Recevoir mes 3 devis gratuits",
+    "success_title": "Projet envoyé aux entrepreneurs !",
+    "success_msg": "Votre demande a bien été transmise. Des entrepreneurs certifiés et sélectionnés vous contacteront sous 48 h.",
     "success_verify_title": "Vérifiez votre courriel",
-    "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre projet et être contacté par nos entrepreneurs certifiés.",
+    "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et recevoir vos soumissions sous 48 h.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
-    "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage.",
-    "guarantee": "Estimation personnalisée • Aucune obligation • Entrepreneurs vérifiés",
-    "urgency": "Les entrepreneurs sont les plus actifs en ce moment."
+    "privacy": "Vos données personnelles sont protégées — jamais partagées sans votre accord.",
+    "guarantee": "Jusqu'à 3 soumissions • Aucun engagement • Entrepreneurs vérifiés RBQ",
+    "urgency": "Les entrepreneurs certifiés reçoivent des demandes chaque jour — soyez le prochain projet sélectionné."
   },
   "social_proof": {
-    "projects": "est une transformation qui commence par une idée",
-    "area": "est une toile qui attend sa composition",
-    "satisfaction": "est une promesse tenue"
+    "projects": "devis gratuits envoyés aux entrepreneurs",
+    "area": "délai de réponse moyen",
+    "satisfaction": "gratuit, sans aucune obligation"
   },
   "psychology": {
     "title": "Pourquoi attendre ?",
-    "quote": "L'action n'a pas à être parfaite. Elle doit simplement commencer.",
-    "subtitle": "Ce ne sont pas les entrepreneurs qui manquent, c'est le premier pas qui coûte. Nous sommes là pour le rendre léger.",
-    "cta": "Faire le premier pas"
+    "quote": "Le plus difficile, c'est de commencer. Après, tout s'enchaîne.",
+    "subtitle": "Décrivez votre projet en 2 minutes. Recevez jusqu'à 3 soumissions gratuites. Comparez, choisissez — sans pression.",
+    "cta": "Obtenir mes 3 devis gratuits"
   },
   "how_it_works": {
     "title": "Comment ça marche",
@@ -497,10 +497,10 @@
     "categories": "Catégories"
   },
   "footer": {
-    "description": "Donnez vie à vos projets d'aménagement extérieur. Nous connectons les propriétaires avec des entrepreneurs de confiance — simplement, sans pression.",
-    "exit_title": "L'instant qui change tout.",
-    "exit_desc": "Ce n'est pas un devis que vous recevez — c'est la permission d'imaginer votre espace autrement. Et si ce moment, c'était maintenant ?",
-    "exit_cta": "Commencer mon projet",
+    "description": "Le service de mise en relation qui connecte les propriétaires avec des entrepreneurs certifiés RBQ. Jusqu'à 3 soumissions gratuites — comparez et choisissez en toute tranquillité.",
+    "exit_title": "Ne laissez pas votre projet attendre.",
+    "exit_desc": "Recevez jusqu'à 3 soumissions d'entrepreneurs certifiés, gratuitement et sans engagement. La première étape est la plus simple.",
+    "exit_cta": "Obtenir mes 3 soumissions gratuites",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",

@@ -25,12 +25,12 @@
     "service_area": "Service Areas"
   },
   "hero": {
-    "title": "Your outdoors reflects who you are.",
-    "subtitle": "A driveway, a patio, a walkway — it's more than stone and concrete. It's the image you project, the welcome you extend, the space where life happens. Every transformation begins with a single decision. Yours starts now.",
-    "cta_estimate": "It's free and obligation-free — Get my estimate",
+    "title": "Up to 3 free quotes for your outdoor renovation project.",
+    "subtitle": "Describe your project once. Get up to 3 quotes from RBQ-certified contractors, hand-picked for you. Compare and choose — free, no obligation, no pressure.",
+    "cta_estimate": "Get my 3 free quotes",
     "trust_badge_1": "RBQ-Certified Contractors",
-    "trust_badge_2": "Free, No Obligation",
-    "trust_badge_3": "Hand-Picked Pros"
+    "trust_badge_2": "Quotes within 48 h",
+    "trust_badge_3": "No Obligation"
   },
   "services": {
     "title": "Our Services",
@@ -459,26 +459,26 @@
     "project_desc": "Detailed description",
     "desc_hint": "Tell us your story: how long has your driveway been cracked? What have you imagined?",
     "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
-    "submit": "Launch my project",
-    "success_title": "Congratulations!",
-    "success_msg": "Your project has been published. Certified contractors will contact you within 24h.",
+    "submit": "Get my 3 free quotes",
+    "success_title": "Your project has been sent!",
+    "success_msg": "Your request was sent successfully. Certified, hand-picked contractors will reach out within 48 h.",
     "success_verify_title": "Check your email",
-    "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your project and get contacted by our certified contractors.",
+    "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your request and get your quotes within 48 h.",
     "error_msg": "An error occurred. Please try again.",
-    "privacy": "Your information is confidential. No cold calling.",
-    "guarantee": "Personalized estimate • No obligation • Verified contractors",
-    "urgency": "Contractors are most active right now."
+    "privacy": "Your personal data is protected — never shared without your consent.",
+    "guarantee": "Up to 3 quotes • No obligation • RBQ-verified contractors",
+    "urgency": "Certified contractors review new projects every day — be the next project they compete for."
   },
   "social_proof": {
-    "projects": "is a transformation that begins with an idea",
-    "area": "is a canvas waiting for its composition",
-    "satisfaction": "is a promise kept"
+    "projects": "free quotes sent to contractors",
+    "area": "average response time",
+    "satisfaction": "free, with no obligation"
   },
   "psychology": {
     "title": "Why wait?",
-    "quote": "Action doesn't need to be perfect. It just needs to begin.",
-    "subtitle": "It's not the contractors that are missing — it's the first step that feels heavy. We're here to make it light.",
-    "cta": "Take the first step"
+    "quote": "The hardest part is starting. After that, everything falls into place.",
+    "subtitle": "Describe your project in 2 minutes. Get up to 3 free quotes. Compare and choose — with zero pressure.",
+    "cta": "Get my 3 free quotes"
   },
   "how_it_works": {
     "title": "How It Works",
@@ -497,10 +497,10 @@
     "categories": "Categories"
   },
   "footer": {
-    "description": "Bring your outdoor projects to life. We connect homeowners with trusted contractors — simply, without pressure.",
-    "exit_title": "The moment that changes everything.",
-    "exit_desc": "It's not a quote you receive — it's permission to imagine your space differently. What if that moment was now?",
-    "exit_cta": "Start my project",
+    "description": "The matchmaking service that connects homeowners with RBQ-certified contractors. Up to 3 free quotes — compare and choose with total peace of mind.",
+    "exit_title": "Don't let your project wait.",
+    "exit_desc": "Get up to 3 quotes from certified contractors, free and with no obligation. The first step is the easiest one.",
+    "exit_cta": "Get my 3 free quotes",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",
