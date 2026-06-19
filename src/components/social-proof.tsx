@@ -3,10 +3,10 @@
 import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 
-const stats = [
-  { value: "42", key: "projects" },
-  { value: "15 000 m²", key: "area" },
-  { value: "98%", key: "satisfaction" },
+const principles = [
+  { value: "Chaque projet", key: "projects" },
+  { value: "Chaque surface", key: "area" },
+  { value: "Chaque geste", key: "satisfaction" },
 ];
 
 export default function SocialProof() {
@@ -21,11 +21,11 @@ export default function SocialProof() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          {stats.map((stat, i) => (
-            <div key={stat.key} className="flex items-center gap-2 text-sm">
-              <span className="text-terracotta font-bold text-lg">{stat.value}</span>
-              <span className="text-stone-400">{t(stat.key)}</span>
-              {i < stats.length - 1 && (
+          {principles.map((p, i) => (
+            <div key={p.key} className="flex items-center gap-2 text-sm">
+              <span className="text-terracotta font-bold text-sm">{p.value}</span>
+              <span className="text-stone-400">{t(p.key)}</span>
+              {i < principles.length - 1 && (
                 <span className="hidden sm:inline text-stone-600 ml-2">•</span>
               )}
             </div>

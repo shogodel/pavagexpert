@@ -4,19 +4,19 @@ import { motion } from "framer-motion";
 
 const badges = [
   {
-    title: "RBQ",
-    subtitle: "Entrepreneurs certifiés — Licence RBQ obligatoire pour chaque membre",
-    subtitleEn: "RBQ-licensed contractors — mandatory for every member",
+    title: "Transparence",
+    subtitle: "Parcours clair, sans zone d'ombre. Chaque étape vous appartient.",
+    subtitleEn: "A clear path with no blind spots. Every step is yours.",
   },
   {
-    title: "APCHQ / CCQ",
-    subtitle: "Membres en règle de l'Association et de la Commission de la Construction du Québec",
-    subtitleEn: "Members in good standing of APCHQ and CCQ",
+    title: "Compréhension",
+    subtitle: "On écoute votre vision avant d'agir. Votre projet, vos besoins, votre rythme.",
+    subtitleEn: "We listen to your vision before we act. Your project, your needs, your pace.",
   },
   {
-    title: "★ 4.8",
-    subtitle: "Note moyenne vérifiée — Avis authentifiés de vrais clients",
-    subtitleEn: "Verified average rating — Real reviews from real homeowners",
+    title: "Sérénité",
+    subtitle: "Aucune obligation, aucune pression. Juste la liberté de choisir en confiance.",
+    subtitleEn: "No obligation, no pressure. Just the freedom to choose with confidence.",
   },
 ];
 

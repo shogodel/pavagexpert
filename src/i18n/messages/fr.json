@@ -25,12 +25,12 @@
     "service_area": "Zones desservies"
   },
   "hero": {
-    "title": "Le meilleur de l'aménagement extérieur, réuni en un lieu.",
-    "subtitle": "Décrivez votre projet une fois. Nos entrepreneurs certifiés RBQ, membres APCHQ, se disputent votre contrat. Vous choisissez le meilleur rapport qualité-prix — sans frais, sans engagement.",
-    "cta_estimate": "Lancer mon projet gratuitement",
-    "trust_badge_1": "Entrepreneurs certifiés RBQ",
-    "trust_badge_2": "Membres APCHQ",
-    "trust_badge_3": "Avis clients vérifiés"
+    "title": "Votre extérieur raconte qui vous êtes.",
+    "subtitle": "Une entrée de cour, une terrasse, un aménagement — ce n'est pas seulement de la pierre et du béton. C'est l'image que vous projetez, l'accueil que vous offrez, l'espace où vous vous retrouvez. Chaque projet commence par une décision. La vôtre commence ici.",
+    "cta_estimate": "Obtenir mon estimation gratuite",
+    "trust_badge_1": "Entrepreneurs vérifiés RBQ",
+    "trust_badge_2": "Estimation sans engagement",
+    "trust_badge_3": "Service transparent et humain"
   },
   "services": {
     "title": "Nos Services",
@@ -470,9 +470,15 @@
     "urgency": "Les entrepreneurs sont les plus actifs en ce moment."
   },
   "social_proof": {
-    "projects": "projets en cours",
-    "area": "Surface pavée",
-    "satisfaction": "Taux de satisfaction"
+    "projects": "est une transformation qui commence par une idée",
+    "area": "est une toile qui attend sa composition",
+    "satisfaction": "est une promesse tenue"
+  },
+  "psychology": {
+    "title": "Pourquoi attendre ?",
+    "quote": "L'action n'a pas à être parfaite. Elle doit simplement commencer.",
+    "subtitle": "Ce ne sont pas les entrepreneurs qui manquent, c'est le premier pas qui coûte. Nous sommes là pour le rendre léger.",
+    "cta": "Faire le premier pas"
   },
   "how_it_works": {
     "title": "Comment ça marche",
@@ -491,10 +497,10 @@
     "categories": "Catégories"
   },
   "footer": {
-    "description": "Spécialiste en pavé uni à Montréal, Laval, Longueuil et partout au Grand Montréal depuis 2009. Installation professionnelle, service clé en main.",
-    "exit_title": "Vous hésitez encore ?",
-    "exit_desc": "Chaque jour sans devis, c'est un jour de plus avec une entrée qui vieillit.",
-    "exit_cta": "Obtenez mon estimation personnalisée",
+    "description": "Donnez vie à vos projets d'aménagement extérieur. Nous connectons les propriétaires avec des entrepreneurs de confiance — simplement, sans pression.",
+    "exit_title": "L'instant qui change tout.",
+    "exit_desc": "Ce n'est pas un devis que vous recevez — c'est la permission d'imaginer votre espace autrement. Et si ce moment, c'était maintenant ?",
+    "exit_cta": "Commencer mon projet",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",

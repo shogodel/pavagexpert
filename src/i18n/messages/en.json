@@ -25,12 +25,12 @@
     "service_area": "Service Areas"
   },
   "hero": {
-    "title": "The best outdoor contractors, all in one place.",
-    "subtitle": "Describe your project once. Our RBQ-licensed, APCHQ-member contractors compete for your contract. You pick the best value — for free, no obligation.",
-    "cta_estimate": "Launch my project for free",
-    "trust_badge_1": "RBQ-Licensed Contractors",
-    "trust_badge_2": "APCHQ Members",
-    "trust_badge_3": "Verified Customer Reviews"
+    "title": "Your outdoors reflects who you are.",
+    "subtitle": "A driveway, a patio, a walkway — it's more than stone and concrete. It's the image you project, the welcome you extend, the space where life happens. Every transformation begins with a single decision. Yours starts now.",
+    "cta_estimate": "Get your free estimate",
+    "trust_badge_1": "RBQ-Verified Contractors",
+    "trust_badge_2": "Free, No-Obligation Quote",
+    "trust_badge_3": "Transparent & Human Service"
   },
   "services": {
     "title": "Our Services",
@@ -470,9 +470,15 @@
     "urgency": "Contractors are most active right now."
   },
   "social_proof": {
-    "projects": "active projects",
-    "area": "Surface paved",
-    "satisfaction": "Satisfaction rate"
+    "projects": "is a transformation that begins with an idea",
+    "area": "is a canvas waiting for its composition",
+    "satisfaction": "is a promise kept"
+  },
+  "psychology": {
+    "title": "Why wait?",
+    "quote": "Action doesn't need to be perfect. It just needs to begin.",
+    "subtitle": "It's not the contractors that are missing — it's the first step that feels heavy. We're here to make it light.",
+    "cta": "Take the first step"
   },
   "how_it_works": {
     "title": "How It Works",
@@ -491,10 +497,10 @@
     "categories": "Categories"
   },
   "footer": {
-    "description": "Montreal, Laval, Longueuil and all Greater Montreal's paver specialist since 2009. Professional installation, turnkey service.",
-    "exit_title": "Still hesitating?",
-    "exit_desc": "Every day without a quote is another day your driveway keeps aging.",
-    "exit_cta": "Get my personalized estimate",
+    "description": "Bring your outdoor projects to life. We connect homeowners with trusted contractors — simply, without pressure.",
+    "exit_title": "The moment that changes everything.",
+    "exit_desc": "It's not a quote you receive — it's permission to imagine your space differently. What if that moment was now?",
+    "exit_cta": "Start my project",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",
