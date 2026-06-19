@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 
@@ -436,6 +436,24 @@ export default function AdminDashboard() {
 
   const allServiceAreas = Array.from(new Set(contractors.flatMap(c => c.serviceAreas || []))).sort();
 
+  const tabRef = useRef<HTMLDivElement>(null);
+  const [tabScrollLeft, setTabScrollLeft] = useState(false);
+  const [tabScrollRight, setTabScrollRight] = useState(false);
+
+  useEffect(() => {
+    const el = tabRef.current;
+    if (!el) return;
+    const check = () => {
+      setTabScrollLeft(el.scrollLeft > 4);
+      setTabScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    };
+    check();
+    el.addEventListener("scroll", check, { passive: true });
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", check); ro.disconnect(); };
+  }, []);
+
   if (initialLoading) {
     return (
       <div className="min-h-screen bg-stone-900 flex items-center justify-center">
@@ -445,30 +463,61 @@ export default function AdminDashboard() {
   }
 
   const tabList = ["analytics","users","contractors","applications","jobs","bills","health"] as const;
+  const pendingApps = applications.length;
+  const unpaidBills = bills.filter((b) => b.status !== "paid").length;
+
+  function handleTabKeyDown(e: React.KeyboardEvent, idx: number) {
+    let next: number | null = null;
+    if (e.key === "ArrowRight") next = (idx + 1) % tabList.length;
+    else if (e.key === "ArrowLeft") next = (idx - 1 + tabList.length) % tabList.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = tabList.length - 1;
+    if (next === null) return;
+    e.preventDefault();
+    setTab(tabList[next]);
+    tabRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  }
 
   return (
-    <div className="min-h-screen bg-stone-900 pb-safe">
-      <style>{`.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}`}</style>
-      <header className="bg-stone-800 border-b border-stone-700">
+    <div className="min-h-screen bg-stone-900" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <header className="sticky top-0 z-40 bg-stone-800 border-b border-stone-700">
         <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
           <h1 className="text-lg sm:text-xl font-bold text-white">{t("title")}</h1>
-          <div className="flex items-center gap-2 sm:hidden">
-            <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]" title={t("pw_title")}>{t("pw_short")}</button>
-            <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]">{t("logout")}</button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-400 hover:text-white px-3 py-1.5 min-h-[44px] rounded transition-colors" title={t("pw_title")}>{t("pw_short")}</button>
+            <button onClick={handleLogout} className="text-sm text-stone-400 hover:text-white px-3 py-1.5 min-h-[44px] rounded transition-colors">{t("logout")}</button>
           </div>
         </div>
-        <div className="flex gap-1 px-4 sm:px-6 pb-2 overflow-x-auto hide-scrollbar">
-          {tabList.map((tKey) => (
-            <button key={tKey} onClick={() => setTab(tKey)} className={`whitespace-nowrap text-sm px-3 py-1.5 min-h-[44px] rounded transition-colors shrink-0 ${tab === tKey ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t(`tab_${tKey}`)}</button>
-          ))}
-          <div className="hidden sm:flex items-center gap-2 ml-auto pl-2">
-            <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]" title={t("pw_title")}>{t("pw_short")}</button>
-            <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]">{t("logout")}</button>
+        <div className="relative">
+          {tabScrollLeft && <div className="absolute left-0 top-0 bottom-2 w-6 bg-gradient-to-r from-stone-800 to-transparent z-10 pointer-events-none" />}
+          {tabScrollRight && <div className="absolute right-0 top-0 bottom-2 w-6 bg-gradient-to-l from-stone-800 to-transparent z-10 pointer-events-none" />}
+          <div ref={tabRef} role="tablist" aria-label="Admin navigation" className="flex gap-1.5 px-4 sm:px-6 pb-2 overflow-x-auto hide-scrollbar">
+            {tabList.map((tKey, idx) => (
+              <button
+                key={tKey}
+                role="tab"
+                id={`admintab-${tKey}`}
+                aria-selected={tab === tKey}
+                aria-controls={`admintabpanel-${tKey}`}
+                tabIndex={tab === tKey ? 0 : -1}
+                onClick={() => setTab(tKey)}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                className={`whitespace-nowrap text-sm px-3 py-1.5 min-h-[44px] rounded-t transition-colors shrink-0 relative ${tab === tKey ? "bg-stone-900 text-white font-semibold" : "text-stone-400 hover:text-white hover:bg-stone-700/40"}`}
+              >
+                {t(`tab_${tKey}`)}
+                {tKey === "applications" && pendingApps > 0 && (
+                  <span className="ml-1.5 text-[10px] font-medium bg-terracotta text-white px-1.5 py-0.5 rounded-full align-middle">{pendingApps}</span>
+                )}
+                {tKey === "bills" && unpaidBills > 0 && (
+                  <span className="ml-1.5 text-[10px] font-medium bg-amber-600 text-white px-1.5 py-0.5 rounded-full align-middle">{unpaidBills}</span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div role="tabpanel" id={`admintabpanel-${tab}`} aria-labelledby={`admintab-${tab}`} className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {refreshing && (
           <div className="flex justify-center mb-4">
             <span className="text-stone-500 text-xs animate-pulse">{t("refreshing")}</span>
