@@ -27,10 +27,10 @@
   "hero": {
     "title": "Votre extérieur raconte qui vous êtes.",
     "subtitle": "Une entrée de cour, une terrasse, un aménagement — ce n'est pas seulement de la pierre et du béton. C'est l'image que vous projetez, l'accueil que vous offrez, l'espace où vous vous retrouvez. Chaque projet commence par une décision. La vôtre commence ici.",
-    "cta_estimate": "Obtenir mon estimation gratuite",
-    "trust_badge_1": "Entrepreneurs vérifiés RBQ",
-    "trust_badge_2": "Estimation sans engagement",
-    "trust_badge_3": "Service transparent et humain"
+    "cta_estimate": "C'est gratuit et sans engagement — Obtenir mon estimation",
+    "trust_badge_1": "Entrepreneurs certifiés RBQ",
+    "trust_badge_2": "Gratuit, sans engagement",
+    "trust_badge_3": "Entrepreneurs sélectionnés"
   },
   "services": {
     "title": "Nos Services",

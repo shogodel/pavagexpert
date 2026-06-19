@@ -29,13 +29,13 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
     { question: "What is the difference between interlocking pavers and asphalt?", answer: "Interlocking pavers last 30-50 years, offer more design options, and require simple maintenance. Asphalt is cheaper upfront ($5-$12/sq ft vs $15-$35) but needs resurfacing every 5-7 years." },
     { question: "Which paving service is best for a driveway?", answer: "Interlocking pavers are ideal for driveways due to their durability, load-bearing capacity, and easy repair. Asphalt works well for large surfaces. Concrete is best for modern aesthetics." },
     { question: "Do you serve my area?", answer: "Pavagexpert serves 40+ cities across Greater Montreal including Montreal, Laval, Longueuil, Brossard, the South Shore, North Shore, and West Island. Check our service areas page for the full list." },
-    { question: "Are your contractors licensed?", answer: "We verify each contractor before they join our network. All contractors are required to hold the proper licenses and certifications for Quebec construction work. We take integrity seriously." },
+    { question: "Are your contractors licensed?", answer: "Absolutely. Every contractor on Pavagexpert is hand-picked and verified. They must hold a valid RBQ license and be members in good standing of APCHQ and CCQ — those are non-negotiable requirements to join our network." },
   ];
   const faqsFr = [
     { question: "Quelle est la différence entre le pavé uni et l'asphalte?", answer: "Le pavé uni dure 30-50 ans, offre plus d'options de design et nécessite un entretien simple. L'asphalte est moins cher initialement (5-$12/pi² vs 15-$35) mais doit être refait tous les 5-7 ans." },
     { question: "Quel service de pavage est le meilleur pour une entrée?", answer: "Le pavé uni est idéal pour les entrées grâce à sa durabilité et sa réparation facile. L'asphalte convient bien aux grandes surfaces. Le béton est parfait pour un style moderne." },
     { question: "Desservez-vous ma région?", answer: "Pavagexpert dessert plus de 40 villes du Grand Montréal incluant Montréal, Laval, Longueuil, Brossard, la Rive-Sud, la Rive-Nord et le West Island. Consultez notre page des zones desservies." },
-    { question: "Vos entrepreneurs sont-ils licenciés?", answer: "Nous vérifions chaque entrepreneur avant qu'il rejoigne notre réseau. Tout entrepreneur doit détenir les licences et certifications requises pour les travaux de construction au Québec. L'intégrité est notre priorité." },
+    { question: "Vos entrepreneurs sont-ils licenciés?", answer: "Absolument. Chaque entrepreneur sur Pavagexpert est sélectionné et vérifié. Ils doivent détenir une licence RBQ valide et être membres en règle de l'APCHQ et de la CCQ — c'est une condition obligatoire pour rejoindre notre réseau." },
   ];
   const faqItems = locale === "fr" ? faqsFr : faqsEn;
 

@@ -4,19 +4,19 @@ import { motion } from "framer-motion";
 
 const badges = [
   {
-    title: "Transparence",
-    subtitle: "Parcours clair, sans zone d'ombre. Chaque étape vous appartient.",
-    subtitleEn: "A clear path with no blind spots. Every step is yours.",
+    title: "RBQ",
+    subtitle: "Entrepreneurs sélectionnés, chacun certifié RBQ — licence exigée pour tous nos membres",
+    subtitleEn: "Hand-picked contractors, each RBQ-certified — license required for every member",
   },
   {
-    title: "Compréhension",
-    subtitle: "On écoute votre vision avant d'agir. Votre projet, vos besoins, votre rythme.",
-    subtitleEn: "We listen to your vision before we act. Your project, your needs, your pace.",
+    title: "APCHQ / CCQ",
+    subtitle: "Nos entrepreneurs sont membres en règle de l'APCHQ et de la CCQ. Sélection rigoureuse.",
+    subtitleEn: "Our contractors are members in good standing of APCHQ and CCQ. Rigorously vetted.",
   },
   {
-    title: "Sérénité",
-    subtitle: "Aucune obligation, aucune pression. Juste la liberté de choisir en confiance.",
-    subtitleEn: "No obligation, no pressure. Just the freedom to choose with confidence.",
+    title: "100 % gratuit",
+    subtitle: "Estimation sans frais, sans engagement, sans surprise. Vous ne payez que si vous choisissez.",
+    subtitleEn: "Free estimate, no obligation, no surprises. You only pay if you choose to build.",
   },
 ];
 
