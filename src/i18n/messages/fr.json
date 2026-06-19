@@ -332,7 +332,25 @@
     "source_organic": "Direct / Organique",
     "source_referral": "Référence",
     "source_email": "Courriel",
-    "source_direct": "Direct"
+    "source_direct": "Direct",
+    "impressions": "Impressions",
+    "form_starts": "Formulaires commencés",
+    "funnel_title": "Entonnoir de conversion",
+    "funnel_lead_created": "Soumissions",
+    "funnel_lead_verified": "Confirmés",
+    "funnel_claimed": "Réclamés",
+    "funnel_accepted": "Acceptés",
+    "funnel_completed": "Terminés",
+    "funnel_paid": "Payés",
+    "funnel_pct": "% étape préc.",
+    "roi_title": "ROI par entrepreneur",
+    "roi_company": "Entreprise",
+    "roi_claims": "Réclamations",
+    "roi_accepted": "Acceptés",
+    "roi_completed": "Terminés",
+    "roi_paid": "Payé ($)",
+    "roi_conversion": "Taux de conversion",
+    "tab_compliance": "Conformité"
   },
   "profile": {
     "title": "Mon profil",
@@ -548,7 +566,7 @@
     "content": [
       "Pavagexpert s'engage à protéger la confidentialité des informations personnelles que vous nous fournissez.",
       "Les informations recueillies via notre formulaire de demande de soumission sont utilisées uniquement dans le but de vous offrir un service personnalisé et ne sont jamais partagées avec des tiers à des fins commerciales.",
-      "Conformément à la Loi sur la protection des renseignements personnels du Québec, vous pouvez à tout moment demander l'accès, la rectification ou la suppression de vos données personnelles en nous contactant."
+      "Conformément à la Loi sur la protection des renseignements personnels du Québec et au RGPD, vous pouvez à tout moment demander l'accès, la rectification, l'exportation ou la suppression de vos données personnelles."
     ]
   },
   "terms": {
@@ -558,5 +576,36 @@
       "Les devis et estimations fournis via notre plateforme sont à titre indicatif. Un représentant vous contactera pour une évaluation précise de votre projet.",
       "Pavagexpert agit comme plateforme de mise en relation entre les propriétaires et les entrepreneurs certifiés. Nous ne sommes pas responsables des travaux effectués par les entrepreneurs."
     ]
+  },
+  "cookie_consent": {
+    "title": "Gestion des témoins (cookies)",
+    "message": "Nous utilisons des témoins (cookies) pour améliorer votre expérience et analyser le trafic. Vous pouvez choisir vos préférences.",
+    "accept_all": "Tout accepter",
+    "reject_all": "Tout refuser",
+    "customize": "Personnaliser",
+    "necessary": "Nécessaires",
+    "necessary_desc": "Requis pour le fonctionnement du site (connexion, sécurité). Ne peuvent être désactivés.",
+    "analytics": "Analytiques",
+    "analytics_desc": "Nous aident à comprendre comment le site est utilisé (Google Ads).",
+    "save": "Enregistrer",
+    "back": "Retour"
+  },
+  "data_request": {
+    "title": "Demande de données personnelles",
+    "desc": "Conformément à la Loi sur la protection des renseignements personnels du Québec et au RGPD, vous pouvez demander l'exportation ou la suppression de vos données.",
+    "email": "Courriel",
+    "email_placeholder": "votre@courriel.com",
+    "request_type": "Type de demande",
+    "export_label": "Exporter mes données",
+    "export_desc": "Recevez un fichier JSON contenant toutes vos informations.",
+    "deletion_label": "Supprimer mes données",
+    "deletion_desc": "Anonymise toutes vos données personnelles (irréversible).",
+    "submit": "Envoyer la demande",
+    "sending": "Envoi...",
+    "check_email_title": "Vérifiez votre courriel",
+    "check_email_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour confirmer votre demande.",
+    "invalid_title": "Lien invalide ou expiré",
+    "invalid_msg": "Ce lien de confirmation n'est plus valide. Veuillez soumettre une nouvelle demande.",
+    "error": "Une erreur est survenue. Veuillez réessayer."
   }
 }

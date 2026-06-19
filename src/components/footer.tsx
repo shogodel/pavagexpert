@@ -4,12 +4,15 @@ import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
 import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/lib/constants";
 import { servicesList } from "@/lib/services-data";
+import { useState, useEffect } from "react";
 
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
   const servicesT = useTranslations("services");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   return (
     <footer className="bg-stone-900 text-stone-300">
@@ -85,6 +88,9 @@ export default function Footer() {
           <div className="flex gap-4 text-sm text-stone-500">
             <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>
             <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors">{t("terms")}</Link>
+            {mounted && (
+              <Link href={`/${locale}/data-request`} className="hover:text-stone-300 transition-colors">Données personnelles</Link>
+            )}
           </div>
         </div>
       </div>

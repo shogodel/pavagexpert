@@ -22,6 +22,8 @@ interface ContractorRow {
   review_count: number;
   response_time_hours: number | null;
   profile_completion_pct: number;
+  terms_accepted_at: Date | null;
+  terms_version: string;
 }
 
 export interface ContractorProfile {
@@ -46,6 +48,8 @@ export interface ContractorProfile {
   reviewCount: number;
   responseTimeHours: number | null;
   profileCompletionPct: number;
+  termsVersion: string;
+  termsAcceptedAt: string | null;
 }
 
 function mapProfile(row: ContractorRow): ContractorProfile {
@@ -71,6 +75,8 @@ function mapProfile(row: ContractorRow): ContractorProfile {
     reviewCount: row.review_count || 0,
     responseTimeHours: row.response_time_hours ?? null,
     profileCompletionPct: row.profile_completion_pct || 0,
+    termsVersion: row.terms_version || "",
+    termsAcceptedAt: row.terms_accepted_at?.toISOString() ?? null,
   };
 }
 

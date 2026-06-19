@@ -1,4 +1,5 @@
 import { query } from "./db";
+import { getFunnelMetrics, getContractorROI } from "./analytics";
 
 export interface AdminUser {
   id: string;
@@ -111,6 +112,11 @@ export async function getAnalytics() {
     sourceCount[source] = (sourceCount[source] || 0) + 1;
   }
 
+  const [funnel, contractorROI] = await Promise.all([
+    getFunnelMetrics(),
+    getContractorROI(),
+  ]);
+
   return {
     totalLeads: jobs.length,
     totalUsers: clients.length,
@@ -123,5 +129,7 @@ export async function getAnalytics() {
     leadsBySource: Object.entries(sourceCount)
       .sort(([, a], [, b]) => b - a)
       .map(([source, count]) => ({ source, count })),
+    funnel,
+    contractorROI,
   };
 }

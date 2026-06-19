@@ -10,6 +10,8 @@ import Footer from "@/components/footer";
 import JsonLd from "@/components/json-ld";
 import BreadcrumbJsonLd from "@/components/breadcrumb-json-ld";
 import UtmCapture from "@/components/utm-capture";
+import CookieConsent from "@/components/cookie-consent";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -46,14 +48,21 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
 
   const messages = await getMessages(locale);
+  const cookieStore = await cookies();
+  const consentCookie = cookieStore.get("cookie_consent")?.value || "";
+  const analyticsConsent = consentCookie.includes("analytics");
 
   return (
     <html lang={locale} className={`${inter.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
-        <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18245853211" strategy="afterInteractive" />
-        <Script id="google-ads-config" strategy="afterInteractive" dangerouslySetInnerHTML={{
-          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18245853211');`,
-        }} />
+        {analyticsConsent && (
+          <>
+            <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18245853211" strategy="afterInteractive" />
+            <Script id="google-ads-config" strategy="afterInteractive" dangerouslySetInnerHTML={{
+              __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18245853211');`,
+            }} />
+          </>
+        )}
         <JsonLd locale={locale} />
         <BreadcrumbJsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>
@@ -61,6 +70,7 @@ export default async function LocaleLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <CookieConsent />
         </I18nProvider>
       </body>
     </html>

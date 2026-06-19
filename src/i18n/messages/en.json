@@ -332,7 +332,25 @@
     "source_organic": "Direct / Organic",
     "source_referral": "Referral",
     "source_email": "Email",
-    "source_direct": "Direct"
+    "source_direct": "Direct",
+    "impressions": "Impressions",
+    "form_starts": "Form starts",
+    "funnel_title": "Conversion funnel",
+    "funnel_lead_created": "Submissions",
+    "funnel_lead_verified": "Verified",
+    "funnel_claimed": "Claimed",
+    "funnel_accepted": "Accepted",
+    "funnel_completed": "Completed",
+    "funnel_paid": "Paid",
+    "funnel_pct": "% of prev.",
+    "roi_title": "Contractor ROI",
+    "roi_company": "Company",
+    "roi_claims": "Claims",
+    "roi_accepted": "Accepted",
+    "roi_completed": "Completed",
+    "roi_paid": "Paid ($)",
+    "roi_conversion": "Conv. rate",
+    "tab_compliance": "Compliance"
   },
   "profile": {
     "title": "My Profile",
@@ -548,7 +566,7 @@
     "content": [
       "Pavagexpert is committed to protecting the confidentiality of the personal information you provide to us.",
       "Information collected through our quote request form is used solely for the purpose of providing you with a personalized service and is never shared with third parties for commercial purposes.",
-      "In accordance with Quebec's privacy laws, you may at any time request access, correction or deletion of your personal data by contacting us."
+      "In accordance with Quebec's privacy laws and GDPR, you may at any time request access, correction, export or deletion of your personal data."
     ]
   },
   "terms": {
@@ -558,5 +576,36 @@
       "Quotes and estimates provided through our platform are indicative. A representative will contact you for an accurate assessment of your project.",
       "Pavagexpert acts as a matching platform between homeowners and certified contractors. We are not responsible for work performed by contractors."
     ]
+  },
+  "cookie_consent": {
+    "title": "Cookie Preferences",
+    "message": "We use cookies to enhance your experience and analyze traffic. You can choose your preferences.",
+    "accept_all": "Accept All",
+    "reject_all": "Reject All",
+    "customize": "Customize",
+    "necessary": "Necessary",
+    "necessary_desc": "Required for site operation (login, security). Cannot be disabled.",
+    "analytics": "Analytics",
+    "analytics_desc": "Help us understand how the site is used (Google Ads).",
+    "save": "Save",
+    "back": "Back"
+  },
+  "data_request": {
+    "title": "Personal Data Request",
+    "desc": "In accordance with Quebec's privacy laws and GDPR, you may request the export or deletion of your data.",
+    "email": "Email",
+    "email_placeholder": "your@email.com",
+    "request_type": "Request type",
+    "export_label": "Export my data",
+    "export_desc": "Receive a JSON file with all your information.",
+    "deletion_label": "Delete my data",
+    "deletion_desc": "Anonymizes all your personal data (irreversible).",
+    "submit": "Send request",
+    "sending": "Sending...",
+    "check_email_title": "Check your email",
+    "check_email_msg": "A confirmation link has been sent. Click it to confirm your request.",
+    "invalid_title": "Invalid or expired link",
+    "invalid_msg": "This confirmation link is no longer valid. Please submit a new request.",
+    "error": "An error occurred. Please try again."
   }
 }

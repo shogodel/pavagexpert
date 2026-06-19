@@ -4,6 +4,24 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 
+interface FunnelStage {
+  stage: string;
+  label: string;
+  count: number;
+  pctOfPrevious: number | null;
+}
+
+interface ContractorROI {
+  id: string;
+  company: string;
+  email: string;
+  totalClaims: number;
+  acceptedClaims: number;
+  completedJobs: number;
+  totalPaidCents: number;
+  conversionRate: string;
+}
+
 interface Analytics {
   totalLeads: number;
   totalUsers: number;
@@ -12,6 +30,13 @@ interface Analytics {
   leadsByStatus: Record<string, number>;
   leadsPerDay: { date: string; count: number }[];
   leadsBySource: { source: string; count: number }[];
+  funnel: {
+    stages: FunnelStage[];
+    totalImpressions: number;
+    impressionsPerDay: { date: string; count: number }[];
+    formStarts: number;
+  };
+  contractorROI: ContractorROI[];
 }
 
 interface User {
@@ -92,7 +117,7 @@ interface ClientJob {
   createdAt: string;
 }
 
-type Tab = "analytics" | "users" | "contractors" | "applications" | "jobs" | "bills" | "health";
+type Tab = "analytics" | "users" | "contractors" | "applications" | "jobs" | "bills" | "health" | "compliance";
 
 function statusBadgeClass(status: string): string {
   switch (status) {
@@ -156,7 +181,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabFromUrl = searchParams.get("tab") as Tab | null;
-  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications", "jobs", "bills", "health"];
+  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications", "jobs", "bills", "health", "compliance"];
   const [tab, setTabState] = useState<Tab>(tabFromUrl && validTabs.includes(tabFromUrl) ? tabFromUrl : "analytics");
 
   function setTab(newTab: Tab) {
@@ -493,7 +518,7 @@ export default function AdminDashboard() {
     );
   }
 
-  const tabList = ["analytics","users","contractors","applications","jobs","bills","health"] as const;
+  const tabList = ["analytics","users","contractors","applications","jobs","bills","health","compliance"] as const;
   const pendingApps = applications.length;
   const unpaidBills = bills.filter((b) => b.status !== "paid").length;
 
@@ -607,18 +632,22 @@ export default function AdminDashboard() {
           <>
             {analytics && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <div className="bg-stone-800 rounded-xl p-6">
                     <p className="text-stone-400 text-sm">{t("submissions")}</p>
                     <p className="text-3xl font-bold text-white mt-1">{analytics.totalLeads}</p>
                   </div>
                   <div className="bg-stone-800 rounded-xl p-6">
-                    <p className="text-stone-400 text-sm">{t("users")}</p>
-                    <p className="text-3xl font-bold text-white mt-1">{analytics.totalUsers}</p>
+                    <p className="text-stone-400 text-sm">{t("impressions")}</p>
+                    <p className="text-3xl font-bold text-white mt-1">{analytics.funnel.totalImpressions}</p>
                   </div>
                   <div className="bg-stone-800 rounded-xl p-6">
-                    <p className="text-stone-400 text-sm">{t("active")}</p>
-                    <p className="text-3xl font-bold text-white mt-1">{analytics.activeUsers}</p>
+                    <p className="text-stone-400 text-sm">{t("form_starts")}</p>
+                    <p className="text-3xl font-bold text-white mt-1">{analytics.funnel.formStarts}</p>
+                  </div>
+                  <div className="bg-stone-800 rounded-xl p-6">
+                    <p className="text-stone-400 text-sm">{t("users")}</p>
+                    <p className="text-3xl font-bold text-white mt-1">{analytics.activeUsers}<span className="text-sm text-stone-500 font-normal"> / {analytics.totalUsers}</span></p>
                   </div>
                 </div>
 
@@ -707,6 +736,75 @@ export default function AdminDashboard() {
                     })}
                   </div>
                 </div>
+
+                {analytics.funnel.stages.length > 0 && (
+                  <div className="bg-stone-800 rounded-xl p-6 mb-6">
+                    <h3 className="text-white font-semibold mb-4">{t("funnel_title")}</h3>
+                    <div className="space-y-3">
+                      {analytics.funnel.stages.map((s, i) => {
+                        const maxCount = Math.max(...analytics.funnel.stages.map((x) => x.count), 1);
+                        return (
+                          <div key={s.stage}>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-stone-400">{s.label}</span>
+                              <span className="text-white font-medium">{s.count}</span>
+                            </div>
+                            <div className="h-5 bg-stone-700 rounded-full overflow-hidden relative">
+                              <div
+                                className="h-full rounded-full transition-all duration-500"
+                                style={{
+                                  width: `${(s.count / maxCount) * 100}%`,
+                                  backgroundColor:
+                                    i === 0 ? "#f59e0b" :
+                                    i === 1 ? "#3b82f6" :
+                                    i === 2 ? "#8b5cf6" :
+                                    i === 3 ? "#22c55e" :
+                                    i === 4 ? "#14b8a6" :
+                                    "#06b6d4",
+                                }}
+                              />
+                            </div>
+                            {s.pctOfPrevious !== null && (
+                              <p className="text-[11px] text-stone-500 mt-0.5">
+                                {t("funnel_pct")}: {s.pctOfPrevious}%
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {analytics.contractorROI.length > 0 && (
+                  <div className="bg-stone-800 rounded-xl p-6 mb-6 overflow-x-auto">
+                    <h3 className="text-white font-semibold mb-4">{t("roi_title")}</h3>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-stone-400 border-b border-stone-700">
+                          <th className="text-left py-2 pr-4">{t("roi_company")}</th>
+                          <th className="text-right py-2 px-2">{t("roi_claims")}</th>
+                          <th className="text-right py-2 px-2">{t("roi_accepted")}</th>
+                          <th className="text-right py-2 px-2">{t("roi_completed")}</th>
+                          <th className="text-right py-2 px-2">{t("roi_paid")}</th>
+                          <th className="text-right py-2 pl-2">{t("roi_conversion")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {analytics.contractorROI.map((c) => (
+                          <tr key={c.id} className="border-b border-stone-700/50 text-white">
+                            <td className="py-2 pr-4 truncate max-w-[160px]">{c.company}</td>
+                            <td className="text-right py-2 px-2">{c.totalClaims}</td>
+                            <td className="text-right py-2 px-2">{c.acceptedClaims}</td>
+                            <td className="text-right py-2 px-2">{c.completedJobs}</td>
+                            <td className="text-right py-2 px-2">{(c.totalPaidCents / 100).toFixed(2)}$</td>
+                            <td className="text-right py-2 pl-2 font-medium">{c.conversionRate}%</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </>
             )}
           </>
@@ -1266,6 +1364,73 @@ export default function AdminDashboard() {
                 className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
               >
                 {sendingTest ? t("loading") : t("health_test_email")}
+              </button>
+            </div>
+          </>
+        )}
+
+        {tab === "compliance" && (
+          <>
+            <h2 className="text-lg font-semibold text-white mb-6">Conformité</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">Bannière de consentement</h3>
+                <p className="text-stone-400 text-sm mb-4">Une bannière de consentement aux témoins (cookies) est affichée aux nouveaux visiteurs. Les choix sont enregistrés dans un témoin persistants et journalisés dans la base de données.</p>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-stone-400">Active</span>
+                </div>
+              </div>
+
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">Journalisation des consentements</h3>
+                <p className="text-stone-400 text-sm mb-4">Chaque action de consentement (acceptation, refus, personnalisation) est enregistrée dans la table <code className="text-xs bg-stone-700 px-1 py-0.5 rounded">consent_logs</code> avec l'IP, le user-agent et la date.</p>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-stone-400">Active</span>
+                </div>
+              </div>
+
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">Suppression / Export des données</h3>
+                <p className="text-stone-400 text-sm mb-4">Les utilisateurs peuvent demander l'exportation ou la suppression de leurs données via la page <code className="text-xs bg-stone-700 px-1 py-0.5 rounded">/data-request</code>. Un courriel de confirmation est envoyé avant traitement.</p>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-stone-400">Active</span>
+                </div>
+              </div>
+
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">Piste d'audit des conditions</h3>
+                <p className="text-stone-400 text-sm mb-4">Les entrepreneurs doivent accepter les conditions d'utilisation mises à jour pour accéder au tableau de bord. Chaque acceptation est enregistrée dans <code className="text-xs bg-stone-700 px-1 py-0.5 rounded">terms_acceptance</code>.</p>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-stone-400">Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-stone-800 rounded-xl p-6 mt-4 sm:mt-6">
+              <h3 className="text-white font-semibold mb-4">Nettoyage automatique (purge)</h3>
+              <p className="text-stone-400 text-sm mb-4">
+                Supprime les demandes de données expirées, les journaux de consentement de plus de 3 ans, et anonymise les comptes marqués pour suppression.
+              </p>
+              <button
+                onClick={async () => {
+                  if (!confirm("Lancer la purge des données expirées ?")) return;
+                  setRefreshing(true);
+                  try {
+                    await fetch("/api/admin/purge", { method: "POST" });
+                    alert("Purge terminée.");
+                  } catch {
+                    alert("Erreur lors de la purge.");
+                  }
+                  setRefreshing(false);
+                }}
+                className="bg-red-700 hover:bg-red-600 text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors"
+              >
+                Lancer la purge
               </button>
             </div>
           </>
