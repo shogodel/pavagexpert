@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { hardDeleteContractor } from "@/lib/auth-store";
 import { transaction } from "@/lib/db";
 
 async function checkAdmin(req: NextRequest) {
@@ -20,7 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Missing contractor id" }, { status: 400 });
     }
 
-    await transaction(async (q) => {
+    const deleted = await transaction(async (q) => {
       await q("DELETE FROM contractor_bills WHERE contractor_id = $1", [id]);
       await q("DELETE FROM notifications WHERE contractor_id = $1", [id]);
       await q("DELETE FROM push_subscriptions WHERE contractor_id = $1", [id]);
@@ -32,9 +31,10 @@ export async function POST(req: NextRequest) {
       await q("DELETE FROM claims WHERE contractor_id = $1", [id]);
       await q("DELETE FROM quotes WHERE contractor_id = $1", [id]);
       await q("DELETE FROM invoices WHERE contractor_id = $1", [id]);
+      const rows = await q<{ id: string }>("DELETE FROM contractors WHERE id = $1 RETURNING id", [id]);
+      return rows.length > 0;
     });
 
-    const deleted = await hardDeleteContractor(id);
     if (!deleted) {
       return NextResponse.json({ ok: false, error: "Contractor not found" }, { status: 404 });
     }
