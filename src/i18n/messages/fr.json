@@ -322,7 +322,16 @@
     "budget_large": "15k$+",
     "verified": "Vérifié",
     "not_verified": "Non vérifié",
-    "all_areas": "Tous les secteurs"
+    "all_areas": "Tous les secteurs",
+    "by_source": "Par provenance",
+    "source_filter_all": "Toutes les sources",
+    "source_google": "Google",
+    "source_facebook": "Facebook",
+    "source_instagram": "Instagram",
+    "source_organic": "Direct / Organique",
+    "source_referral": "Référence",
+    "source_email": "Courriel",
+    "source_direct": "Direct"
   },
   "profile": {
     "title": "Mon profil",

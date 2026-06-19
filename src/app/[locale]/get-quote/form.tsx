@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
+import { getTrackingData, clearTracking } from "@/lib/utm-tracker";
 
 export default function GetQuoteForm() {
   const t = useTranslations("get_quote");
@@ -32,11 +33,14 @@ export default function GetQuoteForm() {
       fd.set("budget", form.budget);
       fd.set("description", form.description);
       for (const f of photoFiles) fd.append("photos", f);
+      const tracking = getTrackingData();
+      if (tracking) fd.set("lead_source", JSON.stringify(tracking));
       const res = await fetch("/api/contact", {
         method: "POST",
         body: fd,
       });
       if (!res.ok) throw new Error("API error");
+      clearTracking();
       setSubmitted(true);
     } catch {
       setError(true);

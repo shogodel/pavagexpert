@@ -4,6 +4,16 @@ import { query, transaction } from "./db";
 
 export type JobStatus = "new" | "in_progress" | "completed";
 
+export interface LeadSource {
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+  referrer?: string;
+  landing_page?: string;
+}
+
 export interface Job {
   id: string;
   name: string;
@@ -15,6 +25,7 @@ export interface Job {
   status: JobStatus;
   createdAt: string;
   photos: string[];
+  leadSource: LeadSource | null;
 }
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
@@ -42,6 +53,7 @@ interface JobRow {
   name: string;
   email: string;
   phone: string;
+  lead_source: Record<string, string> | null;
 }
 
 interface PhotoRow {
@@ -60,6 +72,7 @@ function mapJob(row: JobRow, photos: string[] = []): Job {
     status: row.status as JobStatus,
     createdAt: row.created_at.toISOString(),
     photos,
+    leadSource: row.lead_source as LeadSource | null,
   };
 }
 
@@ -98,7 +111,7 @@ export async function getJobById(id: string): Promise<Job | null> {
 }
 
 export async function addJob(
-  input: { name: string; email: string; phone: string; postalCode: string; budget: string; description: string } & { photos?: string[] }
+  input: { name: string; email: string; phone: string; postalCode: string; budget: string; description: string; leadSource?: Record<string, string> } & { photos?: string[] }
 ): Promise<Job> {
   return transaction(async (q) => {
     const clientRows = await q<{ id: string }>(
@@ -108,10 +121,10 @@ export async function addJob(
     const clientId = clientRows[0].id;
 
     const jobRows = await q<JobRow>(
-      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status)
-       VALUES ($1, $2, $3, $4, $5, 'new')
+      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status, lead_source)
+       VALUES ($1, $2, $3, $4, $5, 'new', $6::jsonb)
        RETURNING *`,
-      [clientId, `Projet de ${input.name}`, input.description, input.postalCode, input.budget]
+      [clientId, `Projet de ${input.name}`, input.description, input.postalCode, input.budget, input.leadSource ? JSON.stringify(input.leadSource) : null]
     );
     const job = jobRows[0];
 

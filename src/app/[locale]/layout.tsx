@@ -9,6 +9,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import JsonLd from "@/components/json-ld";
 import BreadcrumbJsonLd from "@/components/breadcrumb-json-ld";
+import UtmCapture from "@/components/utm-capture";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -56,6 +57,7 @@ export default async function LocaleLayout({
         <JsonLd locale={locale} />
         <BreadcrumbJsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>
+          <UtmCapture />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

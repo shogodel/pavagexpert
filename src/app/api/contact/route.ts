@@ -25,6 +25,9 @@ export async function POST(req: NextRequest) {
     const postalCode = form.get("postalCode") as string;
     const budget = form.get("budget") as string;
     const description = form.get("description") as string;
+    const leadSourceRaw = form.get("lead_source") as string | null;
+    let leadSource: Record<string, string> | undefined;
+    if (leadSourceRaw) { try { leadSource = JSON.parse(leadSourceRaw); } catch { /* ignore invalid JSON */ } }
 
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ ok: false, errors: ["name"] }, { status: 400 });
@@ -65,7 +68,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create client + job + photo records in a DB transaction
-    const job = await addJob({ name, email, postalCode: postalCode || "", phone, budget, description, photos: savedPhotos });
+    const job = await addJob({ name, email, postalCode: postalCode || "", phone, budget, description, photos: savedPhotos, leadSource });
 
     // Notify subscribed contractors of the new job
     if (job) {

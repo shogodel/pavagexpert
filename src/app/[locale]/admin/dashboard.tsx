@@ -11,6 +11,7 @@ interface Analytics {
   leadsByType: Record<string, number>;
   leadsByStatus: Record<string, number>;
   leadsPerDay: { date: string; count: number }[];
+  leadsBySource: { source: string; count: number }[];
 }
 
 interface User {
@@ -45,6 +46,7 @@ interface AdminJob {
   description: string;
   status: string;
   createdAt: string;
+  leadSource: { utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_page?: string } | null;
 }
 
 interface Contractor {
@@ -123,6 +125,31 @@ function jobStatusBadgeClass(status: string): string {
   }
 }
 
+function sourceBadgeClass(source: string): string {
+  switch (source) {
+    case "google": return "bg-red-900/50 text-red-300";
+    case "facebook": return "bg-blue-900/50 text-blue-300";
+    case "instagram": return "bg-pink-900/50 text-pink-300";
+    case "organic": return "bg-green-900/50 text-green-300";
+    case "referral": return "bg-purple-900/50 text-purple-300";
+    case "email": return "bg-cyan-900/50 text-cyan-300";
+    default: return "bg-stone-700 text-stone-400";
+  }
+}
+
+function getSourceLabel(source: string, tr: (k: string) => string): string {
+  switch (source) {
+    case "google": return tr("source_google");
+    case "facebook": return tr("source_facebook");
+    case "instagram": return tr("source_instagram");
+    case "organic": return tr("source_organic");
+    case "referral": return tr("source_referral");
+    case "email": return tr("source_email");
+    case "direct": return tr("source_direct");
+    default: return source;
+  }
+}
+
 export default function AdminDashboard() {
   const t = useTranslations("admin");
   const locale = useLocale() as "fr" | "en";
@@ -166,6 +193,7 @@ export default function AdminDashboard() {
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: "user" | "contractor" | "job"; id: string; label: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [serviceAreaFilter, setServiceAreaFilter] = useState("");
+  const [sourceFilter, setSourceFilter] = useState("");
 
   const [bills, setBills] = useState<Bill[]>([]);
   const [generating, setGenerating] = useState(false);
@@ -436,6 +464,9 @@ export default function AdminDashboard() {
 
   const allServiceAreas = Array.from(new Set(contractors.flatMap(c => c.serviceAreas || []))).sort();
 
+  const allSources = Array.from(new Set(jobs.map(j => j.leadSource?.utm_source || "direct"))).sort();
+  const filteredJobs = sourceFilter ? jobs.filter(j => (j.leadSource?.utm_source || "direct") === sourceFilter) : jobs;
+
   const tabRef = useRef<HTMLDivElement>(null);
   const [tabScrollLeft, setTabScrollLeft] = useState(false);
   const [tabScrollRight, setTabScrollRight] = useState(false);
@@ -633,6 +664,28 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+
+                {analytics.leadsBySource && analytics.leadsBySource.length > 0 && (
+                  <div className="bg-stone-800 rounded-xl p-6 mb-6">
+                    <h3 className="text-white font-semibold mb-4">{t("by_source")}</h3>
+                    <div className="space-y-2">
+                      {analytics.leadsBySource.map(({ source, count }) => {
+                        const max = Math.max(...analytics.leadsBySource.map((s) => s.count));
+                        return (
+                          <div key={source}>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-stone-400">{getSourceLabel(source, t)}</span>
+                              <span className="text-white">{count}</span>
+                            </div>
+                            <div className="h-2 bg-stone-700 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full" style={{ width: `${(count / max) * 100}%`, backgroundColor: source === "google" ? "#ef4444" : source === "facebook" ? "#3b82f6" : source === "instagram" ? "#ec4899" : source === "organic" ? "#22c55e" : source === "referral" ? "#a855f7" : source === "email" ? "#06b6d4" : "#a8a29e" }} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <div className="bg-stone-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
                   <h3 className="text-white font-semibold mb-4">{t("by_day")}</h3>
@@ -928,8 +981,22 @@ export default function AdminDashboard() {
               </div>
             )}
 
+            {allSources.length > 0 && (
+              <div className="mb-4">
+                <select
+                  value={sourceFilter}
+                  onChange={(e) => setSourceFilter(e.target.value)}
+                  className="w-full sm:w-auto px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white text-sm outline-none"
+                >
+                  <option value="">{t("source_filter_all")}</option>
+                  {allSources.map((s) => (
+                    <option key={s} value={s}>{getSourceLabel(s, t)}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="space-y-3">
-              {jobs.map((job) => (
+              {filteredJobs.map((job) => (
                 <div key={job.id} className="bg-stone-800 rounded-xl p-4 sm:p-5">
                   <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
                     <div className="min-w-0 flex-1">
@@ -938,6 +1005,11 @@ export default function AdminDashboard() {
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${jobStatusBadgeClass(job.status)}`}>
                           {t(`job_status_${job.status}`)}
                         </span>
+                        {job.leadSource && (
+                          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${sourceBadgeClass(job.leadSource.utm_source || "direct")}`}>
+                            {getSourceLabel(job.leadSource.utm_source || "direct", t)}
+                          </span>
+                        )}
                       </div>
                       {job.description && <p className="text-sm text-stone-500 line-clamp-2">{job.description}</p>}
                       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-stone-500">
@@ -967,7 +1039,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               ))}
-              {jobs.length === 0 && (
+              {filteredJobs.length === 0 && (
                 <p className="text-center text-stone-500 py-8">{t("jobs_empty")}</p>
               )}
             </div>

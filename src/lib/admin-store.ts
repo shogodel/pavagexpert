@@ -74,9 +74,11 @@ export async function deleteUser(id: string): Promise<boolean> {
   return rows.length > 0;
 }
 
+interface JobWithSource { status: string; created_at: Date; budget: string; lead_source: Record<string, string> | null }
+
 export async function getAnalytics() {
-  const jobs = await query<{ status: string; created_at: Date; budget: string }>(
-    "SELECT status, created_at, budget FROM jobs"
+  const jobs = await query<JobWithSource>(
+    "SELECT status, created_at, budget, lead_source FROM jobs"
   );
   const clients = await query<{ status: string }>(
     "SELECT status FROM clients"
@@ -85,6 +87,7 @@ export async function getAnalytics() {
   const budgetRanges: Record<string, number> = {};
   const statusCount: Record<string, number> = {};
   const dailyCount: Record<string, number> = {};
+  const sourceCount: Record<string, number> = {};
 
   for (const job of jobs) {
     const budgetNum = parseInt(job.budget.replace(/[^0-9]/g, ""), 10);
@@ -103,6 +106,9 @@ export async function getAnalytics() {
     statusCount[job.status] = (statusCount[job.status] || 0) + 1;
     const day = job.created_at.toISOString().slice(0, 10);
     dailyCount[day] = (dailyCount[day] || 0) + 1;
+
+    const source = job.lead_source?.utm_source || "direct";
+    sourceCount[source] = (sourceCount[source] || 0) + 1;
   }
 
   return {
@@ -114,5 +120,8 @@ export async function getAnalytics() {
     leadsPerDay: Object.entries(dailyCount)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([date, count]) => ({ date, count })),
+    leadsBySource: Object.entries(sourceCount)
+      .sort(([, a], [, b]) => b - a)
+      .map(([source, count]) => ({ source, count })),
   };
 }
