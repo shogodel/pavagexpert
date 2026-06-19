@@ -165,7 +165,9 @@
     "error_generic": "Something went wrong. Please try again.",
     "error_network": "Network error. Check your connection.",
     "success_title": "Application received!",
-    "success_body": "Thank you for your application. Our team will review it within 48 hours. You'll receive an email once a decision is made.",
+    "success_body": "Thank you for your application. Our team will review it within 48 hours.",
+    "success_username": "Your username",
+    "success_username_hint": "Keep it to log in once your application is approved.",
     "submit": "Submit application"
   },
   "login": {

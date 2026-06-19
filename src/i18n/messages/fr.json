@@ -165,7 +165,9 @@
     "error_generic": "Une erreur est survenue. Veuillez réessayer.",
     "error_network": "Erreur réseau. Vérifiez votre connexion.",
     "success_title": "Candidature reçue !",
-    "success_body": "Merci pour votre candidature. Notre équipe l'examinera sous 48 heures. Vous recevrez un courriel dès qu'une décision sera prise.",
+    "success_body": "Merci pour votre candidature. Notre équipe l'examinera sous 48 heures.",
+    "success_username": "Votre nom d'utilisateur",
+    "success_username_hint": "Conservez-le pour vous connecter après approbation.",
     "submit": "Soumettre ma candidature"
   },
   "login": {

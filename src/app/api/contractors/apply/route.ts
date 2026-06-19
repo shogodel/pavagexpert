@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, errors }, { status: 400 });
     }
 
-    await createApplication({
+    const result = await createApplication({
       company: company.trim(),
       rbqLicense: rbqLicense.trim(),
       phone: phone.trim(),
@@ -35,12 +35,13 @@ export async function POST(req: NextRequest) {
       subject: "Candidature reçue — Pavagexpert",
       html: `<p>Bonjour ${company},</p>
 <p>Nous avons bien reçu votre candidature d'entrepreneur.</p>
+<p>Votre nom d'utilisateur est : <strong>${result.username}</strong></p>
 <p>Notre équipe l'examinera sous 48 heures. Vous recevrez un courriel dès qu'une décision sera prise.</p>
 <p>Merci de votre intérêt !</p>
 <p>— L'équipe Pavagexpert</p>`,
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, username: result.username });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "";
     if (message === "Email already registered") {
