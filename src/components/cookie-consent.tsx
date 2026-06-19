@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslations } from "@/lib/use-translations";
 
 function getCookie(name: string): string | null {
@@ -26,9 +26,17 @@ const CONSENT_COOKIE = "cookie_consent";
 
 export default function CookieConsent() {
   const t = useTranslations("cookie_consent");
-  const [visible, setVisible] = useState(!getCookie(CONSENT_COOKIE));
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [showCustomize, setShowCustomize] = useState(false);
   const [analytics, setAnalytics] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (getCookie(CONSENT_COOKIE)) {
+      setVisible(false);
+    }
+  }, []);
 
   const save = useCallback(async (consentGiven: boolean, categories: string[]) => {
     const visitorId = generateVisitorId();
@@ -59,22 +67,22 @@ export default function CookieConsent() {
     save(cats.length > 1, cats);
   }, [analytics, save]);
 
-  if (!visible) return null;
+  if (!mounted || !visible) return null;
 
   if (showCustomize) {
     return (
-      <div className="fixed bottom-0 inset-x-0 z-50 p-4">
+      <div className="fixed bottom-0 inset-x-0 z-[60] p-4 pb-[env(safe-area-inset-bottom,16px)]">
         <div className="max-w-lg mx-auto bg-stone-900 border border-stone-700 rounded-xl p-5 shadow-2xl">
           <h3 className="text-white font-semibold mb-3">{t("title")}</h3>
           <div className="space-y-3 mb-4">
-            <label className="flex items-center justify-between py-2">
+            <label className="flex items-center justify-between py-2 cursor-pointer">
               <div>
                 <p className="text-white text-sm font-medium">{t("necessary")}</p>
                 <p className="text-stone-400 text-xs">{t("necessary_desc")}</p>
               </div>
               <input type="checkbox" checked disabled className="accent-terracotta" />
             </label>
-            <label className="flex items-center justify-between py-2">
+            <label className="flex items-center justify-between py-2 cursor-pointer">
               <div>
                 <p className="text-white text-sm font-medium">{t("analytics")}</p>
                 <p className="text-stone-400 text-xs">{t("analytics_desc")}</p>
@@ -90,13 +98,13 @@ export default function CookieConsent() {
           <div className="flex gap-2">
             <button
               onClick={saveCustom}
-              className="flex-1 bg-terracotta hover:bg-terracotta/90 text-white text-sm font-medium py-2 px-4 rounded-lg transition"
+              className="flex-1 bg-terracotta hover:bg-terracotta/90 text-white text-sm font-medium py-2 px-4 rounded-lg transition cursor-pointer"
             >
               {t("save")}
             </button>
             <button
               onClick={() => setShowCustomize(false)}
-              className="text-stone-400 hover:text-white text-sm py-2 px-4 transition"
+              className="text-stone-400 hover:text-white text-sm py-2 px-4 transition cursor-pointer"
             >
               {t("back")}
             </button>
@@ -107,7 +115,7 @@ export default function CookieConsent() {
   }
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 p-4">
+    <div className="fixed bottom-0 inset-x-0 z-[60] p-4 pb-[env(safe-area-inset-bottom,16px)]">
       <div className="max-w-2xl mx-auto bg-stone-900 border border-stone-700 rounded-xl p-5 shadow-2xl">
         <p className="text-stone-300 text-sm mb-4 leading-relaxed">
           {t("message")}
@@ -115,19 +123,19 @@ export default function CookieConsent() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={acceptAll}
-            className="bg-terracotta hover:bg-terracotta/90 text-white text-sm font-medium py-2 px-5 rounded-lg transition"
+            className="bg-terracotta hover:bg-terracotta/90 text-white text-sm font-medium py-2 px-5 rounded-lg transition cursor-pointer"
           >
             {t("accept_all")}
           </button>
           <button
             onClick={rejectAll}
-            className="bg-stone-700 hover:bg-stone-600 text-white text-sm font-medium py-2 px-5 rounded-lg transition"
+            className="bg-stone-700 hover:bg-stone-600 text-white text-sm font-medium py-2 px-5 rounded-lg transition cursor-pointer"
           >
             {t("reject_all")}
           </button>
           <button
             onClick={() => setShowCustomize(true)}
-            className="text-stone-400 hover:text-white text-sm py-2 px-5 transition"
+            className="text-stone-400 hover:text-white text-sm py-2 px-5 transition cursor-pointer"
           >
             {t("customize")}
           </button>
