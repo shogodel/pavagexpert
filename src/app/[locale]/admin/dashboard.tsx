@@ -55,9 +55,42 @@ interface Contractor {
   email: string;
   status: string;
   createdAt: string;
+  rbqLicense?: string;
+  serviceAreas?: string[];
+  verified?: boolean;
+  bio?: string;
 }
 
-type Tab = "analytics" | "users" | "contractors" | "applications" | "jobs";
+interface BillItem {
+  itemType: string;
+  jobId: string | null;
+  amountCents: number;
+  description: string;
+}
+
+interface Bill {
+  id: string;
+  contractorId: string;
+  periodStart: string;
+  periodEnd: string;
+  totalCents: number;
+  status: string;
+  paidAt: string | null;
+  createdAt: string;
+  items: BillItem[];
+}
+
+interface ClientJob {
+  id: string;
+  title: string;
+  description: string;
+  postalCode: string;
+  budget: string;
+  status: string;
+  createdAt: string;
+}
+
+type Tab = "analytics" | "users" | "contractors" | "applications" | "jobs" | "bills" | "health";
 
 function statusBadgeClass(status: string): string {
   switch (status) {
@@ -96,7 +129,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabFromUrl = searchParams.get("tab") as Tab | null;
-  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications", "jobs"];
+  const validTabs: Tab[] = ["analytics", "users", "contractors", "applications", "jobs", "bills", "health"];
   const [tab, setTabState] = useState<Tab>(tabFromUrl && validTabs.includes(tabFromUrl) ? tabFromUrl : "analytics");
 
   function setTab(newTab: Tab) {
@@ -132,6 +165,21 @@ export default function AdminDashboard() {
 
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: "user" | "contractor" | "job"; id: string; label: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [serviceAreaFilter, setServiceAreaFilter] = useState("");
+
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [reminding, setReminding] = useState(false);
+
+  const [healthData, setHealthData] = useState<{ dbConnected: boolean; migrationCount: number; serverTime: string; nodeVersion: string } | null>(null);
+  const [sendingTest, setSendingTest] = useState(false);
+  const [testEmailMsg, setTestEmailMsg] = useState("");
+
+  const [expandedClient, setExpandedClient] = useState<string | null>(null);
+  const [clientJobs, setClientJobs] = useState<Record<string, ClientJob[]>>({});
+  const [loadingClientJobs, setLoadingClientJobs] = useState<string | null>(null);
+
+  const [appNote, setAppNote] = useState("");
 
   const [showPwChange, setShowPwChange] = useState(false);
   const [pwForm, setPwForm] = useState({ current: "", new: "" });
@@ -143,12 +191,14 @@ export default function AdminDashboard() {
     setFetchError("");
     setActionSuccess("");
     try {
-      const [aRes, uRes, cRes, appRes, jRes] = await Promise.all([
+      const [aRes, uRes, cRes, appRes, jRes, bRes, hRes] = await Promise.all([
         fetch("/api/admin/analytics"),
         fetch("/api/admin/leads"),
         fetch("/api/admin/contractors"),
         fetch("/api/admin/applications"),
         fetch("/api/admin/jobs"),
+        fetch("/api/admin/bills"),
+        fetch("/api/admin/health"),
       ]);
       if (aRes.status === 401 || uRes.status === 401 || cRes.status === 401 || appRes.status === 401 || jRes.status === 401) {
         router.push(`/${locale}/login`);
@@ -160,11 +210,15 @@ export default function AdminDashboard() {
       const cData = ok ? await cRes.json() : null;
       const appData = ok ? await appRes.json() : null;
       const jData = ok ? await jRes.json() : null;
+      const bData = bRes.ok ? await bRes.json() : null;
+      const hData = hRes.ok ? await hRes.json() : null;
       if (aData?.ok) setAnalytics(aData.data);
       if (uData?.ok) setUsers(uData.data);
       if (cData?.ok) setContractors(cData.data);
       if (appData?.ok) setApplications(appData.data);
       if (jData?.ok) setJobs(jData.data);
+      if (bData?.ok) setBills(bData.data);
+      if (hData?.ok) setHealthData(hData.data);
       if (!ok) setFetchError(t("fetch_error"));
     } catch (err) {
       console.error("Dashboard fetch error:", err);
@@ -190,8 +244,9 @@ export default function AdminDashboard() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(addForm),
     });
+    if (res.status === 401) { router.push(`/${locale}/login`); return; }
     const data = await res.json();
-    if (!data.ok) { setError(t("user_error")); return; }
+    if (!data.ok) { setError(data.error || t("user_error")); return; }
     setShowAdd(false);
     setAddForm({ name: "", email: "", phone: "", notes: "" });
     setActionSuccess(t("user_added"));
@@ -267,11 +322,12 @@ export default function AdminDashboard() {
       const res = await fetch("/api/admin/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, action }),
+        body: JSON.stringify({ id, action, notes: appNote }),
       });
       const data = await res.json();
       if (!data.ok) { setContractorActionError(data.error || t("contractor_error")); return; }
       setActionSuccess(action === "approve" ? t("app_approved") : t("app_rejected"));
+      setAppNote("");
       fetchData();
     } catch {
       setContractorActionError(t("network_error"));
@@ -366,10 +422,14 @@ export default function AdminDashboard() {
   }
 
   const filteredContractors = contractors.filter((c) => {
-    if (!searchQuery) return true;
+    if (!searchQuery && !serviceAreaFilter) return true;
     const q = searchQuery.toLowerCase();
-    return c.company.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.username.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q);
+    const matchesSearch = !searchQuery || c.company.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.username.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q) || (c.rbqLicense || "").toLowerCase().includes(q) || (c.serviceAreas || []).some(a => a.toLowerCase().includes(q));
+    const matchesArea = !serviceAreaFilter || (c.serviceAreas || []).some(a => a.toLowerCase().includes(serviceAreaFilter.toLowerCase()));
+    return matchesSearch && matchesArea;
   });
+
+  const allServiceAreas = Array.from(new Set(contractors.flatMap(c => c.serviceAreas || []))).sort();
 
   if (initialLoading) {
     return (
@@ -389,6 +449,8 @@ export default function AdminDashboard() {
           <button onClick={() => setTab("contractors")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "contractors" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_contractors")}</button>
           <button onClick={() => setTab("applications")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "applications" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_applications")}</button>
           <button onClick={() => setTab("jobs")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "jobs" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_jobs")}</button>
+          <button onClick={() => setTab("bills")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "bills" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_bills")}</button>
+          <button onClick={() => setTab("health")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "health" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_health")}</button>
           <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white transition-colors ml-2" title={t("pw_title")}>{t("pw_short")}</button>
           <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-2">{t("logout")}</button>
         </div>
@@ -470,14 +532,15 @@ export default function AdminDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                   <div className="bg-stone-800 rounded-xl p-6">
-                    <h3 className="text-white font-semibold mb-4">{t("by_type")}</h3>
+                    <h3 className="text-white font-semibold mb-4">{t("by_budget")}</h3>
                     <div className="space-y-2">
-                      {Object.entries(analytics.leadsByType).map(([type, count]) => {
+                      {Object.entries(analytics.leadsByType).map(([range, count]) => {
                         const max = Math.max(...Object.values(analytics.leadsByType));
+                        const label = range === "unknown" ? t("budget_unknown") : range === "small" ? t("budget_small") : range === "medium" ? t("budget_medium") : t("budget_large");
                         return (
-                          <div key={type}>
+                          <div key={range}>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-stone-400">{type}</span>
+                              <span className="text-stone-400">{label}</span>
                               <span className="text-white">{count}</span>
                             </div>
                             <div className="h-2 bg-stone-700 rounded-full overflow-hidden">
@@ -559,28 +622,69 @@ export default function AdminDashboard() {
 
             <div className="space-y-3">
               {users.map((user) => (
-                <div key={user.id} className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <h4 className="text-white font-semibold truncate">{user.name}</h4>
-                    <p className="text-sm text-stone-400 mt-0.5">{user.email}</p>
-                    {user.phone && <p className="text-sm text-stone-500">{user.phone}</p>}
-                    {user.notes && <p className="text-sm text-stone-500 mt-1">{user.notes}</p>}
-                    <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(user.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
+                <div key={user.id}>
+                  <div className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                      <button
+                        onClick={() => {
+                          if (expandedClient === user.id) { setExpandedClient(null); return; }
+                          setExpandedClient(user.id);
+                          setLoadingClientJobs(user.id);
+                          fetch(`/api/admin/client-jobs?clientId=${user.id}`).then(r => r.json()).then(d => {
+                            if (d.ok) setClientJobs(p => ({ ...p, [user.id]: d.data }));
+                          }).catch(() => {}).finally(() => setLoadingClientJobs(null));
+                        }}
+                        className="text-white font-semibold truncate hover:text-terracotta transition-colors text-left w-full"
+                      >
+                        {user.name} {expandedClient === user.id ? "▲" : "▼"}
+                      </button>
+                      <p className="text-sm text-stone-400 mt-0.5">{user.email}</p>
+                      {user.phone && <p className="text-sm text-stone-500">{user.phone}</p>}
+                      {user.notes && <p className="text-sm text-stone-500 mt-1">{user.notes}</p>}
+                      <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(user.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(user.status)}`}>
+                        {user.status === "active" ? t("status_active") : user.status === "paused" ? t("status_paused") : t("status_deleted")}
+                      </span>
+                      {user.status === "active" && (
+                        <button onClick={() => handleStatus(user.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
+                      )}
+                      {user.status === "paused" && (
+                        <button onClick={() => handleStatus(user.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
+                      )}
+                      {user.status !== "deleted" && (
+                        <button onClick={() => confirmDeleteUser(user.id, user.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(user.status)}`}>
-                      {user.status === "active" ? t("status_active") : user.status === "paused" ? t("status_paused") : t("status_deleted")}
-                    </span>
-                    {user.status === "active" && (
-                      <button onClick={() => handleStatus(user.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
-                    )}
-                    {user.status === "paused" && (
-                      <button onClick={() => handleStatus(user.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
-                    )}
-                    {user.status !== "deleted" && (
-                      <button onClick={() => confirmDeleteUser(user.id, user.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
-                    )}
-                  </div>
+                  {expandedClient === user.id && (
+                    <div className="bg-stone-850 rounded-b-xl px-5 pb-4 pt-2 -mt-3 border-t border-stone-700/50">
+                      <h5 className="text-sm font-medium text-stone-400 mb-2">{t("tab_job_history")}</h5>
+                      {loadingClientJobs === user.id ? (
+                        <p className="text-xs text-stone-600">{t("loading")}</p>
+                      ) : (clientJobs[user.id]?.length ?? 0) === 0 ? (
+                        <p className="text-xs text-stone-600">{t("no_jobs")}</p>
+                      ) : (
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {clientJobs[user.id]?.map((j) => (
+                            <div key={j.id} className="bg-stone-700/50 rounded-lg p-3 text-sm">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-white font-medium truncate">{j.title}</span>
+                                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${jobStatusBadgeClass(j.status)}`}>{t(`job_status_${j.status}`)}</span>
+                              </div>
+                              {j.description && <p className="text-stone-400 text-xs line-clamp-2">{j.description}</p>}
+                              <div className="flex gap-3 mt-1 text-xs text-stone-500">
+                                {j.budget && <span className="text-green-400">{j.budget}</span>}
+                                {j.postalCode && <span>{j.postalCode}</span>}
+                                <span>{new Date(j.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
               {users.length === 0 && (
@@ -606,6 +710,16 @@ export default function AdminDashboard() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 min-w-[200px] px-4 py-2 rounded-lg bg-stone-800 border border-stone-600 text-white placeholder-stone-500 outline-none text-sm"
               />
+              <select
+                value={serviceAreaFilter}
+                onChange={(e) => setServiceAreaFilter(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-stone-800 border border-stone-600 text-white text-sm outline-none"
+              >
+                <option value="">{t("all_areas")}</option>
+                {allServiceAreas.map((a) => (
+                  <option key={a} value={a}>{a}</option>
+                ))}
+              </select>
               <button onClick={() => setShowAddContractor(!showAddContractor)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shrink-0">
                 {showAddContractor ? t("cancel") : t("add")}
               </button>
@@ -643,15 +757,36 @@ export default function AdminDashboard() {
               {filteredContractors.map((c) => (
                 <div key={c.id} className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <h4 className="text-white font-semibold truncate">{c.company}</h4>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-white font-semibold truncate">{c.company}</h4>
+                      {c.verified !== undefined && (
+                        <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${c.verified ? "bg-green-900 text-green-300" : "bg-stone-700 text-stone-400"}`}>
+                          {c.verified ? t("verified") : t("not_verified")}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-stone-400 mt-0.5">@{c.username}</p>
                     <p className="text-sm text-stone-500">{c.email} | {c.phone}</p>
+                    {(c.serviceAreas?.length ?? 0) > 0 && (
+                      <p className="text-xs text-stone-500 mt-1">{t("contractor_service_areas")} {c.serviceAreas!.join(", ")}</p>
+                    )}
+                    {c.rbqLicense && (
+                      <p className="text-xs text-stone-500">{t("contractor_rbq")} {c.rbqLicense}</p>
+                    )}
+                    {c.bio && (
+                      <p className="text-xs text-stone-500 mt-1 italic line-clamp-2">{c.bio}</p>
+                    )}
                     <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(c.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(c.status)}`}>
                       {t(statusLabelKey(c.status))}
                     </span>
+                    {c.status === "active" && c.verified !== undefined && (
+                      c.verified
+                        ? <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "DELETE" }); fetchData(); }} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("contractor_unverify")}</button>
+                        : <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "POST" }); fetchData(); }} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("contractor_verify")}</button>
+                    )}
                     {c.status === "active" && (
                       <button onClick={() => handleContractorStatus(c.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
                     )}
@@ -668,7 +803,7 @@ export default function AdminDashboard() {
                 </div>
               ))}
               {filteredContractors.length === 0 && (
-                <p className="text-center text-stone-500 py-8">{searchQuery ? t("search_empty") : t("contractors_empty")}</p>
+                <p className="text-center text-stone-500 py-8">{searchQuery || serviceAreaFilter ? t("search_empty") : t("contractors_empty")}</p>
               )}
             </div>
           </>
@@ -792,6 +927,18 @@ export default function AdminDashboard() {
               <p className="text-center text-stone-500 py-8">{t("applications_empty")}</p>
             ) : (
               <div className="space-y-3">
+                <div className="bg-stone-800 rounded-xl p-4 flex items-center gap-3">
+                  <textarea
+                    placeholder={t("notes_placeholder") + " (included in email)"}
+                    value={appNote}
+                    onChange={(e) => setAppNote(e.target.value)}
+                    rows={1}
+                    className="flex-1 px-3 py-1.5 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 text-xs outline-none resize-none"
+                  />
+                  {appNote && (
+                    <button onClick={() => setAppNote("")} className="text-xs text-stone-500 hover:text-white shrink-0">{t("reset_cancel")}</button>
+                  )}
+                </div>
                 {applications.map((app) => (
                   <div key={app.id} className="bg-stone-800 rounded-xl p-5">
                     <div className="flex items-start justify-between gap-4">
@@ -824,6 +971,170 @@ export default function AdminDashboard() {
                 ))}
               </div>
             )}
+          </>
+        )}
+
+        {tab === "bills" && (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white">{t("bills_title")}</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    setGenerating(true);
+                    try {
+                      const res = await fetch("/api/admin/bills/generate", { method: "POST" });
+                      const d = await res.json();
+                      if (d.ok) { setActionSuccess(t("bills_generated")); fetchData(); }
+                    } catch { setFetchError(t("network_error")); }
+                    setGenerating(false);
+                  }}
+                  disabled={generating}
+                  className="bg-terracotta hover:bg-terracotta-dark text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {generating ? t("bills_generating") : t("bills_generate")}
+                </button>
+                <button
+                  onClick={async () => {
+                    setReminding(true);
+                    try {
+                      const res = await fetch("/api/admin/bills/remind", { method: "POST" });
+                      const d = await res.json();
+                      if (d.ok) { setActionSuccess(t("bills_reminded")); fetchData(); }
+                    } catch { setFetchError(t("network_error")); }
+                    setReminding(false);
+                  }}
+                  disabled={reminding}
+                  className="bg-amber-700 hover:bg-amber-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {reminding ? t("bills_reminding") : t("bills_remind")}
+                </button>
+              </div>
+            </div>
+
+            {bills.length === 0 ? (
+              <p className="text-center text-stone-500 py-8">{t("bills_empty")}</p>
+            ) : (
+              <div className="space-y-3">
+                {bills.map((bill) => {
+                  const contractor = contractors.find(c => c.id === bill.contractorId);
+                  const total$ = `$${(bill.totalCents / 100).toFixed(2)}`;
+                  const startDate = new Date(bill.periodStart).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA");
+                  const endDate = new Date(bill.periodEnd).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA");
+                  return (
+                    <div key={bill.id} className="bg-stone-800 rounded-xl p-5">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="text-white font-semibold">{contractor?.company || bill.contractorId.slice(0, 8)}</h4>
+                            {bill.paidAt && <span className="text-xs text-green-400">{t("bills_paid_at")} {new Date(bill.paidAt).toLocaleDateString()}</span>}
+                          </div>
+                          <p className="text-sm text-stone-400">{t("bills_period")} {startDate} — {endDate}</p>
+                          <p className="text-lg font-bold text-white mt-1">{total$}</p>
+                          {bill.items.length > 0 && (
+                            <div className="mt-2 space-y-1">
+                              {bill.items.map((item, i) => (
+                                <p key={i} className="text-xs text-stone-500">
+                                  {item.itemType === "monthly_fee" ? t("bills_monthly_fee") : t("bills_job_fee")}
+                                  : ${(item.amountCents / 100).toFixed(2)}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${bill.status === "paid" ? "bg-green-900 text-green-300" : bill.status === "overdue" ? "bg-red-900 text-red-300" : bill.status === "sent" ? "bg-blue-900 text-blue-300" : "bg-amber-900 text-amber-300"}`}>
+                            {t(`bills_status_${bill.status}`)}
+                          </span>
+                          {bill.status !== "paid" && (
+                            <select
+                              value={bill.status}
+                              onChange={async (e) => {
+                                const newStatus = e.target.value;
+                                if (newStatus === "paid" || newStatus === "overdue") {
+                                  await fetch(`/api/admin/bills/${bill.id}`, {
+                                    method: "PATCH",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ status: newStatus }),
+                                  });
+                                  fetchData();
+                                }
+                              }}
+                              className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1 outline-none"
+                            >
+                              <option value={bill.status}>{t(`bills_status_${bill.status}`)}</option>
+                              <option value="paid">{t("bills_confirm_paid")}</option>
+                              {bill.status !== "overdue" && <option value="overdue">{t("bills_confirm_overdue")}</option>}
+                            </select>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
+        {tab === "health" && (
+          <>
+            <h2 className="text-lg font-semibold text-white mb-6">{t("health_title")}</h2>
+
+            {testEmailMsg && (
+              <div className={`px-4 py-3 rounded-lg mb-6 text-sm text-center ${testEmailMsg === t("health_test_sent") ? "bg-green-900/50 border border-green-700 text-green-300" : "bg-red-900/50 border border-red-700 text-red-300"}`}>
+                {testEmailMsg}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">{t("health_db")}</h3>
+                {healthData ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${healthData.dbConnected ? "bg-green-500" : "bg-red-500"}`} />
+                      <span className="text-sm text-stone-400">{healthData.dbConnected ? t("health_db_ok") : t("health_db_error")}</span>
+                    </div>
+                    <p className="text-sm text-stone-500">{t("health_migrations")}: {healthData.migrationCount}</p>
+                    <p className="text-sm text-stone-500">{t("health_migration_ok")}</p>
+                  </div>
+                ) : (
+                  <p className="text-sm text-stone-500">{t("loading")}</p>
+                )}
+              </div>
+
+              <div className="bg-stone-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-4">{t("health_server")}</h3>
+                {healthData && (
+                  <div className="space-y-3">
+                    <p className="text-sm text-stone-500">{t("health_server_time")}: {new Date(healthData.serverTime).toLocaleString()}</p>
+                    <p className="text-sm text-stone-500">{t("health_version")}: {healthData.nodeVersion}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                onClick={async () => {
+                  setSendingTest(true);
+                  setTestEmailMsg("");
+                  try {
+                    const res = await fetch("/api/admin/test-email", { method: "POST" });
+                    const d = await res.json();
+                    setTestEmailMsg(d.ok ? t("health_test_sent") : t("health_test_failed"));
+                  } catch {
+                    setTestEmailMsg(t("health_test_failed"));
+                  }
+                  setSendingTest(false);
+                }}
+                disabled={sendingTest}
+                className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {sendingTest ? t("loading") : t("health_test_email")}
+              </button>
+            </div>
           </>
         )}
       </div>

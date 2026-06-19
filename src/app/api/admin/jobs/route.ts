@@ -10,7 +10,9 @@ async function checkAdmin(req: NextRequest) {
   return null;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await checkAdmin(req);
+  if (auth) return auth;
   const jobs = await getJobs();
   return NextResponse.json({ ok: true, data: jobs });
 }
