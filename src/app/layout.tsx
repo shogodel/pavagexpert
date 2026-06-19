@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Pavagexpert",
   description: "Spécialiste en pavé uni à Montréal",
   metadataBase: new URL("https://pavagexpert.space"),
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
       { url: "/images/favicon.svg", type: "image/svg+xml" },

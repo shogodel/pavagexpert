@@ -229,7 +229,7 @@ export default function AdminDashboard() {
     }
   }, [router, locale, t]);
 
-  useEffect(() => { fetchData(true); }, [fetchData]);
+  useEffect(() => { fetchData(true); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
 
   async function handleLogout() {
     await fetch("/api/logout", { method: "POST" });
@@ -439,24 +439,31 @@ export default function AdminDashboard() {
     );
   }
 
+  const tabList = ["analytics","users","contractors","applications","jobs","bills","health"] as const;
+
   return (
-    <div className="min-h-screen bg-stone-900">
-      <header className="bg-stone-800 border-b border-stone-700 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-white">{t("title")}</h1>
-        <div className="flex items-center gap-4">
-          <button onClick={() => setTab("analytics")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "analytics" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_analytics")}</button>
-          <button onClick={() => setTab("users")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "users" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_users")}</button>
-          <button onClick={() => setTab("contractors")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "contractors" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_contractors")}</button>
-          <button onClick={() => setTab("applications")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "applications" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_applications")}</button>
-          <button onClick={() => setTab("jobs")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "jobs" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_jobs")}</button>
-          <button onClick={() => setTab("bills")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "bills" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_bills")}</button>
-          <button onClick={() => setTab("health")} className={`text-sm px-3 py-1.5 rounded transition-colors ${tab === "health" ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t("tab_health")}</button>
-          <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white transition-colors ml-2" title={t("pw_title")}>{t("pw_short")}</button>
-          <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white transition-colors ml-2">{t("logout")}</button>
+    <div className="min-h-screen bg-stone-900 pb-safe">
+      <style>{`.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}`}</style>
+      <header className="bg-stone-800 border-b border-stone-700">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
+          <h1 className="text-lg sm:text-xl font-bold text-white">{t("title")}</h1>
+          <div className="flex items-center gap-2 sm:hidden">
+            <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]" title={t("pw_title")}>{t("pw_short")}</button>
+            <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]">{t("logout")}</button>
+          </div>
+        </div>
+        <div className="flex gap-1 px-4 sm:px-6 pb-2 overflow-x-auto hide-scrollbar">
+          {tabList.map((tKey) => (
+            <button key={tKey} onClick={() => setTab(tKey)} className={`whitespace-nowrap text-sm px-3 py-1.5 min-h-[44px] rounded transition-colors shrink-0 ${tab === tKey ? "bg-terracotta text-white" : "text-stone-400 hover:text-white"}`}>{t(`tab_${tKey}`)}</button>
+          ))}
+          <div className="hidden sm:flex items-center gap-2 ml-auto pl-2">
+            <button onClick={() => setShowPwChange(true)} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]" title={t("pw_title")}>{t("pw_short")}</button>
+            <button onClick={handleLogout} className="text-sm text-stone-500 hover:text-white px-2 py-1 min-h-[44px]">{t("logout")}</button>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {refreshing && (
           <div className="flex justify-center mb-4">
             <span className="text-stone-500 text-xs animate-pulse">{t("refreshing")}</span>
@@ -477,8 +484,8 @@ export default function AdminDashboard() {
 
         {/* Delete confirmation modal */}
         {deleteConfirm && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div className="bg-stone-800 rounded-xl p-6 w-full max-w-sm mx-4">
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-stone-800 rounded-xl p-5 sm:p-6 w-full max-w-sm">
               <h3 className="text-white font-semibold mb-2">{t("delete_title")}</h3>
               <p className="text-stone-400 text-sm mb-4">{t("delete_confirm")} <strong className="text-white">{deleteConfirm.label}</strong>?</p>
               <div className="flex gap-3">
@@ -491,8 +498,8 @@ export default function AdminDashboard() {
 
         {/* Password change modal */}
         {showPwChange && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div className="bg-stone-800 rounded-xl p-6 w-full max-w-md mx-4">
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-stone-800 rounded-xl p-5 sm:p-6 w-full max-w-md">
               <h3 className="text-white font-semibold mb-4">{t("pw_title")}</h3>
               <form onSubmit={handleChangePw} className="space-y-4">
                 <div>
@@ -515,7 +522,7 @@ export default function AdminDashboard() {
           <>
             {analytics && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <div className="bg-stone-800 rounded-xl p-6">
                     <p className="text-stone-400 text-sm">{t("submissions")}</p>
                     <p className="text-3xl font-bold text-white mt-1">{analytics.totalLeads}</p>
@@ -530,7 +537,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                   <div className="bg-stone-800 rounded-xl p-6">
                     <h3 className="text-white font-semibold mb-4">{t("by_budget")}</h3>
                     <div className="space-y-2">
@@ -573,7 +580,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-stone-800 rounded-xl p-6 mb-8">
+                <div className="bg-stone-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
                   <h3 className="text-white font-semibold mb-4">{t("by_day")}</h3>
                   <div className="flex items-end gap-1 h-32">
                     {analytics.leadsPerDay.map((day) => {
@@ -602,7 +609,7 @@ export default function AdminDashboard() {
           <>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-white">{t("users_title")}</h2>
-              <button onClick={() => setShowAdd(!showAdd)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+              <button onClick={() => setShowAdd(!showAdd)} className="bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-4 py-2 min-h-[36px] rounded-lg transition-colors">
                 {showAdd ? t("cancel") : t("add")}
               </button>
             </div>
@@ -623,7 +630,7 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               {users.map((user) => (
                 <div key={user.id}>
-                  <div className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
+                  <div className="bg-stone-800 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
                     <div className="min-w-0 flex-1">
                       <button
                         onClick={() => {
@@ -643,18 +650,18 @@ export default function AdminDashboard() {
                       {user.notes && <p className="text-sm text-stone-500 mt-1">{user.notes}</p>}
                       <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(user.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 shrink-0">
                       <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(user.status)}`}>
                         {user.status === "active" ? t("status_active") : user.status === "paused" ? t("status_paused") : t("status_deleted")}
                       </span>
                       {user.status === "active" && (
-                        <button onClick={() => handleStatus(user.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
+                        <button onClick={() => handleStatus(user.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 px-2 py-1 min-h-[36px] transition-colors">{t("pause_btn")}</button>
                       )}
                       {user.status === "paused" && (
-                        <button onClick={() => handleStatus(user.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
+                        <button onClick={() => handleStatus(user.id, "active")} className="text-xs text-stone-500 hover:text-green-400 px-2 py-1 min-h-[36px] transition-colors">{t("activate_btn")}</button>
                       )}
                       {user.status !== "deleted" && (
-                        <button onClick={() => confirmDeleteUser(user.id, user.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                        <button onClick={() => confirmDeleteUser(user.id, user.name)} className="text-xs text-stone-500 hover:text-red-400 px-2 py-1 min-h-[36px] transition-colors">{t("delete_btn")}</button>
                       )}
                     </div>
                   </div>
@@ -741,8 +748,8 @@ export default function AdminDashboard() {
 
             {/* Password reset modal */}
             {resetPw && (
-              <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-                <div className="bg-stone-800 rounded-xl p-6 w-full max-w-md mx-4">
+              <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+                <div className="bg-stone-800 rounded-xl p-5 sm:p-6 w-full max-w-md">
                   <h3 className="text-white font-semibold mb-4">{t("reset_title")} - {resetPw.username}</h3>
                   <input placeholder={t("reset_placeholder")} type="password" value={resetPwValue} onChange={(e) => setResetPwValue(e.target.value)} minLength={6} className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 text-white placeholder-stone-500 outline-none mb-4" />
                   <div className="flex gap-3">
@@ -755,9 +762,9 @@ export default function AdminDashboard() {
 
             <div className="space-y-3">
               {filteredContractors.map((c) => (
-                <div key={c.id} className="bg-stone-800 rounded-xl p-5 flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
+                <div key={c.id} className="bg-stone-800 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h4 className="text-white font-semibold truncate">{c.company}</h4>
                       {c.verified !== undefined && (
                         <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${c.verified ? "bg-green-900 text-green-300" : "bg-stone-700 text-stone-400"}`}>
@@ -778,26 +785,26 @@ export default function AdminDashboard() {
                     )}
                     <p className="text-xs text-stone-600 mt-2">{t("created_prefix")} {new Date(c.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</p>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeClass(c.status)}`}>
                       {t(statusLabelKey(c.status))}
                     </span>
                     {c.status === "active" && c.verified !== undefined && (
                       c.verified
-                        ? <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "DELETE" }); fetchData(); }} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("contractor_unverify")}</button>
-                        : <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "POST" }); fetchData(); }} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("contractor_verify")}</button>
+                        ? <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "DELETE" }); fetchData(); }} className="text-xs text-stone-500 hover:text-amber-400 px-2 py-1 min-h-[36px] transition-colors">{t("contractor_unverify")}</button>
+                        : <button onClick={async () => { await fetch(`/api/admin/contractors/${c.id}/verify`, { method: "POST" }); fetchData(); }} className="text-xs text-stone-500 hover:text-green-400 px-2 py-1 min-h-[36px] transition-colors">{t("contractor_verify")}</button>
                     )}
                     {c.status === "active" && (
-                      <button onClick={() => handleContractorStatus(c.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 transition-colors">{t("pause_btn")}</button>
+                      <button onClick={() => handleContractorStatus(c.id, "paused")} className="text-xs text-stone-500 hover:text-amber-400 px-2 py-1 min-h-[36px] transition-colors">{t("pause_btn")}</button>
                     )}
                     {c.status === "paused" && (
-                      <button onClick={() => handleContractorStatus(c.id, "active")} className="text-xs text-stone-500 hover:text-green-400 transition-colors">{t("activate_btn")}</button>
+                      <button onClick={() => handleContractorStatus(c.id, "active")} className="text-xs text-stone-500 hover:text-green-400 px-2 py-1 min-h-[36px] transition-colors">{t("activate_btn")}</button>
                     )}
                     {c.status !== "deleted" && c.status !== "rejected" && (
-                      <button onClick={() => { setResetPw({ id: c.id, username: c.username }); setResetPwValue(""); }} className="text-xs text-stone-500 hover:text-blue-400 transition-colors">{t("reset_btn")}</button>
+                      <button onClick={() => { setResetPw({ id: c.id, username: c.username }); setResetPwValue(""); }} className="text-xs text-stone-500 hover:text-blue-400 px-2 py-1 min-h-[36px] transition-colors">{t("reset_btn")}</button>
                     )}
                     {c.status !== "deleted" && (
-                      <button onClick={() => confirmDeleteContractor(c.id, c.company)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                      <button onClick={() => confirmDeleteContractor(c.id, c.company)} className="text-xs text-stone-500 hover:text-red-400 px-2 py-1 min-h-[36px] transition-colors">{t("delete_btn")}</button>
                     )}
                   </div>
                 </div>
@@ -826,8 +833,8 @@ export default function AdminDashboard() {
 
             {/* Add/Edit job modal */}
             {showAddJob && (
-              <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-                <div className="bg-stone-800 rounded-xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+                <div className="bg-stone-800 rounded-xl p-5 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
                   <h3 className="text-white font-semibold mb-4">{editJob ? t("job_edit_title") : t("job_add_title")}</h3>
                   <form onSubmit={handleSaveJob} className="space-y-4">
                     <div>
@@ -869,10 +876,10 @@ export default function AdminDashboard() {
 
             <div className="space-y-3">
               {jobs.map((job) => (
-                <div key={job.id} className="bg-stone-800 rounded-xl p-5">
-                  <div className="flex items-start justify-between gap-4">
+                <div key={job.id} className="bg-stone-800 rounded-xl p-4 sm:p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <h4 className="text-white font-semibold truncate">{job.name}</h4>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${jobStatusBadgeClass(job.status)}`}>
                           {t(`job_status_${job.status}`)}
@@ -887,12 +894,12 @@ export default function AdminDashboard() {
                         <span>{t("created_prefix")} {new Date(job.createdAt).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA")}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 shrink-0">
                       {job.status !== "completed" && (
                         <select
                           value={job.status}
                           onChange={(e) => handleJobStatus(job.id, e.target.value)}
-                          className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1 outline-none"
+                          className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1.5 min-h-[36px] outline-none"
                         >
                           <option value="new">{t("job_status_new")}</option>
                           <option value="published">{t("job_status_published")}</option>
@@ -900,8 +907,8 @@ export default function AdminDashboard() {
                           <option value="completed">{t("job_status_completed")}</option>
                         </select>
                       )}
-                      <button onClick={() => openEditJob(job)} className="text-xs text-stone-500 hover:text-blue-400 transition-colors">{t("job_edit")}</button>
-                      <button onClick={() => confirmDeleteJob(job.id, job.name)} className="text-xs text-stone-500 hover:text-red-400 transition-colors">{t("delete_btn")}</button>
+                      <button onClick={() => openEditJob(job)} className="text-xs text-stone-500 hover:text-blue-400 px-2 py-1 min-h-[36px] transition-colors">{t("job_edit")}</button>
+                      <button onClick={() => confirmDeleteJob(job.id, job.name)} className="text-xs text-stone-500 hover:text-red-400 px-2 py-1 min-h-[36px] transition-colors">{t("delete_btn")}</button>
                     </div>
                   </div>
                 </div>
@@ -940,9 +947,9 @@ export default function AdminDashboard() {
                   )}
                 </div>
                 {applications.map((app) => (
-                  <div key={app.id} className="bg-stone-800 rounded-xl p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
+                  <div key={app.id} className="bg-stone-800 rounded-xl p-4 sm:p-5">
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                      <div className="min-w-0 flex-1">
                         <h4 className="text-white font-semibold truncate">{app.company}</h4>
                         <p className="text-sm text-stone-400 mt-0.5">{app.email} | {app.phone}</p>
                         <p className="text-sm text-stone-500">{t("app_rbq")} {app.rbqLicense}</p>
@@ -955,13 +962,13 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => handleApplicationAction(app.id, "approve")}
-                          className="bg-green-700 hover:bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors"
+                          className="bg-green-700 hover:bg-green-600 text-white text-xs font-semibold px-4 py-2 min-h-[36px] rounded-lg transition-colors"
                         >
                           {t("app_approve")}
                         </button>
                         <button
                           onClick={() => handleApplicationAction(app.id, "reject")}
-                          className="bg-red-700 hover:bg-red-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors"
+                          className="bg-red-700 hover:bg-red-600 text-white text-xs font-semibold px-4 py-2 min-h-[36px] rounded-lg transition-colors"
                         >
                           {t("app_reject")}
                         </button>
@@ -976,7 +983,7 @@ export default function AdminDashboard() {
 
         {tab === "bills" && (
           <>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h2 className="text-lg font-semibold text-white">{t("bills_title")}</h2>
               <div className="flex gap-2">
                 <button
@@ -990,7 +997,7 @@ export default function AdminDashboard() {
                     setGenerating(false);
                   }}
                   disabled={generating}
-                  className="bg-terracotta hover:bg-terracotta-dark text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                  className="bg-terracotta hover:bg-terracotta-dark text-white text-xs font-semibold px-4 py-2 min-h-[36px] rounded-lg transition-colors disabled:opacity-50"
                 >
                   {generating ? t("bills_generating") : t("bills_generate")}
                 </button>
@@ -1005,7 +1012,7 @@ export default function AdminDashboard() {
                     setReminding(false);
                   }}
                   disabled={reminding}
-                  className="bg-amber-700 hover:bg-amber-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                  className="bg-amber-700 hover:bg-amber-600 text-white text-xs font-semibold px-4 py-2 min-h-[36px] rounded-lg transition-colors disabled:opacity-50"
                 >
                   {reminding ? t("bills_reminding") : t("bills_remind")}
                 </button>
@@ -1022,10 +1029,10 @@ export default function AdminDashboard() {
                   const startDate = new Date(bill.periodStart).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA");
                   const endDate = new Date(bill.periodEnd).toLocaleDateString(locale === "en" ? "en-CA" : "fr-CA");
                   return (
-                    <div key={bill.id} className="bg-stone-800 rounded-xl p-5">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
+                    <div key={bill.id} className="bg-stone-800 rounded-xl p-4 sm:p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h4 className="text-white font-semibold">{contractor?.company || bill.contractorId.slice(0, 8)}</h4>
                             {bill.paidAt && <span className="text-xs text-green-400">{t("bills_paid_at")} {new Date(bill.paidAt).toLocaleDateString()}</span>}
                           </div>
@@ -1042,7 +1049,7 @@ export default function AdminDashboard() {
                             </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex flex-wrap items-center gap-2 shrink-0">
                           <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${bill.status === "paid" ? "bg-green-900 text-green-300" : bill.status === "overdue" ? "bg-red-900 text-red-300" : bill.status === "sent" ? "bg-blue-900 text-blue-300" : "bg-amber-900 text-amber-300"}`}>
                             {t(`bills_status_${bill.status}`)}
                           </span>
@@ -1060,7 +1067,7 @@ export default function AdminDashboard() {
                                   fetchData();
                                 }
                               }}
-                              className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1 outline-none"
+                              className="text-xs bg-stone-700 border border-stone-600 text-white rounded px-2 py-1.5 min-h-[36px] outline-none"
                             >
                               <option value={bill.status}>{t(`bills_status_${bill.status}`)}</option>
                               <option value="paid">{t("bills_confirm_paid")}</option>
@@ -1087,7 +1094,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="bg-stone-800 rounded-xl p-6">
                 <h3 className="text-white font-semibold mb-4">{t("health_db")}</h3>
                 {healthData ? (
