@@ -122,6 +122,7 @@
     "postal": "Postal code:",
     "filter_postal": "Filter by postal code...",
     "filter_status_all": "All statuses",
+    "sort_score": "Best match",
     "sort_newest": "Newest first",
     "sort_oldest": "Oldest first",
     "sort_budget_high": "Budget: high to low",

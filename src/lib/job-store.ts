@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { query, transaction } from "./db";
+import { computeLeadScore } from "./lead-scoring";
 
 export type JobStatus = "new" | "in_progress" | "completed";
 
@@ -26,6 +27,7 @@ export interface Job {
   createdAt: string;
   photos: string[];
   leadSource: LeadSource | null;
+  score: number;
 }
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
@@ -54,6 +56,7 @@ interface JobRow {
   email: string;
   phone: string;
   lead_source: Record<string, string> | null;
+  score: number;
 }
 
 interface PhotoRow {
@@ -73,6 +76,7 @@ function mapJob(row: JobRow, photos: string[] = []): Job {
     createdAt: row.created_at.toISOString(),
     photos,
     leadSource: row.lead_source as LeadSource | null,
+    score: row.score ?? 0,
   };
 }
 
@@ -81,7 +85,26 @@ export async function getJobs(): Promise<Job[]> {
     `SELECT j.*, c.name, c.email, c.phone
      FROM jobs j
      JOIN clients c ON c.id = j.client_id
-     ORDER BY j.created_at DESC`
+     WHERE j.verified = true
+     ORDER BY j.score DESC, j.created_at DESC`
+  );
+  const jobs: Job[] = [];
+  for (const row of rows) {
+    const photos = await query<PhotoRow>(
+      "SELECT filename FROM job_photos WHERE job_id = $1 ORDER BY created_at",
+      [row.id]
+    );
+    jobs.push(mapJob(row, photos.map((p) => p.filename)));
+  }
+  return jobs;
+}
+
+export async function getAllJobs(): Promise<Job[]> {
+  const rows = await query<JobRow>(
+    `SELECT j.*, c.name, c.email, c.phone
+     FROM jobs j
+     JOIN clients c ON c.id = j.client_id
+     ORDER BY j.score DESC, j.created_at DESC`
   );
   const jobs: Job[] = [];
   for (const row of rows) {
@@ -187,6 +210,15 @@ export async function addJobWithMeta(
     ipAddress?: string; browserFingerprint?: string; flagReason?: string;
   } & { photos?: string[] }
 ): Promise<Job> {
+  const photoFiles = input.photos || [];
+  const score = computeLeadScore({
+    budget: input.budget,
+    photoCount: photoFiles.length,
+    description: input.description,
+    phone: input.phone,
+    verified: false,
+  });
+
   return transaction(async (q) => {
     const clientRows = await q<{ id: string }>(
       "INSERT INTO clients (name, email, phone) VALUES ($1, $2, $3) RETURNING id",
@@ -195,19 +227,19 @@ export async function addJobWithMeta(
     const clientId = clientRows[0].id;
 
     const jobRows = await q<JobRow>(
-      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status, lead_source, ip_address, browser_fingerprint, flag_reason, verified)
-       VALUES ($1, $2, $3, $4, $5, 'new', $6::jsonb, $7, $8, $9, false)
+      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status, lead_source, ip_address, browser_fingerprint, flag_reason, verified, score)
+       VALUES ($1, $2, $3, $4, $5, 'new', $6::jsonb, $7, $8, $9, false, $10)
        RETURNING *`,
       [
         clientId, `Projet de ${input.name}`, input.description,
         input.postalCode, input.budget,
         input.leadSource ? JSON.stringify(input.leadSource) : null,
         input.ipAddress || "", input.browserFingerprint || "", input.flagReason || "",
+        score,
       ]
     );
     const job = jobRows[0];
 
-    const photoFiles = input.photos || [];
     for (const filename of photoFiles) {
       await q("INSERT INTO job_photos (job_id, filename) VALUES ($1, $2)", [job.id, filename]);
     }
@@ -218,7 +250,8 @@ export async function addJobWithMeta(
 
 export async function verifyJob(jobId: string): Promise<boolean> {
   const rows = await query<{ id: string }>(
-    "UPDATE jobs SET verified = true, updated_at = now() WHERE id = $1 AND verified = false RETURNING id",
+    `UPDATE jobs SET verified = true, score = score + 10, updated_at = now()
+     WHERE id = $1 AND verified = false RETURNING id`,
     [jobId]
   );
   return rows.length > 0;

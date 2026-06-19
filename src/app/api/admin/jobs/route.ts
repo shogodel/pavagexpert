@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { getJobs, addJob, updateJobStatus, updateJob, deleteJob } from "@/lib/job-store";
+import { getAllJobs, addJob, updateJobStatus, updateJob, deleteJob } from "@/lib/job-store";
 
 async function checkAdmin(req: NextRequest) {
   const token = req.cookies.get("admin_token")?.value;
@@ -13,7 +13,7 @@ async function checkAdmin(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const auth = await checkAdmin(req);
   if (auth) return auth;
-  const jobs = await getJobs();
+  const jobs = await getAllJobs();
   return NextResponse.json({ ok: true, data: jobs });
 }
 

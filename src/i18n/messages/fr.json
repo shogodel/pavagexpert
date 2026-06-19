@@ -122,6 +122,7 @@
     "postal": "Code postal :",
     "filter_postal": "Filtrer par code postal...",
     "filter_status_all": "Tous les statuts",
+    "sort_score": "Meilleurs prospects",
     "sort_newest": "Plus récents",
     "sort_oldest": "Plus anciens",
     "sort_budget_high": "Budget : élevé à faible",

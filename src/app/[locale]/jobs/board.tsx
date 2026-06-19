@@ -6,7 +6,7 @@ import { useTranslations, useLocale } from "@/lib/use-translations";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Job } from "@/lib/job-store";
 
-type SortKey = "newest" | "oldest" | "budget_high" | "budget_low";
+type SortKey = "score" | "newest" | "oldest" | "budget_high" | "budget_low";
 
 function parseBudget(budget: string): number {
   return parseFloat(budget.replace(/[^0-9.,]/g, "").replace(",", ".")) || 0;
@@ -44,6 +44,13 @@ function borderClass(status: string): string {
   }
 }
 
+function scoreBadge(score: number): { label: string; class: string } {
+  if (score >= 80) return { label: "Excellent", class: "bg-emerald-100 text-emerald-700" };
+  if (score >= 60) return { label: "Élevé", class: "bg-blue-100 text-blue-700" };
+  if (score >= 40) return { label: "Moyen", class: "bg-amber-100 text-amber-700" };
+  return { label: "Basique", class: "bg-stone-100 text-stone-500" };
+}
+
 export default function JobsBoard() {
   const t = useTranslations("jobs");
   const locale = useLocale();
@@ -52,7 +59,7 @@ export default function JobsBoard() {
   const [loading, setLoading] = useState(true);
   const [filterPostal, setFilterPostal] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const [sort, setSort] = useState<SortKey>("newest");
+  const [sort, setSort] = useState<SortKey>("score");
   const [debouncedPostal, setDebouncedPostal] = useState("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -87,6 +94,7 @@ export default function JobsBoard() {
 
   const sorted = [...jobs].sort((a, b) => {
     switch (sort) {
+      case "score": return (b.score ?? 0) - (a.score ?? 0);
       case "oldest": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       case "budget_high": return parseBudget(b.budget) - parseBudget(a.budget);
       case "budget_low": return parseBudget(a.budget) - parseBudget(b.budget);
@@ -128,6 +136,7 @@ export default function JobsBoard() {
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="px-4 py-2 rounded-lg border border-stone-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
+              <option value="score">{t("sort_score")}</option>
               <option value="newest">{t("sort_newest")}</option>
               <option value="oldest">{t("sort_oldest")}</option>
               <option value="budget_high">{t("sort_budget_high")}</option>
@@ -178,6 +187,9 @@ export default function JobsBoard() {
                               {job.postalCode || "—"}
                             </span>
                             {job.budget && <span className="text-green-700 font-medium">{formatBudget(job.budget)}</span>}
+                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${scoreBadge(job.score ?? 0).class}`}>
+                              {scoreBadge(job.score ?? 0).label} ({job.score ?? 0})
+                            </span>
                             <span className="inline-flex items-center gap-1">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                               {relativeTime(job.createdAt, locale)}
