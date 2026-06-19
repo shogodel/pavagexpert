@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createApplication } from "@/lib/auth-store";
 import { sendEmail } from "@/lib/email";
+import { newApplicationAdmin } from "@/lib/email-templates";
 
 const rbqRegex = /^RBQ\s?\d{4,6}-\d{4,5}-\d{2}$/i;
 const phoneRegex = /^\(?\d{3}\)?\s?\d{3}-?\d{4}$/;
@@ -39,6 +40,12 @@ export async function POST(req: NextRequest) {
 <p>Notre équipe l'examinera sous 48 heures. Vous recevrez un courriel dès qu'une décision sera prise.</p>
 <p>Merci de votre intérêt !</p>
 <p>— L'équipe Pavagexpert</p>`,
+    });
+
+    await sendEmail({
+      to: process.env.NOTIFICATION_EMAIL || "pavagexpertmtl@gmail.com",
+      subject: `Nouvelle candidature — ${company}`,
+      html: newApplicationAdmin(company, email.trim().toLowerCase(), phone.trim()),
     });
 
     return NextResponse.json({ ok: true, username: result.username });

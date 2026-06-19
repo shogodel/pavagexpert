@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { updateJobStatus } from "@/lib/job-store";
+import { getJobById } from "@/lib/job-store";
+import { sendEmail } from "@/lib/email";
+import { jobCompleteClient, reviewInvite } from "@/lib/email-templates";
 
 export async function POST(
   req: NextRequest,
@@ -19,5 +22,17 @@ export async function POST(
   if (!ok) {
     return NextResponse.json({ ok: false, code: "not_found" }, { status: 404 });
   }
+
+  try {
+    const job = await getJobById(id);
+    if (job) {
+      await sendEmail({
+        to: job.email,
+        subject: "Votre projet est terminé — Pavagexpert",
+        html: jobCompleteClient(job.name),
+      });
+    }
+  } catch { /* completion emails are best-effort */ }
+
   return NextResponse.json({ ok: true });
 }

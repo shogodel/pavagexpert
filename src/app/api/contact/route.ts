@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { addJob, ensureJobPhotoDir } from "@/lib/job-store";
 import { generateMagicLink } from "@/lib/client-store";
 import { sendEmail } from "@/lib/email";
+import { newJobToContractors } from "@/lib/email-templates";
+import { query } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
 import fs from "fs";
 
@@ -75,6 +77,19 @@ export async function POST(req: NextRequest) {
           url: `/fr/jobs`,
         });
       } catch { /* push notifications are best-effort */ }
+
+      try {
+        const contractors = await query<{ email: string; company: string }>(
+          "SELECT email, company FROM contractors WHERE status = 'active' AND email != ''"
+        );
+        for (const c of contractors) {
+          await sendEmail({
+            to: c.email,
+            subject: "Nouveau projet disponible — Pavagexpert",
+            html: newJobToContractors(),
+          });
+        }
+      } catch { /* contractor notification emails are best-effort */ }
     }
     const photoDir = ensureJobPhotoDir(job.id);
 

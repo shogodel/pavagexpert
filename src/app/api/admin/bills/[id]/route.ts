@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { updateBillStatus, getBills } from "@/lib/billing-store";
+import { sendEmail } from "@/lib/email";
+import { paymentReceived, paymentOverdue } from "@/lib/email-templates";
+import { query } from "@/lib/db";
 
 export async function PATCH(
   req: NextRequest,
@@ -20,6 +23,29 @@ export async function PATCH(
 
   const bill = await updateBillStatus(id, status);
   if (!bill) return NextResponse.json({ ok: false }, { status: 404 });
+
+  try {
+    const contractor = await query<{ company: string; email: string }>(
+      "SELECT company, email FROM contractors WHERE id = $1",
+      [bill.contractorId]
+    );
+    if (contractor.length > 0 && contractor[0].email) {
+      if (status === "paid") {
+        await sendEmail({
+          to: contractor[0].email,
+          subject: "Paiement reçu — Pavagexpert",
+          html: paymentReceived(contractor[0].company, bill.totalCents),
+        });
+      } else if (status === "overdue") {
+        await sendEmail({
+          to: contractor[0].email,
+          subject: "Paiement en retard — Pavagexpert",
+          html: paymentOverdue(contractor[0].company, bill.totalCents),
+        });
+      }
+    }
+  } catch { /* billing notification emails are best-effort */ }
+
   return NextResponse.json({ ok: true, data: bill });
 }
 
