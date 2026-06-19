@@ -40,19 +40,51 @@ export async function expressInterest(
   contractorId: string,
   message: string
 ): Promise<Claim> {
-  const existing = await query<ClaimRow>(
-    "SELECT * FROM claims WHERE job_id = $1 AND contractor_id = $2",
-    [jobId, contractorId]
-  );
-  if (existing.length > 0) {
-    throw new Error("ALREADY_EXISTS");
-  }
-  const rows = await query<ClaimRow>(
-    `INSERT INTO claims (job_id, contractor_id, message)
-     VALUES ($1, $2, $3) RETURNING *`,
-    [jobId, contractorId, message]
-  );
-  return mapClaim(rows[0]);
+  return transaction(async (tx) => {
+    const existing = await tx<ClaimRow>(
+      "SELECT * FROM claims WHERE job_id = $1 AND contractor_id = $2",
+      [jobId, contractorId]
+    );
+    if (existing.length > 0) {
+      throw new Error("ALREADY_EXISTS");
+    }
+
+    // Deduct lead credit
+    const wallet = await tx<{ balance: number }>(
+      `UPDATE lead_wallet SET balance = balance - 1, updated_at = now()
+       WHERE contractor_id = $1 AND balance >= 1 RETURNING balance`,
+      [contractorId]
+    );
+    if (wallet.length === 0) {
+      throw new Error("INSUFFICIENT_CREDITS");
+    }
+
+    await tx(
+      `INSERT INTO lead_credit_transactions (contractor_id, amount, type, description) VALUES ($1, -1, 'spend', 'Réclamation de projet')`,
+      [contractorId]
+    );
+
+    const rows = await tx<ClaimRow>(
+      `INSERT INTO claims (job_id, contractor_id, message)
+       VALUES ($1, $2, $3) RETURNING *`,
+      [jobId, contractorId, message]
+    );
+
+    // Fire-and-forget webhook + SMS
+    const webhookStore = await import("./webhook-store");
+    webhookStore.dispatchWebhook("claim.created", { jobId, contractorId, claimId: rows[0].id }).catch(() => {});
+
+    const jobRows = await tx<{ email: string; phone: string }>(
+      `SELECT email, phone FROM jobs WHERE id = $1`,
+      [jobId]
+    );
+    if (jobRows.length > 0 && jobRows[0].phone) {
+      const sms = await import("./sms");
+      sms.sendSms(jobRows[0].phone, "Un entrepreneur a réclamé votre projet sur Pavagexpert. Connectez-vous pour voir les détails.").catch(() => {});
+    }
+
+    return mapClaim(rows[0]);
+  });
 }
 
 export async function acceptClaim(claimId: string): Promise<Claim | null> {

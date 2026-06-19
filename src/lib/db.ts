@@ -62,6 +62,16 @@ async function runMigrations(): Promise<void> {
     }
   }
 
+  const hasDrip = await pool.query("SELECT id FROM drip_campaigns LIMIT 1");
+  if (hasDrip.rows.length === 0 && process.env.NODE_ENV !== "test") {
+    try {
+      const { seedDripCampaigns } = await import("./seed-campaigns");
+      await seedDripCampaigns();
+    } catch (e) {
+      console.error("[db] Failed to seed drip campaigns:", e);
+    }
+  }
+
   const { rows: admins } = await pool.query("SELECT id FROM admin LIMIT 1");
   if (admins.length === 0) {
     const username = process.env.ADMIN_USERNAME || "admin";

@@ -135,6 +135,12 @@ export async function POST(req: NextRequest) {
       flagReason: flagReasons.length > 0 ? flagReasons.join(";") : "",
     });
 
+    // Fire-and-forget fraud check
+    try {
+      const { flagIfSuspicious } = await import("@/lib/fraud-store");
+      flagIfSuspicious(job.id, ip, phone).catch(() => {});
+    } catch {}
+
     // Write photos to disk
     if (job) {
       const photoDir = ensureJobPhotoDir(job.id);

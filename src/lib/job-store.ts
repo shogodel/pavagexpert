@@ -244,6 +244,13 @@ export async function addJobWithMeta(
       await q("INSERT INTO job_photos (job_id, filename) VALUES ($1, $2)", [job.id, filename]);
     }
 
+    try {
+      const { scheduleDrip } = await import("./drip-store");
+      await scheduleDrip("abandoned_lead_24h", input.email, job.id, null);
+      await scheduleDrip("unverified_lead_48h", input.email, job.id, null);
+      await scheduleDrip("reengagement_30d", input.email, job.id, null);
+    } catch {}
+
     return mapJob(job, photoFiles);
   });
 }
