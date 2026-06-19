@@ -19,7 +19,11 @@ let initPromise: Promise<void> | null = null;
 async function ensureInit(): Promise<void> {
   if (!process.env.DATABASE_URL) return;
   if (!initPromise) {
-    initPromise = runMigrations();
+    initPromise = runMigrations().catch((e) => {
+      console.error("[db] Migration failed, will retry on next query:", e);
+      initPromise = null;
+      throw e;
+    });
   }
   return initPromise;
 }
