@@ -68,26 +68,38 @@ export async function updateUser(id: string, data: Partial<Pick<AdminUser, "name
 
 export async function deleteUser(id: string): Promise<boolean> {
   const rows = await query<{ id: string }>(
-    "DELETE FROM clients WHERE id = $1 RETURNING id",
+    "UPDATE clients SET status = 'deleted' WHERE id = $1 RETURNING id",
     [id]
   );
   return rows.length > 0;
 }
 
 export async function getAnalytics() {
-  const jobs = await query<{ status: string; created_at: Date }>(
-    "SELECT status, created_at FROM jobs"
+  const jobs = await query<{ status: string; created_at: Date; budget: string }>(
+    "SELECT status, created_at, budget FROM jobs"
   );
   const clients = await query<{ status: string }>(
     "SELECT status FROM clients"
   );
 
-  const projectTypeCount: Record<string, number> = {};
+  const budgetRanges: Record<string, number> = {};
   const statusCount: Record<string, number> = {};
   const dailyCount: Record<string, number> = {};
 
   for (const job of jobs) {
-    projectTypeCount["other"] = (projectTypeCount["other"] || 0) + 1;
+    const budgetNum = parseInt(job.budget.replace(/[^0-9]/g, ""), 10);
+    let range: string;
+    if (!job.budget || isNaN(budgetNum)) {
+      range = "unknown";
+    } else if (budgetNum < 5000) {
+      range = "small";
+    } else if (budgetNum < 15000) {
+      range = "medium";
+    } else {
+      range = "large";
+    }
+    budgetRanges[range] = (budgetRanges[range] || 0) + 1;
+
     statusCount[job.status] = (statusCount[job.status] || 0) + 1;
     const day = job.created_at.toISOString().slice(0, 10);
     dailyCount[day] = (dailyCount[day] || 0) + 1;
@@ -97,7 +109,7 @@ export async function getAnalytics() {
     totalLeads: jobs.length,
     totalUsers: clients.length,
     activeUsers: clients.filter((c) => c.status === "active").length,
-    leadsByType: projectTypeCount,
+    leadsByType: budgetRanges,
     leadsByStatus: statusCount,
     leadsPerDay: Object.entries(dailyCount)
       .sort(([a], [b]) => a.localeCompare(b))

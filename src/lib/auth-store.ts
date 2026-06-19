@@ -25,6 +25,8 @@ export interface Contractor {
   rbqLicense: string;
   yearsInBusiness: number;
   serviceAreas: string[];
+  verified: boolean;
+  bio: string;
 }
 
 export type Application = Contractor;
@@ -41,6 +43,8 @@ interface ContractorRow {
   rbq_license?: string;
   years_in_business?: number;
   service_areas?: string[];
+  verified?: boolean;
+  bio?: string;
 }
 
 interface AdminRow {
@@ -60,6 +64,8 @@ function mapContractor(row: ContractorRow): Contractor {
     rbqLicense: row.rbq_license || "",
     yearsInBusiness: row.years_in_business || 0,
     serviceAreas: row.service_areas || [],
+    verified: row.verified ?? false,
+    bio: row.bio ?? "",
   };
 }
 
@@ -227,6 +233,14 @@ export async function updateContractor(id: string, p: Partial<Pick<Contractor, "
 export async function deleteContractor(id: string): Promise<boolean> {
   const rows = await query<ContractorRow>(
     "UPDATE contractors SET status = 'deleted', updated_at = now() WHERE id = $1 RETURNING id",
+    [id]
+  );
+  return rows.length > 0;
+}
+
+export async function hardDeleteContractor(id: string): Promise<boolean> {
+  const rows = await query<{ id: string }>(
+    "DELETE FROM contractors WHERE id = $1 RETURNING id",
     [id]
   );
   return rows.length > 0;

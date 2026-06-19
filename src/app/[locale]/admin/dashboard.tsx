@@ -268,14 +268,19 @@ export default function AdminDashboard() {
 
   async function executeDelete() {
     if (!deleteConfirm) return;
+    let res;
     if (deleteConfirm.type === "user") {
-      await fetch(`/api/admin/leads?id=${deleteConfirm.id}`, { method: "DELETE" });
+      res = await fetch(`/api/admin/leads?id=${deleteConfirm.id}`, { method: "DELETE" });
     } else if (deleteConfirm.type === "contractor") {
-      await fetch(`/api/admin/contractors?id=${deleteConfirm.id}`, { method: "DELETE" });
+      res = await fetch(`/api/admin/contractors?id=${deleteConfirm.id}`, { method: "DELETE" });
     } else {
-      await fetch(`/api/admin/jobs?id=${deleteConfirm.id}`, { method: "DELETE" });
+      res = await fetch(`/api/admin/jobs?id=${deleteConfirm.id}`, { method: "DELETE" });
     }
     setDeleteConfirm(null);
+    if (!res.ok) {
+      try { const d = await res.json(); setFetchError(d.error || t("network_error")); } catch { setFetchError(t("network_error")); }
+      return;
+    }
     fetchData();
   }
 

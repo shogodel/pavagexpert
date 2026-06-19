@@ -27,18 +27,20 @@ export async function POST(req: NextRequest) {
   const auth = await checkAdmin(req);
   if (auth) return auth;
   try {
-    const { id, action } = await req.json();
+    const { id, action, notes } = await req.json();
     if (!id || !action) {
       return NextResponse.json({ ok: false, error: "Missing id or action" }, { status: 400 });
     }
     if (action === "approve") {
       const result = await approveApplication(id);
       if (!result) return NextResponse.json({ ok: false, error: "Application not found" }, { status: 404 });
+      const approveNotes = notes ? `<p><strong>Note de l'administrateur :</strong> ${notes}</p>` : "";
       await sendEmail({
         to: result.email,
         subject: "Candidature approuvée — Pavagexpert",
         html: `<p>Bonjour ${result.company},</p>
 <p>Votre candidature d'entrepreneur a été <strong>approuvée</strong> !</p>
+${approveNotes}
 <p>Connectez-vous avec les identifiants suivants :</p>
 <p>
   Identifiant : <strong>${result.username}</strong><br>
@@ -53,12 +55,14 @@ export async function POST(req: NextRequest) {
     if (action === "reject") {
       const result = await rejectApplication(id);
       if (!result) return NextResponse.json({ ok: false, error: "Application not found" }, { status: 404 });
+      const rejectNotes = notes ? `<p><strong>Note de l'administrateur :</strong> ${notes}</p>` : "";
       await sendEmail({
         to: result.email,
         subject: "Candidature — Pavagexpert",
         html: `<p>Bonjour ${result.company},</p>
 <p>Nous avons examiné votre candidature d'entrepreneur.</p>
 <p>Malheureusement, nous ne pouvons pas donner suite à votre demande à ce moment-ci.</p>
+${rejectNotes}
 <p>— L'équipe Pavagexpert</p>`,
       });
       return NextResponse.json({ ok: true });
