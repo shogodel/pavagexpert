@@ -443,6 +443,8 @@
     "submit": "Lancer mon projet",
     "success_title": "Félicitations !",
     "success_msg": "Votre projet a été publié. Des entrepreneurs certifiés vous contacteront sous 24h.",
+    "success_verify_title": "Vérifiez votre courriel",
+    "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre projet et être contacté par nos entrepreneurs certifiés.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos informations sont confidentielles. Aucun démarchage sauvage.",
     "guarantee": "Estimation personnalisée • Aucune obligation • Entrepreneurs vérifiés",

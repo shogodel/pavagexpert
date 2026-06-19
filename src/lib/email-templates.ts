@@ -86,6 +86,16 @@ export function newJobToContractors(): string {
   `.trim());
 }
 
+export function leadVerification(clientName: string, verifyUrl: string): string {
+  return wrap(`
+    <p style="font-size:16px;font-weight:600;color:#292524">Confirmez votre projet</p>
+    <p>Bonjour <strong>${clientName}</strong>,</p>
+    <p>Cliquez sur le bouton ci-dessous pour confirmer votre projet. Une fois confirmé, il sera transmis aux entrepreneurs certifiés de notre réseau.</p>
+    <a href="${verifyUrl}" style="display:inline-block;background:#c87d5d;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;margin:16px 0">Confirmer mon projet</a>
+    <p style="color:#a8a29e;font-size:12px;line-height:1.4">Ce lien expire dans 7 jours. Si vous n'êtes pas à l'origine de cette demande, ignorez ce courriel.</p>
+  `.trim());
+}
+
 export function invoiceReady(company: string, totalCents: number, periodStart: string, periodEnd: string): string {
   const total = (totalCents / 100).toFixed(2);
   return wrap(`

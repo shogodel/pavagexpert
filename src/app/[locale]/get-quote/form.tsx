@@ -1,13 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 import { getTrackingData, clearTracking } from "@/lib/utm-tracker";
 
+function getBrowserFingerprint(): string {
+  if (typeof window === "undefined") return "";
+  const parts = [
+    navigator.userAgent,
+    screen.width,
+    screen.height,
+    screen.colorDepth,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    navigator.language,
+    navigator.platform,
+  ];
+  return parts.join("||");
+}
+
 export default function GetQuoteForm() {
   const t = useTranslations("get_quote");
   const [submitted, setSubmitted] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(false);
   const [form, setForm] = useState({
@@ -19,6 +34,13 @@ export default function GetQuoteForm() {
     description: "",
   });
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const mountTime = useRef(0);
+  const fingerprint = useRef("");
+
+  useEffect(() => {
+    mountTime.current = Date.now();
+    fingerprint.current = getBrowserFingerprint();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +54,8 @@ export default function GetQuoteForm() {
       fd.set("postalCode", form.postalCode);
       fd.set("budget", form.budget);
       fd.set("description", form.description);
+      fd.set("_fm", String(mountTime.current));
+      fd.set("_fp", fingerprint.current);
       for (const f of photoFiles) fd.append("photos", f);
       const tracking = getTrackingData();
       if (tracking) fd.set("lead_source", JSON.stringify(tracking));
@@ -39,9 +63,14 @@ export default function GetQuoteForm() {
         method: "POST",
         body: fd,
       });
+      const data = await res.json();
       if (!res.ok) throw new Error("API error");
       clearTracking();
-      setSubmitted(true);
+      if (data.verify) {
+        setNeedsVerification(true);
+      } else {
+        setSubmitted(true);
+      }
     } catch {
       setError(true);
     } finally {
@@ -70,6 +99,27 @@ export default function GetQuoteForm() {
     );
   }
 
+  if (needsVerification) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center bg-stone-50">
+        <motion.div
+          className="text-center px-4 max-w-md"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+        >
+          <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 className="text-3xl font-bold text-stone-800 mb-2">{t("success_verify_title")}</h2>
+          <p className="text-stone-500">{t("success_verify_msg")}</p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-stone-50">
       <div className="pt-24 pb-8 bg-stone-100">
@@ -88,6 +138,12 @@ export default function GetQuoteForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
+            {/* Honeypot field — hidden from humans */}
+            <div aria-hidden="true" className="absolute left-[-9999px] opacity-0 pointer-events-none" tabIndex={-1}>
+              <label htmlFor="_website">Website</label>
+              <input id="_website" name="_website" type="text" autoComplete="off" tabIndex={-1} />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
                 {t("name")} <span className="text-red-500">*</span>

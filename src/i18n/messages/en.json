@@ -443,6 +443,8 @@
     "submit": "Launch my project",
     "success_title": "Congratulations!",
     "success_msg": "Your project has been published. Certified contractors will contact you within 24h.",
+    "success_verify_title": "Check your email",
+    "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your project and get contacted by our certified contractors.",
     "error_msg": "An error occurred. Please try again.",
     "privacy": "Your information is confidential. No cold calling.",
     "guarantee": "Personalized estimate • No obligation • Verified contractors",

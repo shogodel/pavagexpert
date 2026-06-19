@@ -177,3 +177,49 @@ export async function deleteJob(id: string): Promise<boolean> {
   );
   return rows.length > 0;
 }
+
+// --- Dedup / spam prevention additions ---
+
+export async function addJobWithMeta(
+  input: {
+    name: string; email: string; phone: string; postalCode: string;
+    budget: string; description: string; leadSource?: Record<string, string>;
+    ipAddress?: string; browserFingerprint?: string; flagReason?: string;
+  } & { photos?: string[] }
+): Promise<Job> {
+  return transaction(async (q) => {
+    const clientRows = await q<{ id: string }>(
+      "INSERT INTO clients (name, email, phone) VALUES ($1, $2, $3) RETURNING id",
+      [input.name, input.email, input.phone]
+    );
+    const clientId = clientRows[0].id;
+
+    const jobRows = await q<JobRow>(
+      `INSERT INTO jobs (client_id, title, description, postal_code, budget, status, lead_source, ip_address, browser_fingerprint, flag_reason, verified)
+       VALUES ($1, $2, $3, $4, $5, 'new', $6::jsonb, $7, $8, $9, false)
+       RETURNING *`,
+      [
+        clientId, `Projet de ${input.name}`, input.description,
+        input.postalCode, input.budget,
+        input.leadSource ? JSON.stringify(input.leadSource) : null,
+        input.ipAddress || "", input.browserFingerprint || "", input.flagReason || "",
+      ]
+    );
+    const job = jobRows[0];
+
+    const photoFiles = input.photos || [];
+    for (const filename of photoFiles) {
+      await q("INSERT INTO job_photos (job_id, filename) VALUES ($1, $2)", [job.id, filename]);
+    }
+
+    return mapJob(job, photoFiles);
+  });
+}
+
+export async function verifyJob(jobId: string): Promise<boolean> {
+  const rows = await query<{ id: string }>(
+    "UPDATE jobs SET verified = true, updated_at = now() WHERE id = $1 AND verified = false RETURNING id",
+    [jobId]
+  );
+  return rows.length > 0;
+}
