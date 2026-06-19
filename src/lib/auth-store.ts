@@ -77,22 +77,36 @@ export async function createApplication(input: {
   yearsInBusiness: number; serviceAreas: string[];
 }): Promise<{ username: string }> {
   const existing = await query<{ id: string }>(
-    "SELECT id FROM contractors WHERE email = $1",
+    "SELECT id FROM contractors WHERE email = $1 AND status != 'deleted'",
     [input.email]
   );
   if (existing.length > 0) {
     throw new Error("Email already registered");
   }
+
   const slug = input.company.toLowerCase().replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "").slice(0, 20);
-  const suffix = crypto.randomBytes(3).toString("hex");
-  const username = slug ? `${slug}_${suffix}` : `contractor_${suffix}`;
-  const rows = await query<{ username: string }>(
-    `INSERT INTO contractors (company, email, phone, rbq_license, years_in_business, service_areas, username, status, password_hash)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending', '')
-     RETURNING username`,
-    [input.company, input.email, input.phone, input.rbqLicense, input.yearsInBusiness, input.serviceAreas, username]
-  );
-  return { username: rows[0].username };
+  const prefix = slug || "contractor";
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const suffix = crypto.randomBytes(3).toString("hex");
+    const username = `${prefix}_${suffix}`;
+
+    const taken = await query<{ id: string }>(
+      "SELECT id FROM contractors WHERE username = $1",
+      [username]
+    );
+    if (taken.length > 0) continue;
+
+    const rows = await query<{ username: string }>(
+      `INSERT INTO contractors (company, email, phone, rbq_license, years_in_business, service_areas, username, status, password_hash)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending', '')
+       RETURNING username`,
+      [input.company, input.email, input.phone, input.rbqLicense, input.yearsInBusiness, input.serviceAreas, username]
+    );
+    return { username: rows[0].username };
+  }
+
+  throw new Error("Failed to generate unique username");
 }
 
 export async function approveApplication(id: string): Promise<{ company: string; email: string; username: string; password: string } | null> {
