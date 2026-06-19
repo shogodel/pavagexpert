@@ -162,6 +162,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|trpc|_next|_vercel|images|favicon.ico).*)",
+    "/((?!api|trpc|_next|_vercel|images|sw\\.js|favicon.ico).*)",
   ],
 };

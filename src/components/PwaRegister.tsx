@@ -12,12 +12,18 @@ function urlBase64ToUint8Array(base64: string): Uint8Array {
 export default function PwaRegister({ isContractor }: { isContractor: boolean }) {
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
+    if (!("Notification" in window)) return;
+
+    if (isContractor && Notification.permission === "default") {
+      Notification.requestPermission().catch(() => {});
+    }
 
     let cancelled = false;
 
     (async () => {
       const reg = await navigator.serviceWorker.register("/sw.js").catch(() => null);
-      if (!reg || !isContractor || cancelled) return;
+      if (!reg || cancelled) return;
+      if (!isContractor) return;
 
       const res = await fetch("/api/vapid-public-key").catch(() => null);
       if (!res || !res.ok) return;

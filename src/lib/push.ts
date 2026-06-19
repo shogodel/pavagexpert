@@ -34,11 +34,15 @@ interface PushPayload {
   title: string;
   body: string;
   url: string;
+  phone?: string;
 }
 
 export async function sendPushToAll(payload: PushPayload) {
   const subs = await query<{ endpoint: string; p256dh: string; auth: string }>(
-    "SELECT endpoint, p256dh, auth FROM push_subscriptions"
+    `SELECT ps.endpoint, ps.p256dh, ps.auth
+     FROM push_subscriptions ps
+     JOIN contractors c ON c.id = ps.contractor_id
+     WHERE c.status = 'active' AND ps.paused = false`
   );
   if (subs.length === 0) return;
 

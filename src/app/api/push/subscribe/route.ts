@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     await query(
       `INSERT INTO push_subscriptions (contractor_id, endpoint, p256dh, auth)
        VALUES ($1, $2, $3, $4)
-       ON CONFLICT (contractor_id) DO UPDATE SET endpoint = $2, p256dh = $3, auth = $4, created_at = now()`,
+       ON CONFLICT (contractor_id, endpoint) DO UPDATE SET p256dh = $3, auth = $4, created_at = now()`,
       [payload.sub, endpoint, keys.p256dh, keys.auth]
     );
 

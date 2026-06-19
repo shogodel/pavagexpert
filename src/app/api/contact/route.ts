@@ -71,10 +71,12 @@ export async function POST(req: NextRequest) {
     if (job) {
       try {
         const { sendPushToAll } = await import("@/lib/push");
+        const { CONTACT_PHONE_TEL } = await import("@/lib/constants");
         await sendPushToAll({
           title: `Nouveau projet${job.postalCode ? " — " + job.postalCode : ""}`,
           body: `Budget: ${job.budget || "—"} • ${job.name}`,
           url: `/fr/jobs`,
+          phone: CONTACT_PHONE_TEL,
         });
       } catch { /* push notifications are best-effort */ }
 
