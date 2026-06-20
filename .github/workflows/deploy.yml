@@ -74,12 +74,12 @@ jobs:
 
             # Preserve secrets across deploys
             if [ -f .env ]; then
-              OLD_JWT=$(grep JWT_SECRET .env | cut -d= -f2-) || :
-              OLD_DB_PASS=$(grep DB_PASSWORD .env | cut -d= -f2-) || :
-              OLD_ADMIN_PASS=$(grep ADMIN_PASSWORD .env | cut -d= -f2-) || :
-              OLD_VAPID_PUB=$(grep NEXT_PUBLIC_VAPID_PUBLIC_KEY .env | cut -d= -f2-) || :
-              OLD_VAPID_PRIV=$(grep VAPID_PRIVATE_KEY .env | cut -d= -f2-) || :
-              OLD_RESEND_KEY=$(grep RESEND_API_KEY .env | cut -d= -f2-) || :
+              OLD_JWT=$(grep "^JWT_SECRET=" .env | cut -d= -f2-) || :
+              OLD_DB_PASS=$(grep "^DB_PASSWORD=" .env | cut -d= -f2-) || :
+              OLD_ADMIN_PASS=$(grep "^ADMIN_PASSWORD=" .env | cut -d= -f2-) || :
+              OLD_VAPID_PUB=$(grep "^NEXT_PUBLIC_VAPID_PUBLIC_KEY=" .env | cut -d= -f2-) || :
+              OLD_VAPID_PRIV=$(grep "^VAPID_PRIVATE_KEY=" .env | cut -d= -f2-) || :
+              OLD_RESEND_KEY=$(grep "^RESEND_API_KEY=" .env | cut -d= -f2-) || :
             fi
 
             {
