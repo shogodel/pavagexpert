@@ -33,7 +33,7 @@ async function ensureInit(): Promise<void> {
   return initPromise;
 }
 
-export async function runMigrations(): Promise<void> {
+async function runMigrations(): Promise<void> {
   const deadline = Date.now() + 15_000;
 
   for (let i = 0; ; i++) {
