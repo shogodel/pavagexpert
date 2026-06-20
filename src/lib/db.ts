@@ -54,14 +54,16 @@ async function ensureDbReady(): Promise<void> {
     probePool.end().catch(() => {});
   }
 
-  const hasDrip = await pool.query("SELECT id FROM drip_campaigns LIMIT 1");
-  if (hasDrip.rows.length === 0 && process.env.NODE_ENV !== "test") {
-    try {
+  try {
+    const hasDrip = await queryWithTimeout(
+      pool.query("SELECT id FROM drip_campaigns LIMIT 1"), 10000
+    );
+    if (hasDrip.rows.length === 0 && process.env.NODE_ENV !== "test") {
       const { seedDripCampaigns } = await import("./seed-campaigns");
       await seedDripCampaigns();
-    } catch (e) {
-      console.error("[db] Failed to seed drip campaigns:", e);
     }
+  } catch (e) {
+    console.error("[db] Failed to check/seed drip campaigns:", e);
   }
 }
 
