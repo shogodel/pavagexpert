@@ -24,10 +24,18 @@ async function ensureInit(): Promise<void> {
   return initPromise;
 }
 
+async function queryWithTimeout(promise: Promise<unknown>, ms: number): Promise<void> {
+  const timer = new Promise<void>((_, reject) =>
+    setTimeout(() => reject(new Error("Query timed out")), ms)
+  );
+  promise.then(() => {}, () => {});
+  await Promise.race([promise, timer]);
+}
+
 async function runMigrations(): Promise<void> {
   for (let i = 0; i < 30; i++) {
     try {
-      await pool.query("SELECT 1");
+      await queryWithTimeout(pool.query("SELECT 1"), 5000);
       break;
     } catch {
       if (i === 29) throw new Error("Database not reachable after 30 seconds");

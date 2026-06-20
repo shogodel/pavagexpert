@@ -12,7 +12,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATA_DIR=/data
-      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert
+      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert?connect_timeout=5
     logging:
       driver: json-file
       options:
