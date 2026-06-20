@@ -179,8 +179,6 @@
     "error": "Identifiants invalides",
     "error_missing_fields": "Nom d'utilisateur et mot de passe requis",
     "error_server": "Erreur du serveur. Veuillez réessayer.",
-    "error_too_many": "Trop de tentatives. Veuillez réessayer dans 15 minutes.",
-    "error_ip_blocked": "Trop de tentatives depuis cette adresse. Veuillez réessayer dans 15 minutes.",
     "redirect_banner": "Veuillez vous connecter pour continuer",
     "show_password": "Afficher le mot de passe",
     "hide_password": "Masquer le mot de passe"

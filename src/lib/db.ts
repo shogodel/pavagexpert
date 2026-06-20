@@ -17,50 +17,21 @@ pool.on("error", (err) => {
 let initPromise: Promise<void> | null = null;
 
 async function ensureInit(): Promise<void> {
-  if (!process.env.DATABASE_URL) {
-    if (process.env.NODE_ENV !== "test") {
-      console.warn("[db] DATABASE_URL not set — DB queries will fail until .env.local is configured");
-    }
-    return;
-  }
+  if (!process.env.DATABASE_URL) return;
   if (!initPromise) {
-    initPromise = runMigrations().catch((e) => {
-      console.error("[db] Migration failed, will retry on next query:", e);
-      initPromise = null;
-      throw e;
-    });
+    initPromise = runMigrations();
   }
   return initPromise;
 }
 
-async function queryWithTimeout(promise: Promise<unknown>, ms: number): Promise<void> {
-  const timer = new Promise<void>((_, reject) =>
-    setTimeout(() => reject(new Error("Query timed out")), ms)
-  );
-  // Suppress async rejection of the loser to prevent unhandledRejection
-  promise.then(() => {}, () => {});
-  await Promise.race([promise, timer]);
-}
-
 async function runMigrations(): Promise<void> {
-  const deadline = Date.now() + 15_000;
-
-  for (let i = 0; ; i++) {
+  for (let i = 0; i < 30; i++) {
     try {
-      await queryWithTimeout(pool.query("SELECT 1"), 5000);
+      await pool.query("SELECT 1");
       break;
-    } catch (err) {
-      const remaining = deadline - Date.now();
-      if (remaining <= 0) throw new Error("Database not reachable");
-
-      const isAuthError =
-        err instanceof Error &&
-        /password|auth|SASL|SCRAM|authentication/i.test(err.message);
-      if (isAuthError) throw err;
-
-      const delay = Math.min(100 * 2 ** i, 2000);
-      const jitter = Math.random() * delay * 0.3;
-      await new Promise((r) => setTimeout(r, Math.min(delay + jitter, remaining)));
+    } catch {
+      if (i === 29) throw new Error("Database not reachable after 30 seconds");
+      await new Promise((r) => setTimeout(r, 1000));
     }
   }
 

@@ -8,8 +8,6 @@ const errorCode: Record<string, string> = {
   missing_fields: "error_missing_fields",
   invalid_credentials: "error",
   server_error: "error_server",
-  too_many_attempts: "error_too_many",
-  ip_blocked: "error_ip_blocked",
 };
 
 export default function LoginForm() {

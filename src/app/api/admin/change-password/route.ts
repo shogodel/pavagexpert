@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
     const valid = await verifyAdmin(payload.sub, currentPassword);
     if (!valid) return NextResponse.json({ ok: false, error: "Wrong password" }, { status: 403 });
-    await changeAdminPassword(newPassword, payload.sub);
+    await changeAdminPassword(newPassword);
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ ok: false }, { status: 500 });

@@ -24,40 +24,26 @@ export async function getAuditLog(limit = 100, offset = 0) {
 }
 
 export async function recordLoginAttempt(identifier: string, ipAddress: string, success: boolean): Promise<void> {
-  try {
-    await query(
-      `INSERT INTO login_attempts (identifier, ip_address, success) VALUES ($1, $2, $3)`,
-      [identifier, ipAddress, success]
-    );
-  } catch (e) {
-    console.warn("[security-store] recordLoginAttempt failed:", e);
-  }
+  await query(
+    `INSERT INTO login_attempts (identifier, ip_address, success) VALUES ($1, $2, $3)`,
+    [identifier, ipAddress, success]
+  );
 }
 
 export async function getRecentFailedAttempts(identifier: string, windowMinutes = 15): Promise<number> {
-  try {
-    const rows = await query<{ c: string }>(
-      `SELECT COUNT(*)::text AS c FROM login_attempts WHERE identifier = $1 AND success = false AND created_at > now() - make_interval(mins => $2)`,
-      [identifier, windowMinutes]
-    );
-    return parseInt(rows[0]?.c || "0", 10);
-  } catch (e) {
-    console.warn("[security-store] getRecentFailedAttempts failed:", e);
-    return 0;
-  }
+  const rows = await query<{ c: string }>(
+    `SELECT COUNT(*)::text AS c FROM login_attempts WHERE identifier = $1 AND success = false AND created_at > now() - make_interval(mins => $2)`,
+    [identifier, windowMinutes]
+  );
+  return parseInt(rows[0]?.c || "0", 10);
 }
 
 export async function getRecentFailedAttemptsByIP(ipAddress: string, windowMinutes = 15): Promise<number> {
-  try {
-    const rows = await query<{ c: string }>(
-      `SELECT COUNT(*)::text AS c FROM login_attempts WHERE ip_address = $1 AND success = false AND created_at > now() - make_interval(mins => $2)`,
-      [ipAddress, windowMinutes]
-    );
-    return parseInt(rows[0]?.c || "0", 10);
-  } catch (e) {
-    console.warn("[security-store] getRecentFailedAttemptsByIP failed:", e);
-    return 0;
-  }
+  const rows = await query<{ c: string }>(
+    `SELECT COUNT(*)::text AS c FROM login_attempts WHERE ip_address = $1 AND success = false AND created_at > now() - make_interval(mins => $2)`,
+    [ipAddress, windowMinutes]
+  );
+  return parseInt(rows[0]?.c || "0", 10);
 }
 
 export async function createCsrfToken(): Promise<string> {
