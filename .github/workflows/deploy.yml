@@ -125,6 +125,11 @@ jobs:
             done
 
             docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert pavagexpert-db
+
+            # Fix SWAG nginx config: remove Docker DNS resolver + variable proxy_pass
+            # so nginx resolves pavagexpert once at startup, not per-request via flaky DNS
+            docker exec swag sh -c "sed -i '/resolver 127.0.0.11/d; /set \$upstream_pavagexpert/d; s|proxy_pass http://\\\$upstream_pavagexpert|proxy_pass http://pavagexpert:3000|' /config/nginx/site-confs/default.conf" 2>/dev/null || true
+            docker exec swag nginx -s reload 2>/dev/null || true
             docker restart swag 2>/dev/null || true
             docker image prune -f
         env:
