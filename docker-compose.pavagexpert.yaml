@@ -23,6 +23,7 @@ services:
 
   pavagexpert-db:
     image: postgres:16-alpine
+    command: ["postgres", "-c", "statement_timeout=30s"]
     restart: unless-stopped
     volumes:
       - pavagexpert_pg_data:/var/lib/postgresql/data
