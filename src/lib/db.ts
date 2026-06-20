@@ -3,12 +3,6 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
-if (!process.env.DATABASE_URL && process.env.NODE_ENV !== "test") {
-  throw new Error(
-    "DATABASE_URL is required. Copy .env.example to .env.local and fill in."
-  );
-}
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 10,
@@ -23,7 +17,12 @@ pool.on("error", (err) => {
 let initPromise: Promise<void> | null = null;
 
 async function ensureInit(): Promise<void> {
-  if (!process.env.DATABASE_URL) return;
+  if (!process.env.DATABASE_URL) {
+    if (process.env.NODE_ENV !== "test") {
+      console.warn("[db] DATABASE_URL not set — DB queries will fail until .env.local is configured");
+    }
+    return;
+  }
   if (!initPromise) {
     initPromise = runMigrations().catch((e) => {
       console.error("[db] Migration failed, will retry on next query:", e);
