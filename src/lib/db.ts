@@ -93,6 +93,21 @@ async function runMigrations(): Promise<void> {
   }
 }
 
+export async function healthCheck(): Promise<boolean> {
+  if (!process.env.DATABASE_URL) return false;
+  try {
+    const client = await pool.connect();
+    try {
+      await client.query("SELECT 1");
+      return true;
+    } finally {
+      client.release();
+    }
+  } catch {
+    return false;
+  }
+}
+
 export async function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
   params?: unknown[]
