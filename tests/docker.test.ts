@@ -95,7 +95,7 @@ describe("deploy.yml", () => {
 
   it("preserves DB_PASSWORD across deploys", () => {
     expect(content).toContain("OLD_DB_PASS");
-    expect(content).toContain("grep DB_PASSWORD .env");
+    expect(content).toContain('grep "^DB_PASSWORD=" .env');
   });
 
   it("writes DB_PASSWORD to .env", () => {
