@@ -149,13 +149,9 @@ export async function verifyAdmin(username: string, password: string): Promise<b
   return scryptVerify(password, rows[0].password_hash);
 }
 
-export async function changeAdminPassword(newPassword: string, username?: string): Promise<void> {
+export async function changeAdminPassword(newPassword: string, username: string): Promise<void> {
   const hash = scryptHash(newPassword);
-  if (username) {
-    await query("UPDATE admin SET password_hash = $1 WHERE username = $2", [hash, username]);
-  } else {
-    await query("UPDATE admin SET password_hash = $1", [hash]);
-  }
+  await query("UPDATE admin SET password_hash = $1 WHERE username = $2", [hash, username]);
 }
 
 export async function verifyContractorPassword(username: string, password: string): Promise<Contractor | null> {

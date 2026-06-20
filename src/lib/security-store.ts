@@ -29,8 +29,8 @@ export async function recordLoginAttempt(identifier: string, ipAddress: string, 
       `INSERT INTO login_attempts (identifier, ip_address, success) VALUES ($1, $2, $3)`,
       [identifier, ipAddress, success]
     );
-  } catch {
-    /* table may not exist — non-critical */
+  } catch (e) {
+    console.warn("[security-store] recordLoginAttempt failed:", e);
   }
 }
 
@@ -41,7 +41,8 @@ export async function getRecentFailedAttempts(identifier: string, windowMinutes 
       [identifier, windowMinutes]
     );
     return parseInt(rows[0]?.c || "0", 10);
-  } catch {
+  } catch (e) {
+    console.warn("[security-store] getRecentFailedAttempts failed:", e);
     return 0;
   }
 }
@@ -53,7 +54,8 @@ export async function getRecentFailedAttemptsByIP(ipAddress: string, windowMinut
       [ipAddress, windowMinutes]
     );
     return parseInt(rows[0]?.c || "0", 10);
-  } catch {
+  } catch (e) {
+    console.warn("[security-store] getRecentFailedAttemptsByIP failed:", e);
     return 0;
   }
 }

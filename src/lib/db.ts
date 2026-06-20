@@ -3,6 +3,12 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
+if (!process.env.DATABASE_URL && process.env.NODE_ENV !== "test") {
+  throw new Error(
+    "DATABASE_URL is required. Copy .env.example to .env.local and fill in."
+  );
+}
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 10,
@@ -28,14 +34,25 @@ async function ensureInit(): Promise<void> {
   return initPromise;
 }
 
-async function runMigrations(): Promise<void> {
-  for (let i = 0; i < 30; i++) {
+export async function runMigrations(): Promise<void> {
+  const deadline = Date.now() + 15_000;
+
+  for (let i = 0; ; i++) {
     try {
       await pool.query("SELECT 1");
       break;
-    } catch {
-      if (i === 29) throw new Error("Database not reachable after 30 seconds");
-      await new Promise((r) => setTimeout(r, 1000));
+    } catch (err) {
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) throw new Error("Database not reachable");
+
+      const isAuthError =
+        err instanceof Error &&
+        /password|auth|SASL|SCRAM|authentication/i.test(err.message);
+      if (isAuthError) throw err;
+
+      const delay = Math.min(100 * 2 ** i, 2000);
+      const jitter = Math.random() * delay * 0.3;
+      await new Promise((r) => setTimeout(r, Math.min(delay + jitter, remaining)));
     }
   }
 
