@@ -6,10 +6,18 @@ import crypto from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+function queryWithTimeout(promise, ms) {
+  const timer = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Query timed out")), ms)
+  );
+  promise.then(() => {}, () => {});
+  return Promise.race([promise, timer]);
+}
+
 async function waitForDb(pool, retries = 30) {
   for (let i = 0; i < retries; i++) {
     try {
-      await pool.query("SELECT 1");
+      await queryWithTimeout(pool.query("SELECT 1"), 5000);
       return;
     } catch (e) {
       if (i < retries - 1) {
