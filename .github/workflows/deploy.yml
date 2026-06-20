@@ -104,13 +104,23 @@ jobs:
             # Pull latest image and deploy
             docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
 
-            # Start DB first (migrate.mjs retries if not ready)
+            # Start DB first and wait for pg_isready
             docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert-db
-            sleep 3
+            echo "[deploy] waiting for DB to accept connections..."
+            for i in $(seq 1 30); do
+              docker compose -f docker-compose.pavagexpert.yaml exec -T pavagexpert-db pg_isready -U pavagexpert 2>/dev/null && break
+              sleep 1
+            done
 
-            # Start app (no service_healthy gate — migrate.mjs handles retries)
+            # Start app
             docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert --force-recreate
-            sleep 5
+
+            # Wait for health endpoint to pass (last fix added DB probe to /api/health)
+            echo "[deploy] waiting for app health check..."
+            for i in $(seq 1 30); do
+              docker compose -f docker-compose.pavagexpert.yaml exec -T pavagexpert curl -sf http://localhost:3000/api/health > /dev/null 2>&1 && break
+              sleep 2
+            done
 
             docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert pavagexpert-db
             docker restart swag 2>/dev/null || true
