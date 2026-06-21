@@ -6,13 +6,6 @@
     "calculator": "Calculateur",
     "blog": "Blog",
     "get_quote": "Estimation personnalisée",
-    "jobs": "Projets récents",
-    "login": "Connexion",
-    "dashboard": "Tableau de bord",
-    "profile": "Mon profil",
-    "logout": "Déconnexion",
-    "install_app": "Installer l'app",
-    "all_services": "Tous nos services",
     "services_asphalt": "Asphalte",
     "services_pavers": "Pavé Uni",
     "services_concrete": "Béton",
@@ -21,7 +14,6 @@
     "services_landscaping": "Aménagement paysager",
     "services_turf": "Gazon & Tourbe",
     "services_drainage": "Drainage",
-    "apply": "Devenir entrepreneur",
     "service_area": "Zones desservies"
   },
   "hero": {

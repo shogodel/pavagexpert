@@ -6,13 +6,6 @@
     "calculator": "Calculator",
     "blog": "Blog",
     "get_quote": "Personalized Estimate",
-    "jobs": "Recent Projects",
-    "login": "Login",
-    "dashboard": "Dashboard",
-    "profile": "My Profile",
-    "logout": "Sign out",
-    "install_app": "Install App",
-    "all_services": "All Services",
     "services_asphalt": "Asphalt",
     "services_pavers": "Pavers",
     "services_concrete": "Concrete",
@@ -21,7 +14,6 @@
     "services_landscaping": "Landscaping",
     "services_turf": "Sod & Turf",
     "services_drainage": "Drainage",
-    "apply": "Become a Contractor",
     "service_area": "Service Areas"
   },
   "hero": {
