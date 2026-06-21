@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Pavagexpert",
-  description: "Spécialiste en pavé uni à Montréal",
+  description: "Pavagexpert connects homeowners with RBQ-certified contractors for paving, asphalt, concrete, and landscaping projects across Greater Montreal.",
   metadataBase: new URL("https://pavagexpert.space"),
   manifest: "/manifest.webmanifest",
   icons: {
