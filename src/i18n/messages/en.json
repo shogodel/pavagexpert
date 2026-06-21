@@ -6,6 +6,11 @@
     "calculator": "Calculator",
     "blog": "Blog",
     "get_quote": "Personalized Estimate",
+    "jobs": "Recent Projects",
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "profile": "My Profile",
+    "logout": "Sign out",
     "install_app": "Install App",
     "all_services": "All Services",
     "services_asphalt": "Asphalt",
@@ -16,6 +21,7 @@
     "services_landscaping": "Landscaping",
     "services_turf": "Sod & Turf",
     "services_drainage": "Drainage",
+    "apply": "Become a Contractor",
     "service_area": "Service Areas"
   },
   "hero": {
@@ -108,7 +114,6 @@
     "after": "After",
     "view_project": "View Project"
   },
-  "get_quote": {
   "pwa": {
     "banner_title": "Install the app",
     "banner_desc": "Get push notifications when new projects are posted.",
@@ -213,8 +218,14 @@
     "blog_desc": "Expert advice for your paving project near me in Montreal, Laval and the South Shore: 2026 pricing, maintenance tips, paver patterns, asphalt vs interlock comparison.",
     "get_quote_title": "Free Paver Estimate Near Me | Montreal, Laval, Longueuil | Pavagexpert",
     "get_quote_desc": "Get a free personalized estimate for your interlocking paver or paving stone project near me in Montreal, Laval or the South Shore. Launch your project and receive contractor offers within 24h.",
+    "jobs_title": "Paver Projects Near Me | Montreal, Laval, South Shore | Pavagexpert",
+    "jobs_desc": "Browse recent paver and paving projects near me from homeowners in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal. Find work in your area.",
+    "apply_title": "Become a Paving Contractor | Pavagexpert Montreal, Laval, South Shore",
+    "apply_desc": "Apply to join our network of certified interlocking paver and paving contractors serving Montreal, Laval and the South Shore. RBQ license required. Grow your local business.",
     "service_area_title": "Service Areas | Paving Contractor Near Me | Montreal, Laval, South Shore & all Greater Montreal",
-    "service_area_desc": "Pavagexpert serves 40+ cities and neighborhoods across Greater Montreal. Find an interlocking paver, asphalt or concrete contractor near you in Laval, Longueuil, South Shore, North Shore, West Island and more."
+    "service_area_desc": "Pavagexpert serves 40+ cities and neighborhoods across Greater Montreal. Find an interlocking paver, asphalt or concrete contractor near you in Laval, Longueuil, South Shore, North Shore, West Island and more.",
+    "login_title": "Contractor & Admin Login | Pavagexpert",
+    "login_desc": "Access your Pavagexpert paving contractor dashboard or admin panel. Manage local projects, quotes and account settings."
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -244,6 +255,5 @@
     "analytics_desc": "Help us understand how the site is used (Google Ads).",
     "save": "Save",
     "back": "Back"
-  },
   }
 }

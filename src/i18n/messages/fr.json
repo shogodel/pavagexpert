@@ -6,6 +6,11 @@
     "calculator": "Calculateur",
     "blog": "Blog",
     "get_quote": "Estimation personnalisée",
+    "jobs": "Projets récents",
+    "login": "Connexion",
+    "dashboard": "Tableau de bord",
+    "profile": "Mon profil",
+    "logout": "Déconnexion",
     "install_app": "Installer l'app",
     "all_services": "Tous nos services",
     "services_asphalt": "Asphalte",
@@ -16,6 +21,7 @@
     "services_landscaping": "Aménagement paysager",
     "services_turf": "Gazon & Tourbe",
     "services_drainage": "Drainage",
+    "apply": "Devenir entrepreneur",
     "service_area": "Zones desservies"
   },
   "hero": {
@@ -108,7 +114,6 @@
     "after": "Après",
     "view_project": "Voir le projet"
   },
-  "get_quote": {
   "pwa": {
     "banner_title": "Installer l'application",
     "banner_desc": "Recevez des notifications quand un nouveau projet est publié.",
@@ -213,8 +218,14 @@
     "blog_desc": "Conseils d'experts pour votre projet de pavage près de chez vous à Montréal, Laval et la Rive-Sud : prix 2026, entretien, motifs de pose, comparaison asphalte vs pavé uni.",
     "get_quote_title": "Soumission Pavé Uni gratuite près de chez vous | Montréal, Laval | Pavagexpert",
     "get_quote_desc": "Obtenez une soumission gratuite pour votre projet de pavé uni ou dallage près de chez vous à Montréal, Laval ou sur la Rive-Sud. Lancez votre projet et recevez des offres d'entrepreneurs sous 24h.",
+    "jobs_title": "Projets de Pavage près de chez vous | Montréal, Laval, Rive-Sud | Pavagexpert",
+    "jobs_desc": "Consultez les projets de pavage et pavé uni près de chez vous soumis par des propriétaires à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal. Trouvez du travail dans votre secteur.",
+    "apply_title": "Devenir Entrepreneur en Pavage | Pavagexpert Montréal, Laval, Rive-Sud",
+    "apply_desc": "Postulez pour rejoindre notre réseau d'entrepreneurs certifiés en pavé uni et pavage desservant Montréal, Laval et la Rive-Sud. Licence RBQ requise. Développez votre entreprise locale.",
     "service_area_title": "Zones Desservies | Entrepreneur en Pavage près de chez vous | Montréal, Laval, Rive-Sud & Grand Montréal",
-    "service_area_desc": "Pavagexpert dessert plus de 40 villes et quartiers du Grand Montréal. Trouvez un entrepreneur en pavé uni, asphalte ou béton près de chez vous à Laval, Longueuil, Rive-Sud, Rive-Nord, West Island et plus."
+    "service_area_desc": "Pavagexpert dessert plus de 40 villes et quartiers du Grand Montréal. Trouvez un entrepreneur en pavé uni, asphalte ou béton près de chez vous à Laval, Longueuil, Rive-Sud, Rive-Nord, West Island et plus.",
+    "login_title": "Connexion Entrepreneur & Administrateur | Pavagexpert",
+    "login_desc": "Accédez à votre tableau de bord entrepreneur en pavage ou au panneau d'administration Pavagexpert. Gérez projets locaux, soumissions et paramètres de compte."
   },
   "privacy": {
     "title": "Politique de confidentialité",
@@ -244,6 +255,5 @@
     "analytics_desc": "Nous aident à comprendre comment le site est utilisé (Google Ads).",
     "save": "Enregistrer",
     "back": "Retour"
-  },
   }
 }
