@@ -18,7 +18,7 @@ export default function ServicesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-800">{t("title")}</h2>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{t("title")}</h2>
           <p className="mt-3 text-stone-500 text-lg">{t("subtitle")}</p>
         </motion.div>
 
@@ -41,8 +41,8 @@ export default function ServicesSection() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={service.icon} />
                     </svg>
                   </div>
-                  <h3 className="font-semibold text-stone-800 mb-2 group-hover:text-terracotta transition-colors">{typeof title === "string" ? title : service.id}</h3>
-                  <p className="text-sm text-stone-500 leading-relaxed">{typeof desc === "string" ? desc : ""}</p>
+                  <h3 className="font-heading font-semibold text-stone-800 mb-2 group-hover:text-terracotta transition-colors">{typeof title === "string" ? title : service.id}</h3>
+                  <p className="text-sm md:text-base text-stone-500 leading-relaxed">{typeof desc === "string" ? desc : ""}</p>
                 </motion.div>
               </Link>
             );

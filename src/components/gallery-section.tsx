@@ -34,7 +34,7 @@ export default function GallerySection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-800">{t("title")}</h2>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{t("title")}</h2>
           <p className="mt-3 text-stone-500 text-lg">{t("subtitle")}</p>
         </motion.div>
 
@@ -75,7 +75,7 @@ export default function GallerySection() {
 
               <div className={`absolute inset-0 bg-stone-900/70 flex items-center justify-center transition-opacity duration-300 ${hoveredId === project.id ? "opacity-100" : "opacity-0"}`}>
                 <div className="text-center text-white px-4">
-                  <p className="font-semibold mb-2">{t(project.titleKey)}</p>
+                  <p className="font-heading font-semibold mb-2">{t(project.titleKey)}</p>
                   <div className="flex gap-3 justify-center text-xs">
                     <span className="bg-white/20 px-3 py-1 rounded">{t("before")}</span>
                     <span className="bg-white/20 px-3 py-1 rounded">{t("after")}</span>

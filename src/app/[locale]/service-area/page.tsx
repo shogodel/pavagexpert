@@ -44,7 +44,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ lo
     <div className="min-h-screen bg-stone-50">
       <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold">{title}</h1>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold">{title}</h1>
           <p className="mt-3 text-lg text-stone-300 max-w-2xl mx-auto">{subtitle}</p>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ lo
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {groups.map((group) => (
               <div key={group.label} className="bg-white rounded-xl p-6 border border-stone-200 shadow-sm">
-                <h2 className="font-semibold text-lg text-stone-800 mb-4">{group.label}</h2>
+                <h2 className="font-heading font-semibold text-lg text-stone-800 mb-4">{group.label}</h2>
                 <ul className="space-y-2">
                   {group.cities.map((city) => (
                     <li key={city} className="flex items-center gap-2 text-stone-600">

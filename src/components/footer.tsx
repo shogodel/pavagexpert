@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("quick_links")}</h3>
+            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("quick_links")}</h3>
             <nav className="flex flex-col gap-2">
               <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("home")}</Link>
               <Link href={`/${locale}/services`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("services")}</Link>
@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("services_list")}</h3>
+            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("services_list")}</h3>
             <nav className="flex flex-col gap-2">
               {servicesList.map((s) => (
                 <Link
@@ -52,13 +52,13 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
+            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
             <div className="flex flex-col gap-2 text-sm text-stone-400">
               <span>Laval, QC H7N 2C2</span>
               <a href={`tel:${CONTACT_PHONE_TEL}`} className="hover:text-white transition-colors">{CONTACT_PHONE}</a>
               <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors">{CONTACT_EMAIL}</a>
             </div>
-            <h4 className="text-white font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>
+            <h4 className="text-white font-heading font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>
             <div className="flex flex-col gap-1 text-sm text-stone-400">
               <span>{t("mon_fri")}</span>
               <span>{t("sat")}</span>
@@ -69,7 +69,7 @@ export default function Footer() {
 
         <div className="border-t border-stone-800 mt-8 pt-8 pb-8 mb-8 border-b border-stone-800">
           <div className="max-w-xl mx-auto text-center">
-            <p className="text-white font-semibold text-lg">{t("exit_title")}</p>
+            <p className="text-white font-heading font-semibold text-lg">{t("exit_title")}</p>
             <p className="text-stone-400 text-sm mt-1">{t("exit_desc")}</p>
               <Link
                 href={`/${locale}/get-quote`}

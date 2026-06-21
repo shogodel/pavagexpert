@@ -49,7 +49,7 @@ export default function CookieConsent() {
     return (
       <div className="fixed bottom-0 inset-x-0 z-[60] p-4 pb-[env(safe-area-inset-bottom,16px)]">
         <div className="max-w-lg mx-auto bg-stone-900 border border-stone-700 rounded-xl p-5 shadow-2xl">
-          <h3 className="text-white font-semibold mb-3">{t("title")}</h3>
+          <h3 className="text-white font-heading font-semibold mb-3">{t("title")}</h3>
           <div className="space-y-3 mb-4">
             <label className="flex items-center justify-between py-2 cursor-pointer">
               <div>

@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               {t.all_services || "All Services"}
             </Link>
-            <h1 className="text-3xl md:text-4xl font-bold">{service.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-heading font-bold">{service.title}</h1>
             <p className="mt-4 text-lg text-stone-300 leading-relaxed">{service.content}</p>
           </div>
         </div>
@@ -78,7 +78,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
       <div className="py-12 bg-stone-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-stone-800 mb-6 text-center">{t.all_services || "All Services"}</h2>
+          <h2 className="text-xl font-heading font-bold text-stone-800 mb-6 text-center">{t.all_services || "All Services"}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {subservices.filter((s) => s.slug !== slug).map((s) => {
               const svc = (messages.services as Record<string, unknown>)[s.key] as Record<string, string> | undefined;

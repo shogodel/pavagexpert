@@ -92,7 +92,7 @@ export default function GetQuoteForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-stone-800 mb-2">{t("success_title")}</h2>
+          <h2 className="text-3xl font-heading font-bold text-stone-800 mb-2">{t("success_title")}</h2>
           <p className="text-stone-500">{t("success_msg")}</p>
         </motion.div>
       </div>
@@ -113,7 +113,7 @@ export default function GetQuoteForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-stone-800 mb-2">{t("success_verify_title")}</h2>
+          <h2 className="text-3xl font-heading font-bold text-stone-800 mb-2">{t("success_verify_title")}</h2>
           <p className="text-stone-500">{t("success_verify_msg")}</p>
         </motion.div>
       </div>
@@ -124,7 +124,7 @@ export default function GetQuoteForm() {
     <div className="min-h-screen bg-stone-50">
       <div className="pt-24 pb-8 bg-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-stone-800">{t("title")}</h1>
+            <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{t("title")}</h1>
           <p className="mt-2 text-stone-500">{t("subtitle")}</p>
         </div>
       </div>

@@ -46,7 +46,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
       <FaqJsonLd items={faqItems} />
       <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold">{t.title as string || (locale === "fr" ? "Nos Services" : "Our Services")}</h1>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold">{t.title as string || (locale === "fr" ? "Nos Services" : "Our Services")}</h1>
           <p className="mt-3 text-lg text-stone-300">{(t.subtitle as string) || ""}</p>
         </div>
       </div>
@@ -65,8 +65,8 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={service.icon} />
                       </svg>
                     </div>
-                    <h2 className="font-semibold text-stone-800 mb-2 group-hover:text-terracotta transition-colors">{svc.title}</h2>
-                    <p className="text-sm text-stone-500 leading-relaxed">{svc.desc}</p>
+                    <h2 className="font-heading font-semibold text-stone-800 mb-2 group-hover:text-terracotta transition-colors">{svc.title}</h2>
+                    <p className="text-sm md:text-base text-stone-500 leading-relaxed">{svc.desc}</p>
                   </div>
                 </Link>
               );

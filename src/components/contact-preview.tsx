@@ -17,7 +17,7 @@ export default function ContactPreview() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t("title")}</h2>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t("title")}</h2>
           <p className="text-lg text-white/80 mb-8">{t("subtitle")}</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

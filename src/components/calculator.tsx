@@ -74,7 +74,7 @@ export default function Calculator() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-800">{t("title")}</h2>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{t("title")}</h2>
           <p className="mt-3 text-stone-500 text-lg">{t("subtitle")}</p>
         </motion.div>
 
@@ -172,7 +172,7 @@ export default function Calculator() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="text-xl font-bold text-stone-800 mb-6">{t("estimate_result")}</h3>
+            <h3 className="text-xl font-heading font-bold text-stone-800 mb-6">{t("estimate_result")}</h3>
 
             <div className="flex items-center justify-center mb-6">
               <div className="w-32 h-32 rounded-full bg-stone-100 flex items-center justify-center border-2 border-terracotta/20">

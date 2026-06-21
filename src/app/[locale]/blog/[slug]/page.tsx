@@ -43,7 +43,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ lo
       <div className="pt-24 pb-8 bg-stone-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href={`/${locale}/blog`} className="text-sm text-terracotta hover:underline mb-4 inline-block">&larr; Blog</Link>
-          <h1 className="text-3xl md:text-4xl font-bold text-stone-800 mb-2">{article.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800 mb-2">{article.title}</h1>
           <p className="text-stone-500">{article.desc}</p>
         </div>
       </div>
