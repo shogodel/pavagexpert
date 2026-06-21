@@ -16,7 +16,6 @@ docker run -d \
   --name pavagexpert \
   --env-file .env \
   --network apps_default \
-  -v jobs_data:/data \
   pavagexpert:local
 
 echo "=== Waiting for health check ==="

@@ -6,43 +6,15 @@ services:
     image: ghcr.io/shogodel/pavagexpert:latest
     pull_policy: always
     restart: unless-stopped
-    depends_on:
-      - pavagexpert-db
     env_file: .env
     environment:
       - NODE_ENV=production
       - DATA_DIR=/data
-      - DATABASE_URL=postgresql://pavagexpert:${DB_PASSWORD}@pavagexpert-db:5432/pavagexpert?connect_timeout=5&application_name=pavagexpert
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
-    volumes:
-      - jobs_data:/data
-
-  pavagexpert-db:
-    image: postgres:16-alpine
-    command: ["postgres", "-c", "statement_timeout=30s"]
-    restart: unless-stopped
-    volumes:
-      - pavagexpert_pg_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: pavagexpert
-      POSTGRES_USER: pavagexpert
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pavagexpert"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
-
-volumes:
-  jobs_data:
-    external: true
-  pavagexpert_pg_data:
-    external: true
 
 networks:
   default:

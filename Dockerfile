@@ -25,11 +25,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-RUN npm install pg 
 RUN apk add --no-cache su-exec curl
-
-COPY src/db/migrate.mjs ./db/migrate.mjs
-COPY src/db/migrations/ ./db/migrations/
 
 COPY --chmod=755 entrypoint.sh ./
 

@@ -15,12 +15,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    volumes:
-      - jobs_data:/data
-
-volumes:
-  jobs_data:
-    external: true
 
 networks:
   default:

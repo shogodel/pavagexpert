@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Pavagexpert",
     short_name: "Pavagexpert",
     description: "Pavagexpert — Interlocking paver projects in Montreal, Laval and the South Shore. Projets de pavé uni à Montréal, Laval et la Rive-Sud.",
-    start_url: "/fr/login",
+    start_url: "/fr",
     display: "standalone",
     background_color: "#fafaf9",
     theme_color: "#c87d5d",

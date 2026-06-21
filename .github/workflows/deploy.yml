@@ -46,88 +46,41 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DROPLET_SSH }}
-          envs: GHCR_TOKEN,GHCR_USER,RESEND_API_KEY
+          envs: GHCR_TOKEN,GHCR_USER,RESEND_API_KEY,NOTIFICATION_EMAIL,WORDPRESS_API_URL,WORDPRESS_API_KEY
           script: |
             set -e
             cd ~/apps
 
-            # Clean up pavagexpert artifacts left by old awk-based deploys
-            if [ -f docker-compose.yaml ]; then
-              awk '
-              BEGIN { skip = 0 }
-              /^  pavagexpert(-db)?:/ { skip = 1; next }
-              skip && /^  [a-z]|^volumes|^networks/ { skip = 0 }
-              skip { next }
-              /^  (jobs_data|pavagexpert_pg_data):$/ { next }
-              { print }
-              ' docker-compose.yaml > .dc.clean
-              if [ -s .dc.clean ]; then
-                mv .dc.clean docker-compose.yaml
-              else
-                rm -f .dc.clean
-              fi
-            fi
-
-            # Remove stale pavagexpert containers
             docker rm -f pavagexpert 2>/dev/null || true
             docker rm -f pavagexpert-pavexpert-1 2>/dev/null || true
 
-            # Preserve secrets across deploys
             if [ -f .env ]; then
-              OLD_JWT=$(grep "^JWT_SECRET=" .env | cut -d= -f2-) || :
-              OLD_DB_PASS=$(grep "^DB_PASSWORD=" .env | cut -d= -f2-) || :
-              OLD_ADMIN_PASS=$(grep "^ADMIN_PASSWORD=" .env | cut -d= -f2-) || :
-              OLD_VAPID_PUB=$(grep "^NEXT_PUBLIC_VAPID_PUBLIC_KEY=" .env | cut -d= -f2-) || :
-              OLD_VAPID_PRIV=$(grep "^VAPID_PRIVATE_KEY=" .env | cut -d= -f2-) || :
               OLD_RESEND_KEY=$(grep "^RESEND_API_KEY=" .env | cut -d= -f2-) || :
+              OLD_NOTIFICATION_EMAIL=$(grep "^NOTIFICATION_EMAIL=" .env | cut -d= -f2-) || :
             fi
 
             {
-              echo "ADMIN_USERNAME=admin"
-              echo "ADMIN_PASSWORD=${OLD_ADMIN_PASS:-P@55word}"
-              echo "JWT_SECRET=${OLD_JWT:-$(openssl rand -base64 32)}"
-              echo "DB_PASSWORD=${OLD_DB_PASS:-$(openssl rand -base64 32)}"
-              echo "NEXT_PUBLIC_VAPID_PUBLIC_KEY=${OLD_VAPID_PUB}"
-              echo "VAPID_PRIVATE_KEY=${OLD_VAPID_PRIV}"
-              echo "VAPID_SUBJECT=mailto:pavagexpertmtl@gmail.com"
               echo "RESEND_API_KEY=${OLD_RESEND_KEY:-$RESEND_API_KEY}"
-              echo "NOTIFICATION_EMAIL=pavagexpertmtl@gmail.com"
+              echo "NOTIFICATION_EMAIL=${OLD_NOTIFICATION_EMAIL:-$NOTIFICATION_EMAIL}"
+              echo "WORDPRESS_API_URL=${WORDPRESS_API_URL}"
+              echo "WORDPRESS_API_KEY=${WORDPRESS_API_KEY}"
             } > .env
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
-            # Ensure dedicated volumes
-            docker volume inspect jobs_data >/dev/null 2>&1 || docker volume create jobs_data
-            docker volume inspect pavagexpert_pg_data >/dev/null 2>&1 || docker volume create pavagexpert_pg_data
-
-            # Download compose file from repo (avoids heredoc YAML issues)
             curl -sSL -o docker-compose.pavagexpert.yaml \
               https://raw.githubusercontent.com/shogodel/pavagexpert/master/docker-compose.pavagexpert.yaml
 
-            # Pull latest image and deploy
             docker compose -f docker-compose.pavagexpert.yaml pull pavagexpert
-
-            # Start DB first and wait for pg_isready
-            docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert-db
-            echo "[deploy] waiting for DB to accept connections..."
-            for i in $(seq 1 30); do
-              docker compose -f docker-compose.pavagexpert.yaml exec -T pavagexpert-db pg_isready -U pavagexpert 2>/dev/null && break
-              sleep 1
-            done
-
-            # Start app
             docker compose -f docker-compose.pavagexpert.yaml up -d pavagexpert --force-recreate
 
-            # Wait for health endpoint to pass (last fix added DB probe to /api/health)
             echo "[deploy] waiting for app health check..."
             for i in $(seq 1 30); do
               docker compose -f docker-compose.pavagexpert.yaml exec -T pavagexpert curl -sf http://localhost:3000/api/health > /dev/null 2>&1 && break
               sleep 2
             done
 
-            docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert pavagexpert-db
+            docker compose -f docker-compose.pavagexpert.yaml logs --tail 20 pavagexpert
 
-            # Fix SWAG nginx config: remove Docker DNS resolver + variable proxy_pass
-            # so nginx resolves pavagexpert once at startup, not per-request via flaky DNS
             docker exec swag sh -c "sed -i '/resolver 127.0.0.11/d; /set \$upstream_pavagexpert/d; s|proxy_pass http://\\\$upstream_pavagexpert|proxy_pass http://pavagexpert:3000|' /config/nginx/site-confs/default.conf" 2>/dev/null || true
             docker exec swag nginx -s reload 2>/dev/null || true
             docker restart swag 2>/dev/null || true
@@ -136,3 +89,6 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GHCR_USER: ${{ github.actor }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NOTIFICATION_EMAIL: ${{ secrets.NOTIFICATION_EMAIL }}
+          WORDPRESS_API_URL: ${{ secrets.WORDPRESS_API_URL }}
+          WORDPRESS_API_KEY: ${{ secrets.WORDPRESS_API_KEY }}
