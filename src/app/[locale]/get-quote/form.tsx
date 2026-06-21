@@ -153,7 +153,7 @@ export default function GetQuoteForm() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
-                placeholder="Jean Tremblay"
+                placeholder={t("name_placeholder")}
               />
             </div>
 
@@ -167,7 +167,7 @@ export default function GetQuoteForm() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
-                placeholder="jean@exemple.com"
+                placeholder={t("email_placeholder")}
               />
             </div>
 
@@ -194,7 +194,7 @@ export default function GetQuoteForm() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
-                placeholder="(514) 555-1234"
+                placeholder={t("phone_placeholder")}
               />
             </div>
 
@@ -212,7 +212,7 @@ export default function GetQuoteForm() {
                 className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
               />
               {photoFiles.length > 0 && (
-                <p className="text-xs text-stone-400 mt-1">{photoFiles.length} fichier(s) sélectionné(s)</p>
+                <p className="text-xs text-stone-400 mt-1">{photoFiles.length} {t("photos_selected")}</p>
               )}
             </div>
 
