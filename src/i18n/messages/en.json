@@ -235,6 +235,14 @@
       "Pavagexpert acts as a matching platform between homeowners and certified contractors. We are not responsible for work performed by contractors."
     ]
   },
+  "trust_badges": {
+    "rbq_title": "RBQ",
+    "rbq_desc": "Every contractor is RBQ-certified — mandatory before joining our network",
+    "apchq_title": "APCHQ / CCQ",
+    "apchq_desc": "Each contractor is a member in good standing of APCHQ and CCQ. Rigorously vetted.",
+    "free_title": "100% Free",
+    "free_desc": "Free quote, no obligation, no surprises. You only pay when you sign a contract."
+  },
   "cookie_consent": {
     "title": "Cookie Preferences",
     "message": "We use cookies to enhance your experience and analyze traffic. You can choose your preferences.",

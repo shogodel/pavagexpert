@@ -235,6 +235,14 @@
       "Pavagexpert agit comme plateforme de mise en relation entre les propriétaires et les entrepreneurs certifiés. Nous ne sommes pas responsables des travaux effectués par les entrepreneurs."
     ]
   },
+  "trust_badges": {
+    "rbq_title": "RBQ",
+    "rbq_desc": "Tous nos entrepreneurs sont certifiés RBQ — exigence obligatoire avant d'intégrer notre réseau",
+    "apchq_title": "APCHQ / CCQ",
+    "apchq_desc": "Chaque entrepreneur est membre en règle de l'APCHQ et de la CCQ. Sélection rigoureuse garantie.",
+    "free_title": "100 % gratuit",
+    "free_desc": "Devis gratuit, sans engagement, sans surprise. Vous ne payez que si vous signez un contrat."
+  },
   "cookie_consent": {
     "title": "Gestion des témoins (cookies)",
     "message": "Nous utilisons des témoins (cookies) pour améliorer votre expérience et analyser le trafic. Vous pouvez choisir vos préférences.",

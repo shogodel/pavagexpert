@@ -1,33 +1,20 @@
 "use client";
 
+import { useTranslations } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 
-const badges = [
-  {
-    title: "RBQ",
-    subtitle: "Tous nos entrepreneurs sont certifiés RBQ — exigence obligatoire avant d'intégrer notre réseau",
-    subtitleEn: "Every contractor is RBQ-certified — mandatory before joining our network",
-  },
-  {
-    title: "APCHQ / CCQ",
-    subtitle: "Chaque entrepreneur est membre en règle de l'APCHQ et de la CCQ. Sélection rigoureuse garantie.",
-    subtitleEn: "Each contractor is a member in good standing of APCHQ and CCQ. Rigorously vetted.",
-  },
-  {
-    title: "100 % gratuit",
-    subtitle: "Devis gratuit, sans engagement, sans surprise. Vous ne payez que si vous signez un contrat.",
-    subtitleEn: "Free quote, no obligation, no surprises. You only pay when you sign a contract.",
-  },
-];
+const badgeKeys = ["rbq", "apchq", "free"] as const;
 
-export default function TrustBadges({ locale = "fr" }: { locale?: string }) {
+export default function TrustBadges() {
+  const t = useTranslations("trust_badges");
+
   return (
     <section className="py-10 bg-terracotta/5 border-y border-terracotta/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {badges.map((badge, i) => (
+          {badgeKeys.map((key, i) => (
             <motion.div
-              key={badge.title}
+              key={key}
               className="flex items-center gap-4 bg-white rounded-xl px-6 py-4 shadow-sm border border-stone-200"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -52,8 +39,8 @@ export default function TrustBadges({ locale = "fr" }: { locale?: string }) {
                 )}
               </div>
               <div>
-                <p className="font-bold text-stone-800 text-lg">{badge.title}</p>
-                <p className="text-xs text-stone-500">{locale === "fr" ? badge.subtitle : badge.subtitleEn}</p>
+                <p className="font-bold text-stone-800 text-lg">{t(`${key}_title`)}</p>
+                <p className="text-xs text-stone-500">{t(`${key}_desc`)}</p>
               </div>
             </motion.div>
           ))}
