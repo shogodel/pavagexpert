@@ -17,12 +17,12 @@
     "service_area": "Zones desservies"
   },
   "hero": {
-    "title": "Jusqu'à 3 devis gratuits pour votre projet d'aménagement extérieur.",
-    "subtitle": "Décrivez votre projet une fois. Recevez jusqu'à 3 soumissions d'entrepreneurs certifiés RBQ, sélectionnés pour vous. Comparez, choisissez — sans frais, sans engagement.",
-    "cta_estimate": "Obtenir mes 3 devis gratuits",
+    "title": "Arrêtez de chercher. Décrivez une fois. Plusieurs entrepreneurs compétitionnent pour vous.",
+    "subtitle": "Décrivez votre projet une fois sur notre plateforme. Des entrepreneurs certifiés RBQ de votre région le reçoivent instantanément et compétitionnent pour obtenir votre contrat. Comparez les soumissions, choisissez votre entrepreneur — sans appels, sans pression, sans frais. Jamais.",
+    "cta_estimate": "Obtenir mes soumissions gratuites",
     "trust_badge_1": "Entrepreneurs certifiés RBQ",
     "trust_badge_2": "Soumission sous 48 h",
-    "trust_badge_3": "Sans engagement"
+    "trust_badge_3": "100 % gratuit — Toujours"
   },
   "services": {
     "title": "Nos Services",
