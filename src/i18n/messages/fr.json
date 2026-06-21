@@ -143,7 +143,8 @@
     "urgency": "Les entrepreneurs certifiés reçoivent des demandes chaque jour — soyez le prochain projet sélectionné."
   },
   "social_proof": {
-    "projects": "devis gratuits envoyés aux entrepreneurs",
+    "projects": "soumissions d'entrepreneurs en compétition",
+    "projects_value": "Multiples",
     "area": "délai de réponse moyen",
     "satisfaction": "gratuit, sans aucune obligation"
   },
