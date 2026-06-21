@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { locales, isLocale } from "@/i18n/config";
@@ -14,6 +14,7 @@ import CookieConsent from "@/components/cookie-consent";
 import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -53,7 +54,7 @@ export default async function LocaleLayout({
   const analyticsConsent = consentCookie.includes("analytics");
 
   return (
-    <html lang={locale} className={`${inter.variable} h-full scroll-smooth`}>
+    <html lang={locale} className={`${inter.variable} ${playfair.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
         {analyticsConsent && (
           <>
