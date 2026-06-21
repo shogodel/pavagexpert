@@ -132,14 +132,14 @@
     "project_desc": "Description détaillée",
     "desc_hint": "Racontez-nous votre projet : depuis combien de temps l'entrée est fissurée ? Qu'avez-vous imaginé ?",
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
-    "submit": "Recevoir mes 3 devis gratuits",
+    "submit": "Recevoir mes soumissions gratuites",
     "success_title": "Projet envoyé aux entrepreneurs !",
     "success_msg": "Votre demande a bien été transmise. Des entrepreneurs certifiés et sélectionnés vous contacteront sous 48 h.",
     "success_verify_title": "Vérifiez votre courriel",
     "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et recevoir vos soumissions sous 48 h.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos données personnelles sont protégées — jamais partagées sans votre accord.",
-    "guarantee": "Jusqu'à 3 soumissions • Aucun engagement • Entrepreneurs vérifiés RBQ",
+    "guarantee": "Multiples soumissions • Aucun engagement • Entrepreneurs vérifiés RBQ",
     "urgency": "Les entrepreneurs certifiés reçoivent des demandes chaque jour — soyez le prochain projet sélectionné."
   },
   "social_proof": {
