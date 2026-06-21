@@ -42,7 +42,6 @@ volumes:
   jobs_data:
     external: true
   pavagexpert_pg_data:
-    external: true
 
 networks:
   default:
