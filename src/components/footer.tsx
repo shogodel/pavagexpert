@@ -87,9 +87,7 @@ export default function Footer() {
           <div className="flex gap-4 text-sm text-stone-500">
             <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>
             <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors">{t("terms")}</Link>
-            {mounted && (
-              <Link href={`/${locale}/data-request`} className="hover:text-stone-300 transition-colors">Données personnelles</Link>
-            )}
+            
           </div>
         </div>
       </div>

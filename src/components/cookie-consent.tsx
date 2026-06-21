@@ -14,14 +14,6 @@ function setCookie(name: string, value: string, days: number): void {
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
 }
 
-function generateVisitorId(): string {
-  let id = getCookie("visitor_id");
-  if (id) return id;
-  id = crypto.randomUUID();
-  setCookie("visitor_id", id, 365 * 5);
-  return id;
-}
-
 const CONSENT_COOKIE = "cookie_consent";
 
 export default function CookieConsent() {
@@ -39,24 +31,8 @@ export default function CookieConsent() {
   }, []);
 
   const save = useCallback(async (consentGiven: boolean, categories: string[]) => {
-    const visitorId = generateVisitorId();
     setCookie(CONSENT_COOKIE, categories.join(","), 365);
     setVisible(false);
-
-    try {
-      await fetch("/api/consent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          visitorId,
-          consentType: consentGiven ? "accept" : "reject",
-          consentGiven,
-          categories,
-        }),
-      });
-    } catch {
-      /* fire-and-forget */
-    }
   }, []);
 
   const acceptAll = useCallback(() => save(true, ["necessary", "analytics"]), [save]);

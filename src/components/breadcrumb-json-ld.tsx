@@ -10,16 +10,9 @@ const defaultNames: Record<string, Record<string, string>> = {
   calculator: { fr: "Calculateur", en: "Calculator" },
   gallery: { fr: "Réalisations", en: "Portfolio" },
   "get-quote": { fr: "Soumission", en: "Estimate" },
-  jobs: { fr: "Projets", en: "Projects" },
   "service-area": { fr: "Zones desservies", en: "Service Areas" },
   privacy: { fr: "Confidentialité", en: "Privacy" },
   terms: { fr: "Conditions", en: "Terms" },
-  login: { fr: "Connexion", en: "Login" },
-  apply: { fr: "Devenir entrepreneur", en: "Become a Contractor" },
-  admin: { fr: "Administration", en: "Admin" },
-  contractor: { fr: "Entrepreneur", en: "Contractor" },
-  dashboard: { fr: "Tableau de bord", en: "Dashboard" },
-  profile: { fr: "Profil", en: "Profile" },
 };
 
 const serviceSlugNames: Record<string, Record<string, string>> = {};
