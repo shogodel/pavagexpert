@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import PwaRegister from "@/components/PwaRegister";
-import PwaBanner from "@/components/PwaBanner";
+import { usePathname } from "next/navigation";
 
 const serviceLinks = [
   { key: "pavers", slug: "pavers" },
@@ -18,87 +16,23 @@ const serviceLinks = [
   { key: "drainage", slug: "drainage" },
 ];
 
-let deferredInstallPrompt: Event | null = null;
-if (typeof window !== "undefined") {
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredInstallPrompt = e;
-  });
-}
-
 export default function Header() {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [auth, setAuth] = useState<{ authenticated: boolean; role?: string } | null>(null);
-  const [switchingLocale, setSwitchingLocale] = useState(false);
-  const [installed, setInstalled] = useState(false);
-  const [installHint, setInstallHint] = useState(false);
   const isTouchRef = useRef(false);
-  const installPromptRef = useRef<Event | null>(null);
 
-  useEffect(() => {
+  if (typeof window !== "undefined") {
     isTouchRef.current = "ontouchstart" in window;
-    setInstalled(window.matchMedia("(display-mode: standalone)").matches);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      installPromptRef.current = e;
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    if (deferredInstallPrompt) {
-      installPromptRef.current = deferredInstallPrompt;
-    }
-    const appInstalledHandler = () => setInstalled(true);
-    window.addEventListener("appinstalled", appInstalledHandler);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handler);
-      window.removeEventListener("appinstalled", appInstalledHandler);
-    };
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then(setAuth)
-      .catch(() => setAuth({ authenticated: false }));
-
-    const onFocus = () => {
-      fetch("/api/auth/me")
-        .then((r) => r.json())
-        .then(setAuth)
-        .catch(() => setAuth({ authenticated: false }));
-    };
-    window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
-  }, []);
-
-  async function handleLogout() {
-    await fetch("/api/logout", { method: "POST" });
-    setAuth({ authenticated: false });
-    setMenuOpen(false);
-    router.push(`/${locale}`);
-  }
-
-  function dashboardHref(): string {
-    if (auth?.role === "contractor") return `/${locale}/contractor/dashboard`;
-    return `/${locale}/admin`;
   }
 
   const otherLocale = locale === "fr" ? "en" : "fr";
 
   function isActive(page: string): boolean {
     if (page === "home") return pathname === `/${locale}` || pathname === "/fr" || pathname === "/en";
-    if (page === "dashboard") {
-      return pathname === `/${locale}/admin` || pathname === `/${locale}/contractor/dashboard`;
-    }
-    if (page === "profile") return pathname === `/${locale}/contractor/profile`;
     return pathname === `/${locale}/${page}` || pathname === `/${page}`;
   }
 
@@ -106,22 +40,13 @@ export default function Header() {
     return serviceLinks.some((s) => pathname.startsWith(`/${locale}/services/${s.slug}`));
   }
 
-  async function switchLocale() {
-    setSwitchingLocale(true);
-    document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax;${process.env.NODE_ENV === "production" ? " Secure;" : ""}`;
-    setMenuOpen(false);
-    await router.push(`/${otherLocale}`);
-    setSwitchingLocale(false);
-  }
-
-  const navLink = (href: string, label: string, active: boolean, onClick?: () => void) => (
+  const navLink = (href: string, label: string, active: boolean) => (
     <Link
       href={href}
       className={`text-sm font-medium uppercase tracking-wider transition-colors ${
         active ? "text-terracotta" : "text-stone-600 hover:text-stone-900"
       }`}
       aria-current={active ? "page" : undefined}
-      onClick={onClick}
     >
       {label}
     </Link>
@@ -184,62 +109,20 @@ export default function Header() {
 
             {navLink(`/${locale}/calculator`, t("calculator"), isActive("calculator"))}
             {navLink(`/${locale}/blog`, t("blog"), isActive("blog"))}
-
-            {auth === null ? (
-              <div className="flex items-center gap-6"><div className="h-5 w-48" /></div>
-            ) : auth.authenticated ? (
-              <>
-                {navLink(`/${locale}/jobs`, t("jobs"), isActive("jobs"))}
-                {navLink(dashboardHref(), t("dashboard"), isActive("dashboard"))}
-                {auth.role === "contractor" && navLink(`/${locale}/contractor/profile`, t("profile"), isActive("profile"))}
-                {!installed && (
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (installPromptRef.current) {
-                          (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
-                          installPromptRef.current = null;
-                        } else {
-                          setInstallHint(true);
-                        }
-                      }}
-                      className="text-sm font-medium uppercase tracking-wider text-terracotta hover:text-terracotta-dark cursor-pointer"
-                    >
-                      {t("install_app")}
-                    </button>
-                    {installHint && (
-                      <div className="absolute top-full mt-1 right-0 w-56 bg-stone-800 text-white text-xs rounded-lg p-2 shadow-lg z-50" onClick={() => setInstallHint(false)}>
-                        <p>Ouvrez le menu du navigateur et sélectionnez « Installer l'application » ou « Ajouter à l'écran d'accueil ».</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="text-sm font-medium uppercase tracking-wider text-stone-600 hover:text-stone-900 cursor-pointer"
-                >
-                  {t("logout")}
-                </button>
-              </>
-            ) : (
-              <>
-                {navLink(`/${locale}/apply`, t("apply"), isActive("apply"))}
-                {navLink(`/${locale}/login`, t("login"), isActive("login"))}
-              </>
-            )}
           </nav>
 
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={switchLocale}
-              disabled={switchingLocale}
-              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer disabled:opacity-50"
+              onClick={() => {
+                document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax;${process.env.NODE_ENV === "production" ? " Secure;" : ""}`;
+                setMenuOpen(false);
+                window.location.href = `/${otherLocale}`;
+              }}
+              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer"
               aria-label={`Switch language to ${otherLocale === "fr" ? "French" : "English"}`}
             >
-              {switchingLocale ? "..." : otherLocale === "fr" ? "FR" : "EN"}
+              {otherLocale === "fr" ? "FR" : "EN"}
             </button>
 
             <Link
@@ -328,84 +211,6 @@ export default function Header() {
                 {t("blog")}
               </Link>
 
-              <hr className="my-2 border-stone-200" />
-
-              {auth === null ? null : auth.authenticated ? (
-                <>
-                  <Link
-                    href={`/${locale}/jobs`}
-                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("jobs") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {t("jobs")}
-                  </Link>
-                  <Link
-                    href={dashboardHref()}
-                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("dashboard") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {t("dashboard")}
-                  </Link>
-                  {auth.role === "contractor" && (
-                    <Link
-                      href={`/${locale}/contractor/profile`}
-                      className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("profile") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {t("profile")}
-                    </Link>
-                  )}
-                  {!installed && (
-                    <div className="relative">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (installPromptRef.current) {
-                            (installPromptRef.current as unknown as { prompt: () => Promise<void> }).prompt();
-                            installPromptRef.current = null;
-                            setMenuOpen(false);
-                          } else {
-                            setInstallHint(true);
-                          }
-                        }}
-                        className="text-sm font-medium py-2 uppercase tracking-wider text-terracotta hover:text-terracotta-dark text-left cursor-pointer"
-                      >
-                        {t("install_app")}
-                      </button>
-                      {installHint && (
-                        <div className="absolute top-full mt-1 left-0 w-56 bg-stone-800 text-white text-xs rounded-lg p-2 shadow-lg z-50" onClick={() => setInstallHint(false)}>
-                          <p>Ouvrez le menu du navigateur et sélectionnez « Installer l'application » ou « Ajouter à l'écran d'accueil ».</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => { handleLogout(); setMenuOpen(false); }}
-                    className="text-sm font-medium py-2 uppercase tracking-wider text-stone-600 hover:text-stone-900 text-left cursor-pointer"
-                  >
-                    {t("logout")}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href={`/${locale}/apply`}
-                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("apply") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {t("apply")}
-                  </Link>
-                  <Link
-                    href={`/${locale}/login`}
-                    className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("login") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {t("login")}
-                  </Link>
-                </>
-              )}
-
               <div className="mt-3 pt-3 border-t border-stone-200">
                 <Link
                   href={`/${locale}/get-quote`}
@@ -419,8 +224,6 @@ export default function Header() {
           </div>
         )}
       </div>
-      {auth?.role === "contractor" && <PwaRegister isContractor={true} />}
-      {auth?.authenticated && <PwaBanner />}
     </header>
   );
 }
