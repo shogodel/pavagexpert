@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
     const postalCode = form.get("postalCode") as string;
     const budget = form.get("budget") as string;
     const description = form.get("description") as string;
+    const leadSource = form.get("lead_source") as string | null;
 
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ ok: false, errors: ["name"] }, { status: 400 });
@@ -49,11 +50,30 @@ export async function POST(req: NextRequest) {
     if (!phone || phone.trim().length < 6) {
       return NextResponse.json({ ok: false, errors: ["phone"] }, { status: 400 });
     }
+    if (!postalCode || postalCode.trim().length < 3) {
+      return NextResponse.json({ ok: false, errors: ["postalCode"] }, { status: 400 });
+    }
     if (!budget || budget.trim().length < 1) {
       return NextResponse.json({ ok: false, errors: ["budget"] }, { status: 400 });
     }
     if (!description || description.trim().length < 10) {
       return NextResponse.json({ ok: false, errors: ["description"] }, { status: 400 });
+    }
+
+    const photos = form.getAll("photos") as File[];
+    const attachments = await Promise.all(
+      photos.map(async (photo) => ({
+        filename: photo.name,
+        content: Buffer.from(await photo.arrayBuffer()).toString("base64"),
+      }))
+    );
+
+    let leadSourceHtml = "";
+    if (leadSource) {
+      try {
+        const parsed = JSON.parse(leadSource);
+        leadSourceHtml = `<p><strong>Source:</strong> ${parsed.utm_source || "direct"}<br><strong>Campagne:</strong> ${parsed.utm_campaign || "—"}<br><strong>Page:</strong> ${parsed.landing_page || "—"}</p>`;
+      } catch { /* ignore malformed */ }
     }
 
     try {
@@ -64,10 +84,12 @@ export async function POST(req: NextRequest) {
           <p><strong>Nom:</strong> ${name}</p>
           <p><strong>Courriel:</strong> ${email}</p>
           <p><strong>Téléphone:</strong> ${phone}</p>
-          <p><strong>Code postal:</strong> ${postalCode || "—"}</p>
+          <p><strong>Code postal:</strong> ${postalCode}</p>
           <p><strong>Budget:</strong> ${budget}</p>
           <p><strong>Description:</strong><br>${description}</p>
+          ${leadSourceHtml}
         `,
+        attachments: attachments.length > 0 ? attachments : undefined,
       });
     } catch {
       console.error("[contact] notification email failed");

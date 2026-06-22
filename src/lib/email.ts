@@ -1,9 +1,15 @@
 import { Resend } from "resend";
 
+interface Attachment {
+  filename: string;
+  content: string;
+}
+
 interface EmailPayload {
   to: string;
   subject: string;
   html: string;
+  attachments?: Attachment[];
 }
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
@@ -19,6 +25,7 @@ export async function sendEmail(payload: EmailPayload): Promise<void> {
     to: payload.to,
     subject: payload.subject,
     html: payload.html,
+    attachments: payload.attachments,
   });
   if (error) console.error("[EMAIL] Resend error:", error);
 }
