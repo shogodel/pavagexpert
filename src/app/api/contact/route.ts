@@ -56,26 +56,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, errors: ["description"] }, { status: 400 });
     }
 
-    const wpUrl = process.env.WORDPRESS_API_URL;
-    const wpKey = process.env.WORDPRESS_API_KEY;
-    let wpOk = false;
-    if (wpUrl && wpKey) {
-      try {
-        const wpRes = await fetch(wpUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-API-Key": wpKey,
-          },
-          body: JSON.stringify({ name, email, phone, postalCode, budget, description, ip }),
-        });
-        wpOk = wpRes.ok;
-        if (!wpOk) console.error("[contact] WordPress error:", wpRes.status, await wpRes.text().catch(() => ""));
-      } catch (wpErr) {
-        console.error("[contact] WordPress fetch error:", wpErr);
-      }
-    }
-
     try {
       await sendEmail({
         to: CONTACT_EMAIL,

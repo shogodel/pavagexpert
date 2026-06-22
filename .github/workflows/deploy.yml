@@ -46,7 +46,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DROPLET_SSH }}
-          envs: GHCR_TOKEN,GHCR_USER,RESEND_API_KEY,NOTIFICATION_EMAIL,WORDPRESS_API_URL,WORDPRESS_API_KEY
+          envs: GHCR_TOKEN,GHCR_USER,RESEND_API_KEY,NOTIFICATION_EMAIL
           script: |
             set -e
             cd ~/apps
@@ -62,8 +62,6 @@ jobs:
             {
               echo "RESEND_API_KEY=${OLD_RESEND_KEY:-$RESEND_API_KEY}"
               echo "NOTIFICATION_EMAIL=${OLD_NOTIFICATION_EMAIL:-$NOTIFICATION_EMAIL}"
-              echo "WORDPRESS_API_URL=${WORDPRESS_API_URL}"
-              echo "WORDPRESS_API_KEY=${WORDPRESS_API_KEY}"
             } > .env
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
@@ -90,5 +88,4 @@ jobs:
           GHCR_USER: ${{ github.actor }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           NOTIFICATION_EMAIL: ${{ secrets.NOTIFICATION_EMAIL }}
-          WORDPRESS_API_URL: ${{ secrets.WORDPRESS_API_URL }}
-          WORDPRESS_API_KEY: ${{ secrets.WORDPRESS_API_KEY }}
+
