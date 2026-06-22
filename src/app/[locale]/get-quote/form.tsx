@@ -78,11 +78,11 @@ export default function GetQuoteForm() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      <div className="pt-24 pb-8 bg-stone-100">
+    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
+      <div className="pt-28 pb-10 bg-gradient-to-b from-stone-900 to-stone-800 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{t("title")}</h1>
-          <p className="mt-2 text-stone-500">{t("subtitle")}</p>
+            <h1 className="text-3xl md:text-4xl font-heading font-bold">{t("title")}</h1>
+          <p className="mt-2 text-stone-300">{t("subtitle")}</p>
         </div>
       </div>
 
@@ -90,7 +90,7 @@ export default function GetQuoteForm() {
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.form
             onSubmit={handleSubmit}
-            className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-stone-200 space-y-6"
+            className="bg-white rounded-2xl p-6 md:p-10 shadow-xl border border-stone-200 space-y-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -109,7 +109,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
                 placeholder={t("name_placeholder")}
               />
             </div>
@@ -123,7 +123,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
                 placeholder={t("email_placeholder")}
               />
             </div>
@@ -136,7 +136,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.postalCode}
                 onChange={(e) => setForm({ ...form, postalCode: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
                 placeholder="H3Z 2Y7"
               />
             </div>
@@ -150,14 +150,14 @@ export default function GetQuoteForm() {
                 required
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
                 placeholder={t("phone_placeholder")}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("photos")} <span className="text-red-500">*</span>
+                {t("photos")}
               </label>
               <p className="text-xs text-stone-400 mb-2">{t("photos_hint")}</p>
               <input
@@ -180,7 +180,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.budget}
                 onChange={(e) => setForm({ ...form, budget: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
                 placeholder={t("budget_placeholder")}
               />
             </div>
@@ -195,7 +195,7 @@ export default function GetQuoteForm() {
                 rows={6}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-colors resize-none text-base"
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all resize-none text-base shadow-sm focus:shadow-md"
                 placeholder={t("desc_placeholder")}
               />
             </div>
@@ -211,7 +211,7 @@ export default function GetQuoteForm() {
             <button
               type="submit"
               disabled={sending}
-              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-lg transition-colors text-lg"
+              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-lg transition-all text-lg shadow-lg hover:shadow-xl hover:shadow-terracotta/25"
             >
               {sending ? "..." : t("submit")}
             </button>

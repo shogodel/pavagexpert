@@ -80,7 +80,7 @@ export default function Calculator() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <motion.div
-            className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-stone-200"
+            className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-stone-200"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -166,7 +166,7 @@ export default function Calculator() {
           </motion.div>
 
           <motion.div
-            className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-stone-200 flex flex-col"
+            className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-stone-200 flex flex-col"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -204,7 +204,7 @@ export default function Calculator() {
 
             <Link
               href="/get-quote"
-              className="mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors block"
+              className="mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-all block shadow-lg hover:shadow-xl hover:shadow-terracotta/25"
             >
               {t("cta_get_quote")}
             </Link>

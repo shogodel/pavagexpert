@@ -15,7 +15,7 @@ export default function TrustBadges() {
           {badgeKeys.map((key, i) => (
             <motion.div
               key={key}
-              className="flex items-center gap-4 bg-white rounded-xl px-6 py-4 shadow-sm border border-stone-200"
+              className="flex items-center gap-4 bg-white rounded-xl px-6 py-4 shadow-md hover:shadow-lg border border-stone-200 hover:-translate-y-0.5 transition-all duration-300"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

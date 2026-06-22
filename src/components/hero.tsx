@@ -12,7 +12,8 @@ export default function Hero() {
       <div
         className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-40"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/70 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/95 via-stone-900/75 to-stone-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="max-w-2xl">
@@ -42,7 +43,7 @@ export default function Hero() {
           >
             <Link
               href="/get-quote"
-              className="bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg text-center transition-colors text-lg"
+              className="bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg text-center transition-colors text-lg shadow-lg hover:shadow-terracotta/25 hover:shadow-xl"
             >
               {t("cta_estimate")}
             </Link>

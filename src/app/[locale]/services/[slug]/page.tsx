@@ -87,7 +87,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <Link
                   key={s.slug}
                   href={`/${locale}/services/${s.slug}`}
-                  className="bg-white rounded-lg px-4 py-3 text-sm font-medium text-stone-700 hover:text-terracotta hover:border-terracotta/30 border border-stone-200 transition-colors text-center"
+                  className="bg-white rounded-lg px-4 py-3 text-sm font-medium text-stone-700 hover:text-terracotta hover:border-terracotta/30 border border-stone-200 transition-all text-center shadow-sm hover:shadow-md"
                 >
                   {svc.title}
                 </Link>

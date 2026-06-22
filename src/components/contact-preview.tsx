@@ -23,7 +23,7 @@ export default function ContactPreview() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/get-quote"
-              className="bg-white text-terracotta hover:bg-stone-100 font-semibold px-8 py-3.5 rounded-lg transition-colors text-lg"
+              className="bg-white text-terracotta hover:bg-stone-100 font-semibold px-8 py-3.5 rounded-lg transition-all text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               {t("submit")}
             </Link>

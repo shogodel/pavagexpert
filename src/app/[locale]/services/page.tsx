@@ -59,8 +59,8 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
               if (!svc) return null;
               return (
                 <Link key={service.slug} href={`/${locale}/services/${service.slug}`}>
-                  <div className="group bg-stone-50 rounded-xl p-6 hover:bg-stone-100 transition-colors border border-stone-200 hover:border-terracotta/30 h-full">
-                    <div className="w-12 h-12 bg-terracotta/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-terracotta/20 transition-colors">
+                  <div className="group bg-white rounded-xl p-6 shadow-lg hover:shadow-xl border border-stone-200 hover:border-terracotta/40 hover:-translate-y-1 transition-all duration-300 h-full">
+                    <div className="w-12 h-12 bg-terracotta/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-terracotta/20 transition-all group-hover:scale-110 duration-300">
                       <svg className="w-6 h-6 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={service.icon} />
                       </svg>
