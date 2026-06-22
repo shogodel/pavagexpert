@@ -17,12 +17,12 @@
     "service_area": "Service Areas"
   },
   "hero": {
-    "title": "Stop searching. Describe once. Multiple contractors compete for you.",
-    "subtitle": "Describe your project once on our platform. RBQ-certified contractors in your area receive it instantly and compete to earn your business. Compare quotes, review profiles, pick your match — no phone tag, no pressure, no cost. Ever.",
-    "cta_estimate": "Get my free quotes",
-    "trust_badge_1": "RBQ-Certified Contractors",
-    "trust_badge_2": "Quotes within 48 h",
-    "trust_badge_3": "100% Free — Always"
+    "title": "Pavagexpert is here to help you realize your dream driveway",
+    "subtitle": "One simple submission — no runaround, no pressure.",
+    "cta_estimate": "Get my price, NOW",
+    "trust_badge_1": "RBQ-Certified",
+    "trust_badge_2": "We answer fast, try it out!",
+    "trust_badge_3": "Free Estimate — No Obligation"
   },
   "services": {
     "title": "Our Services",
@@ -113,7 +113,7 @@
     "dismiss": "Not now"
   },
   "get_quote": {
-    "title": "Describe your project once. Certified contractors compete for your contract.",
+    "title": "Pavagexpert looks at your project like is their own's",
     "subtitle": "Tell us about your project in a few words",
     "name": "Full name",
     "name_placeholder": "e.g. John Smith",
@@ -132,37 +132,37 @@
     "project_desc": "Detailed description",
     "desc_hint": "Tell us your story: how long has your driveway been cracked? What have you imagined?",
     "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
-    "submit": "Get my free quotes",
+    "submit": "Get my free estimate",
     "success_title": "Your project has been sent!",
     "success_msg": "Your request was sent successfully. Certified, hand-picked contractors will reach out within 48 h.",
     "success_verify_title": "Check your email",
     "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your request and get your quotes within 48 h.",
     "error_msg": "An error occurred. Please try again.",
     "privacy": "Your personal data is protected — never shared without your consent.",
-    "guarantee": "Multiple quotes • No obligation • RBQ-verified contractors",
-    "urgency": "Certified contractors review new projects every day — be the next project they compete for."
+    "guarantee": "Free estimate • No obligation • RBQ-certified",
+    "urgency": "Our teams of experts in pavement take new projects every day — be the next project they take on."
   },
   "social_proof": {
-    "projects": "quotes from competing contractors",
-    "projects_value": "Multiple",
+    "projects": "projects done by our teams",
+    "projects_value": "500+",
     "area": "average response time",
     "satisfaction": "free, with no obligation"
   },
   "psychology": {
     "title": "Why wait?",
     "quote": "The hardest part is starting. After that, everything falls into place.",
-    "subtitle": "Describe your project in 2 minutes. Get multiple free quotes from competing contractors. Compare and choose — with zero pressure.",
-    "cta": "Get my free quotes"
+    "subtitle": "Get your free estimate for your needs. No pressure, no obligation. We are here to help!",
+    "cta": "Get my quote, NOW"
   },
   "how_it_works": {
     "title": "How It Works",
     "subtitle": "Three simple steps to turn your project into reality",
     "step1_title": "1. Tell us about your project",
     "step1_desc": "Describe your space in minutes. Photos, video, dimensions — the more you share, the more accurate the offers.",
-    "step2_title": "2. Receive offers",
-    "step2_desc": "Certified contractors review your project and submit their best estimate. You compare with peace of mind.",
-    "step3_title": "3. Choose with confidence",
-    "step3_desc": "Browse profiles, compare quotes, and pick the contractor that's right for you. No pressure, no obligation."
+    "step2_title": "2. We find the best team for your project",
+    "step2_desc": "Our teams are made of seasoned pavement experts, RBQ-certified professionals from our network.",
+    "step3_title": "3. Your project begins",
+    "step3_desc": "Schedule your on-site visit, receive your personalized quote, and watch your vision come to life."
   },
   "blog": {
     "title": "Blog & Tips",
@@ -171,10 +171,10 @@
     "categories": "Categories"
   },
   "footer": {
-    "description": "The matchmaking service that connects homeowners with RBQ-certified contractors. Up to 3 free quotes — compare and choose with total peace of mind.",
+    "description": "Pavagexpert makes paving pojects come to life with RBQ-certified paving experts in Montreal, Laval and the South Shore. Free estimate, no obligation.",
     "exit_title": "Don't let your project wait.",
-    "exit_desc": "Get up to 3 quotes from certified contractors, free and with no obligation. The first step is the easiest one.",
-    "exit_cta": "Get my 3 free quotes",
+    "exit_desc": "Get a free personalized estimate for your paving project. No commitment, no pressure. The first step is the easiest.",
+    "exit_cta": "Get my free quote,NOW",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",

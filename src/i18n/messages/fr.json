@@ -17,12 +17,12 @@
     "service_area": "Zones desservies"
   },
   "hero": {
-    "title": "Arrêtez de chercher. Décrivez une fois. Plusieurs entrepreneurs compétitionnent pour vous.",
-    "subtitle": "Décrivez votre projet une fois sur notre plateforme. Des entrepreneurs certifiés RBQ de votre région le reçoivent instantanément et compétitionnent pour obtenir votre contrat. Comparez les soumissions, choisissez votre entrepreneur — sans appels, sans pression, sans frais. Jamais.",
-    "cta_estimate": "Obtenir mes soumissions gratuites",
-    "trust_badge_1": "Entrepreneurs certifiés RBQ",
-    "trust_badge_2": "Soumission sous 48 h",
-    "trust_badge_3": "100 % gratuit — Toujours"
+    "title": "Pavagexpert est là pour vous aider à réaliser l'entrée de vos rêves",
+    "subtitle": "Une seule soumission simple — sans tracas, sans pression.",
+    "cta_estimate": "Obtenez mon prix, MAINTENANT",
+    "trust_badge_1": "Certifié RBQ",
+    "trust_badge_2": "On répond vite, essayez !",
+    "trust_badge_3": "Estimation gratuite — Sans engagement"
   },
   "services": {
     "title": "Nos Services",
@@ -113,7 +113,7 @@
     "dismiss": "Pas maintenant"
   },
   "get_quote": {
-    "title": "Décrivez votre projet une fois. Des entrepreneurs certifiés se disputent votre contrat.",
+    "title": "Pavagexpert considère votre projet comme le sien",
     "subtitle": "Racontez-nous votre projet en toute simplicité",
     "name": "Nom complet",
     "name_placeholder": "Ex. : Jean Tremblay",
@@ -132,37 +132,37 @@
     "project_desc": "Description détaillée",
     "desc_hint": "Racontez-nous votre projet : depuis combien de temps l'entrée est fissurée ? Qu'avez-vous imaginé ?",
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
-    "submit": "Recevoir mes soumissions gratuites",
+    "submit": "Obtenez mon estimation gratuite",
     "success_title": "Projet envoyé aux entrepreneurs !",
     "success_msg": "Votre demande a bien été transmise. Des entrepreneurs certifiés et sélectionnés vous contacteront sous 48 h.",
     "success_verify_title": "Vérifiez votre courriel",
     "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et recevoir vos soumissions sous 48 h.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos données personnelles sont protégées — jamais partagées sans votre accord.",
-    "guarantee": "Multiples soumissions • Aucun engagement • Entrepreneurs vérifiés RBQ",
-    "urgency": "Les entrepreneurs certifiés reçoivent des demandes chaque jour — soyez le prochain projet sélectionné."
+    "guarantee": "Estimation gratuite • Sans engagement • Certifié RBQ",
+    "urgency": "Nos équipes d'experts en pavage prennent de nouveaux projets chaque jour — soyez le prochain projet qu'elles prennent en charge."
   },
   "social_proof": {
-    "projects": "soumissions d'entrepreneurs en compétition",
-    "projects_value": "Multiples",
+    "projects": "projets réalisés par nos équipes",
+    "projects_value": "500+",
     "area": "délai de réponse moyen",
     "satisfaction": "gratuit, sans aucune obligation"
   },
   "psychology": {
     "title": "Pourquoi attendre ?",
     "quote": "Le plus difficile, c'est de commencer. Après, tout s'enchaîne.",
-    "subtitle": "Décrivez votre projet en 2 minutes. Recevez plusieurs soumissions gratuites. Comparez, choisissez — sans pression.",
-    "cta": "Obtenir mes soumissions gratuites"
+    "subtitle": "Obtenez votre estimation gratuite pour vos besoins. Sans pression, sans engagement. Nous sommes là pour vous aider !",
+    "cta": "Obtenez mon devis, MAINTENANT"
   },
   "how_it_works": {
     "title": "Comment ça marche",
     "subtitle": "Trois étapes simples pour transformer votre projet en réalité",
     "step1_title": "1. Racontez votre projet",
     "step1_desc": "Décrivez votre espace en quelques minutes. Photos, vidéo, dimensions — plus vous en dites, plus les offres seront précises.",
-    "step2_title": "2. Recevez des offres",
-    "step2_desc": "Des entrepreneurs certifiés analysent votre projet et vous soumettent leur meilleure estimation. Vous comparez en toute tranquillité.",
-    "step3_title": "3. Choisissez en confiance",
-    "step3_desc": "Consultez les profils, comparez les devis et choisissez l'artisan qui vous convient. Sans pression, sans engagement."
+    "step2_title": "2. Nous trouvons la meilleure équipe pour votre projet",
+    "step2_desc": "Nos équipes sont composées d'experts chevronnés en pavage, des professionnels certifiés RBQ de notre réseau.",
+    "step3_title": "3. Votre projet commence",
+    "step3_desc": "Planifiez votre visite sur place, recevez votre devis personnalisé et regardez votre vision prendre vie."
   },
   "blog": {
     "title": "Blog & Conseils",
@@ -171,10 +171,10 @@
     "categories": "Catégories"
   },
   "footer": {
-    "description": "Le service de mise en relation qui connecte les propriétaires avec des entrepreneurs certifiés RBQ. Jusqu'à 3 soumissions gratuites — comparez et choisissez en toute tranquillité.",
+    "description": "Pavagexpert donne vie à vos projets de pavage avec des experts certifiés RBQ à Montréal, Laval et la Rive-Sud. Estimation gratuite, sans engagement.",
     "exit_title": "Ne laissez pas votre projet attendre.",
-    "exit_desc": "Recevez jusqu'à 3 soumissions d'entrepreneurs certifiés, gratuitement et sans engagement. La première étape est la plus simple.",
-    "exit_cta": "Obtenir mes 3 soumissions gratuites",
+    "exit_desc": "Obtenez une estimation personnalisée gratuite pour votre projet de pavage. Sans engagement, sans pression. La première étape est la plus simple.",
+    "exit_cta": "Obtenez mon devis gratuit, MAINTENANT",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",
