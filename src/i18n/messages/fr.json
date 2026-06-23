@@ -169,7 +169,10 @@
     "title": "Blog & Conseils",
     "subtitle": "Tout savoir sur le pavé uni",
     "read_more": "Lire la suite",
-    "categories": "Catégories"
+    "categories": "Catégories",
+    "view_all": "Voir tous les articles",
+    "home_title": "De notre blogue",
+    "home_subtitle": "Conseils et astuces pour votre projet de pavage"
   },
   "footer": {
     "description": "Pavagexpert donne vie à vos projets de pavage avec des experts certifiés RBQ à Montréal, Laval et la Rive-Sud. Estimation gratuite, sans engagement.",
@@ -188,8 +191,8 @@
     "terms": "Conditions d'utilisation"
   },
   "seo": {
-    "home_title": "Pavagexpert | Spécialiste en Pavé Uni, Asphalte & Béton près de chez vous | Montréal, Laval, Rive-Sud",
-    "home_desc": "Vous cherchez un entrepreneur en pavage près de chez vous? Pavagexpert vous connecte avec des pros du pavé uni, de l'asphalte et du béton licenciés RBQ à Montréal, Laval, Longueuil, Brossard, Repentigny et tout le Grand Montréal. Entrées pavées, terrasses, stationnements clé en main. Estimation gratuite.",
+    "home_title": "Pavagexpert | Entrepreneurs en Pavage à Montréal, Laval & Rive-Sud",
+    "home_desc": "Spécialiste en pavage à Montréal : pavé uni, asphalte, béton et plus. Estimation gratuite. Entrepreneurs certifiés RBQ à Laval, Longueuil et tout le Grand Montréal.",
     "services_title": "Pose de Pavé Uni & Entrepreneur en Pavage près de chez vous | Montréal, Laval, Rive-Sud",
     "services_desc": "Besoin d'un instalateur de pavé uni près de chez vous? Installation de pavé uni à Montréal, Laval, Longueuil, Brossard, Terrebonne et toute la Rive-Sud. Entrées, terrasses, sentiers, murs de soutènement et projets commerciaux. Entrepreneurs RBQ dans votre secteur.",
     "services_pavers_title": "Pavé Uni & Dallage près de chez vous | Montréal, Laval, Rive-Sud | Pavagexpert",

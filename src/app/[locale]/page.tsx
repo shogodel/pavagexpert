@@ -8,6 +8,8 @@ import ServicesSection from "@/components/services-section";
 import HowItWorks from "@/components/how-it-works";
 import Calculator from "@/components/calculator";
 import ContactPreview from "@/components/contact-preview";
+import BlogPreview from "@/components/blog-preview";
+import { getArticle, getAllSlugs } from "@/lib/blog-data";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -22,7 +24,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) return <></>;
+  const slugs = getAllSlugs(locale).slice(0, 2);
+  const articles = slugs.map((s) => ({ slug: s, ...getArticle(s, locale)! }));
   return (
     <>
       <Hero />
@@ -31,6 +37,7 @@ export default function HomePage() {
       <ServicesSection />
       <HowItWorks />
       <Calculator />
+      {articles.length > 0 && <BlogPreview articles={articles} locale={locale} />}
       <ContactPreview />
     </>
   );

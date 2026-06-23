@@ -169,7 +169,10 @@
     "title": "Blog & Tips",
     "subtitle": "Everything about interlocking pavers",
     "read_more": "Read more",
-    "categories": "Categories"
+    "categories": "Categories",
+    "view_all": "View all articles",
+    "home_title": "From Our Blog",
+    "home_subtitle": "Tips and advice for your paving project"
   },
   "footer": {
     "description": "Pavagexpert makes paving pojects come to life with RBQ-certified paving experts in Montreal, Laval and the South Shore. Free estimate, no obligation.",
@@ -188,8 +191,8 @@
     "terms": "Terms of use"
   },
   "seo": {
-    "home_title": "Pavagexpert | Interlocking Paver & Paving Contractor Near Me Montreal, Laval, Longueuil, South Shore",
-    "home_desc": "Looking for a paving contractor near me? Pavagexpert connects you with RBQ-licensed interlocking paver, paving stone and asphalt pros in Montreal, Laval, Longueuil, Brossard, Repentigny and all Greater Montreal. Driveways, patios, parking lots — turnkey, free estimate.",
+    "home_title": "Pavagexpert | Paving Contractors in Montreal, Laval & South Shore",
+    "home_desc": "Montreal's paving expert connecting homeowners with RBQ-certified contractors for interlocking pavers, asphalt, concrete, and more. Free estimate in Montreal, Laval, Longueuil, and all Greater Montreal.",
     "services_title": "Interlocking Paver & Paving Contractor Near Me | Montreal, Laval, South Shore | Pavagexpert",
     "services_desc": "Need a paver company near me? Interlocking paving stone installation in Montreal, Laval, Longueuil, Brossard, Terrebonne and all South Shore. Driveways, patios, walkways, retaining walls and commercial paving projects. RBQ contractors near you.",
     "services_pavers_title": "Interlocking Pavers & Paving Stones Montreal, Laval, South Shore | Pavagexpert",

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
 import { servicesList } from "@/lib/services-data";
+import { getAllSlugs, getArticle } from "@/lib/blog-data";
 import Link from "next/link";
 import ContactPreview from "@/components/contact-preview";
 import type { Metadata } from "next";
@@ -102,6 +103,35 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               );
             })}
           </div>
+        </div>
+      </div>
+
+      <div className="py-12 bg-white border-t border-stone-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-xl font-heading font-bold text-stone-800 mb-2">{locale === "en" ? "From Our Blog" : "De notre blogue"}</h2>
+          <p className="text-stone-500 mb-6">{locale === "en" ? "Tips and advice for your paving project" : "Conseils et astuces pour votre projet de pavage"}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left">
+            {getAllSlugs(locale).slice(0, 2).map((s) => {
+              const a = getArticle(s, locale);
+              if (!a) return null;
+              return (
+                <Link
+                  key={s}
+                  href={`/${locale}/blog/${s}`}
+                  className="bg-stone-50 rounded-xl p-6 border border-stone-200 hover:border-terracotta/30 transition-all shadow-sm hover:shadow-lg group"
+                >
+                  <h3 className="font-heading font-semibold text-stone-800 group-hover:text-terracotta transition-colors mb-2">{a.title}</h3>
+                  <p className="text-sm text-stone-500">{a.desc}</p>
+                </Link>
+              );
+            })}
+          </div>
+          <Link
+            href={`/${locale}/blog`}
+            className="inline-flex items-center gap-2 mt-6 text-stone-600 hover:text-terracotta font-medium transition-colors min-h-[44px] px-6"
+          >
+            {locale === "en" ? "View all articles" : "Voir tous les articles"} &rarr;
+          </Link>
         </div>
       </div>
 
