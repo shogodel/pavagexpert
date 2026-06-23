@@ -134,9 +134,9 @@
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
     "submit": "Obtenez mon estimation gratuite",
     "success_title": "Projet envoyé aux entrepreneurs !",
-    "success_msg": "Votre demande a bien été transmise. Des entrepreneurs certifiés et sélectionnés vous contacteront sous 48 h.",
+    "success_msg": "Votre demande a bien été transmise. Un membre de notre équipe vous contactera rapidement.",
     "success_verify_title": "Vérifiez votre courriel",
-    "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et recevoir vos soumissions sous 48 h.",
+    "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et un membre de notre équipe vous contactera rapidement.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos données personnelles sont protégées — jamais partagées sans votre accord.",
     "guarantee": "Estimation gratuite • Sans engagement • Certifié RBQ",
@@ -145,7 +145,8 @@
   "social_proof": {
     "projects": "projets réalisés par nos équipes",
     "projects_value": "500+",
-    "area": "délai de réponse moyen",
+    "area_value": "Rapide",
+    "area": "réponse",
     "satisfaction": "gratuit, sans aucune obligation"
   },
   "psychology": {

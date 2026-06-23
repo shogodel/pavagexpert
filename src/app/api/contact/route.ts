@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
               <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;">
                 <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">1.</span><span style="color:#495057;"> We review your project details</span></td></tr>
                 <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">2.</span><span style="color:#495057;"> We match you with the right RBQ-certified expert</span></td></tr>
-                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> They reach out within 48 hours for a free estimate</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> They reach out shortly for a free estimate</span></td></tr>
               </table>
               <p style="color:#868e96;font-size:13px;line-height:1.5;margin:0;">Need to reach us? Reply to this email or call us.</p>
             </td></tr>
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
               <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;">
                 <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">1.</span><span style="color:#495057;"> Nous analysons les d&eacute;tails de votre projet</span></td></tr>
                 <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">2.</span><span style="color:#495057;"> Nous vous jumelons avec le bon expert certifi&eacute; RBQ</span></td></tr>
-                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> Il vous contacte sous 48 h pour une estimation gratuite</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> Il vous contacte rapidement pour une estimation gratuite</span></td></tr>
               </table>
               <p style="color:#868e96;font-size:13px;line-height:1.5;margin:0;">Besoin de nous joindre ? R&eacute;pondez &agrave; ce courriel ou appelez-nous.</p>
             </td></tr>

@@ -134,9 +134,9 @@
     "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
     "submit": "Get my free estimate",
     "success_title": "Your project has been sent!",
-    "success_msg": "Your request was sent successfully. Certified, hand-picked contractors will reach out within 48 h.",
+    "success_msg": "Your request was sent successfully. A team member will reach out shortly.",
     "success_verify_title": "Check your email",
-    "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your request and get your quotes within 48 h.",
+    "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your request and a team member will reach out shortly.",
     "error_msg": "An error occurred. Please try again.",
     "privacy": "Your personal data is protected — never shared without your consent.",
     "guarantee": "Free estimate • No obligation • RBQ-certified",
@@ -145,7 +145,8 @@
   "social_proof": {
     "projects": "projects done by our teams",
     "projects_value": "500+",
-    "area": "average response time",
+    "area_value": "Fast",
+    "area": "response",
     "satisfaction": "free, with no obligation"
   },
   "psychology": {

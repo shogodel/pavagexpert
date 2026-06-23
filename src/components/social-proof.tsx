@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const principles = [
   { valueKey: "projects_value", key: "projects" },
-  { value: "48 h", key: "area" },
+  { valueKey: "area_value", key: "area" },
   { value: "100 %", key: "satisfaction" },
 ];
 
