@@ -19,9 +19,9 @@
   "hero": {
     "title": "Pavagexpert est là pour vous aider à réaliser l'entrée de vos rêves",
     "subtitle": "Une seule soumission simple — sans tracas, sans pression.",
-    "cta_estimate": "Obtenez mon prix, MAINTENANT",
+    "cta_estimate": "MON ESTIMATION GRATUITE",
     "trust_badge_1": "Certifié RBQ",
-    "trust_badge_2": "On répond vite, essayez !",
+    "trust_badge_2": "On vous répond vite, c'est promis !",
     "trust_badge_3": "Estimation gratuite — Sans engagement"
   },
   "services": {
@@ -145,7 +145,7 @@
   "social_proof": {
     "projects": "projets réalisés par nos équipes",
     "projects_value": "500+",
-    "area_value": "Rapide",
+    "area_value": "réponse rapide",
     "area": "réponse",
     "satisfaction": "gratuit, sans aucune obligation"
   },
@@ -171,7 +171,7 @@
     "read_more": "Lire la suite",
     "categories": "Catégories",
     "view_all": "Voir tous les articles",
-    "home_title": "De notre blogue",
+    "home_title": "notre blogue",
     "home_subtitle": "Conseils et astuces pour votre projet de pavage"
   },
   "footer": {

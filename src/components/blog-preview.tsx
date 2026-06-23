@@ -8,7 +8,7 @@ interface Props {
 
 export default function BlogPreview({ articles, locale }: Props) {
   const t = {
-    title: locale === "en" ? "From Our Blog" : "De notre blogue",
+    title: locale === "en" ? "From Our Blog" : "Notre blogue",
     subtitle: locale === "en" ? "Tips and advice for your paving project" : "Conseils et astuces pour votre projet de pavage",
     viewAll: locale === "en" ? "View all articles" : "Voir tous les articles",
     readMore: locale === "en" ? "Read more" : "Lire la suite",

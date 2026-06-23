@@ -108,7 +108,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
       <div className="py-12 bg-white border-t border-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-xl font-heading font-bold text-stone-800 mb-2">{locale === "en" ? "From Our Blog" : "De notre blogue"}</h2>
+          <h2 className="text-xl font-heading font-bold text-stone-800 mb-2">{locale === "en" ? "From Our Blog" : "Notre blogue"}</h2>
           <p className="text-stone-500 mb-6">{locale === "en" ? "Tips and advice for your paving project" : "Conseils et astuces pour votre projet de pavage"}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left">
             {getAllSlugs(locale).slice(0, 2).map((s) => {
