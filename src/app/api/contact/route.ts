@@ -76,23 +76,72 @@ export async function POST(req: NextRequest) {
       } catch { /* ignore malformed */ }
     }
 
-    try {
+    const locale = form.get("locale") as string | null;
+
+    const adminSent = await sendEmail({
+      to: CONTACT_EMAIL,
+      subject: `Nouveau lead: ${name} — ${phone}`,
+      html: `
+        <html><body style="font-family:sans-serif;padding:20px;">
+        <p><strong>Nom:</strong> ${name}</p>
+        <p><strong>Courriel:</strong> ${email}</p>
+        <p><strong>Téléphone:</strong> ${phone}</p>
+        <p><strong>Code postal:</strong> ${postalCode}</p>
+        <p><strong>Budget:</strong> ${budget}</p>
+        <p><strong>Description:</strong><br>${description}</p>
+        ${leadSourceHtml}
+        </body></html>
+      `,
+      attachments: attachments.length > 0 ? attachments : undefined,
+    }).catch(() => { console.error("[contact] notification email failed"); });
+
+    if (email) {
+      const isEn = locale === "en";
       await sendEmail({
-        to: CONTACT_EMAIL,
-        subject: `Nouveau lead: ${name} — ${phone}`,
-        html: `
-          <p><strong>Nom:</strong> ${name}</p>
-          <p><strong>Courriel:</strong> ${email}</p>
-          <p><strong>Téléphone:</strong> ${phone}</p>
-          <p><strong>Code postal:</strong> ${postalCode}</p>
-          <p><strong>Budget:</strong> ${budget}</p>
-          <p><strong>Description:</strong><br>${description}</p>
-          ${leadSourceHtml}
-        `,
-        attachments: attachments.length > 0 ? attachments : undefined,
-      });
-    } catch {
-      console.error("[contact] notification email failed");
+        to: email,
+        subject: isEn
+          ? "We received your paving project request!"
+          : "Nous avons reçu votre demande de projet de pavage !",
+        html: isEn
+          ? `<html><body style="font-family:sans-serif;background:#f9f9f9;padding:40px 20px;">
+          <table align="center" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <tr><td style="background:#c44a30;padding:24px;text-align:center;">
+              <h1 style="font-family:Georgia,serif;color:white;margin:0;font-size:22px;">Pavagexpert</h1>
+            </td></tr>
+            <tr><td style="padding:32px 24px;">
+              <h2 style="font-family:Georgia,serif;color:#343a40;margin:0 0 12px;font-size:20px;">Hi ${name},</h2>
+              <p style="color:#495057;line-height:1.6;margin:0 0 20px;font-size:15px;">Thanks for telling us about your project! Here&rsquo;s what happens next:</p>
+              <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;">
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">1.</span><span style="color:#495057;"> We review your project details</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">2.</span><span style="color:#495057;"> We match you with the right RBQ-certified expert</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> They reach out within 48 hours for a free estimate</span></td></tr>
+              </table>
+              <p style="color:#868e96;font-size:13px;line-height:1.5;margin:0;">Need to reach us? Reply to this email or call us.</p>
+            </td></tr>
+            <tr><td style="background:#f8f9fa;padding:16px 24px;text-align:center;">
+              <p style="color:#adb5bd;font-size:12px;margin:0;">Pavagexpert &mdash; Montreal, Laval, South Shore</p>
+            </td></tr>
+          </table></body></html>`
+          : `<html><body style="font-family:sans-serif;background:#f9f9f9;padding:40px 20px;">
+          <table align="center" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <tr><td style="background:#c44a30;padding:24px;text-align:center;">
+              <h1 style="font-family:Georgia,serif;color:white;margin:0;font-size:22px;">Pavagexpert</h1>
+            </td></tr>
+            <tr><td style="padding:32px 24px;">
+              <h2 style="font-family:Georgia,serif;color:#343a40;margin:0 0 12px;font-size:20px;">Bonjour ${name},</h2>
+              <p style="color:#495057;line-height:1.6;margin:0 0 20px;font-size:15px;">Merci de nous avoir parl&eacute; de votre projet ! Voici la suite :</p>
+              <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;">
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">1.</span><span style="color:#495057;"> Nous analysons les d&eacute;tails de votre projet</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">2.</span><span style="color:#495057;"> Nous vous jumelons avec le bon expert certifi&eacute; RBQ</span></td></tr>
+                <tr><td style="padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;"><span style="color:#c44a30;font-weight:bold;margin-right:8px;">3.</span><span style="color:#495057;"> Il vous contacte sous 48 h pour une estimation gratuite</span></td></tr>
+              </table>
+              <p style="color:#868e96;font-size:13px;line-height:1.5;margin:0;">Besoin de nous joindre ? R&eacute;pondez &agrave; ce courriel ou appelez-nous.</p>
+            </td></tr>
+            <tr><td style="background:#f8f9fa;padding:16px 24px;text-align:center;">
+              <p style="color:#adb5bd;font-size:12px;margin:0;">Pavagexpert &mdash; Montr&eacute;al, Laval, Rive-Sud</p>
+            </td></tr>
+          </table></body></html>`,
+      }).catch(() => { console.error("[contact] confirmation email failed"); });
     }
 
     return NextResponse.json({ ok: true });

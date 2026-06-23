@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "@/lib/use-translations";
+import { useTranslations, useLocale } from "@/lib/use-translations";
 import { motion } from "framer-motion";
 import { getTrackingData, clearTracking } from "@/lib/utm-tracker";
 
 export default function GetQuoteForm() {
   const t = useTranslations("get_quote");
+  const locale = useLocale();
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(false);
@@ -40,7 +41,8 @@ export default function GetQuoteForm() {
       fd.set("_fm", String(mountTime.current));
       for (const f of photoFiles) fd.append("photos", f);
       const tracking = getTrackingData();
-      if (tracking) fd.set("lead_source", JSON.stringify(tracking));
+      if (tracking)       fd.set("lead_source", JSON.stringify(tracking));
+      fd.set("locale", locale);
       const res = await fetch("/api/contact", {
         method: "POST",
         body: fd,
