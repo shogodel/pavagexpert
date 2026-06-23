@@ -183,9 +183,9 @@
     "services_list": "Nos services",
     "contact_info": "Coordonnées",
     "hours": "Heures d'ouverture",
-    "mon_fri": "Lun-Ven: 8h-18h",
-    "sat": "Sam: 9h-16h",
-    "sun": "Dim: Fermé",
+    "mon_fri": "7 jours sur 7,",
+    "sat": "24 heures sur 24",
+    "sun": "Ouvert",
     "rights": "Tous droits réservés.",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation"
