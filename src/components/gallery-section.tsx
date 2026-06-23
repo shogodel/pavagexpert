@@ -43,7 +43,7 @@ export default function GallerySection() {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              className={`px-5 py-3 text-sm rounded-full transition-colors min-h-[44px] ${
                 activeFilter === filter
                   ? "bg-terracotta text-white"
                   : "bg-stone-100 text-stone-600 hover:bg-stone-200"
@@ -73,7 +73,7 @@ export default function GallerySection() {
                 </svg>
               </div>
 
-              <div className={`absolute inset-0 bg-stone-900/70 flex items-center justify-center transition-opacity duration-300 ${hoveredId === project.id ? "opacity-100" : "opacity-0"}`}>
+              <div className={`absolute inset-0 bg-stone-900/70 flex items-center justify-center transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100`}>
                 <div className="text-center text-white px-4">
                   <p className="font-heading font-semibold mb-2">{t(project.titleKey)}</p>
                   <div className="flex gap-3 justify-center text-xs">

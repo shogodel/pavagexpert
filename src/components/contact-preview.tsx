@@ -29,7 +29,7 @@ export default function ContactPreview() {
             </Link>
             <a
               href={`tel:${CONTACT_PHONE_TEL}`}
-              className="text-white font-semibold text-lg hover:underline"
+              className="text-white font-semibold text-lg hover:underline px-4 py-3 min-h-[44px] flex items-center"
             >
               {CONTACT_PHONE}
             </a>

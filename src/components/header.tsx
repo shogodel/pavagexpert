@@ -120,7 +120,7 @@ export default function Header() {
                 setMenuOpen(false);
                 window.location.href = `/${otherLocale}`;
               }}
-              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-3 py-1.5 border border-stone-300 rounded-md cursor-pointer"
+              className="text-sm font-medium text-stone-500 hover:text-stone-800 transition-colors px-4 py-2.5 border border-stone-300 rounded-md cursor-pointer min-h-[44px] flex items-center"
               aria-label={`Switch language to ${otherLocale === "fr" ? "French" : "English"}`}
             >
               {otherLocale === "fr" ? "FR" : "EN"}
@@ -129,6 +129,13 @@ export default function Header() {
             <Link
               href={`/${locale}/get-quote`}
               className="hidden sm:inline-flex bg-terracotta hover:bg-terracotta-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            >
+              {t("get_quote")}
+            </Link>
+
+            <Link
+              href={`/${locale}/get-quote`}
+              className="sm:hidden bg-terracotta hover:bg-terracotta-dark text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors min-h-[44px] flex items-center"
             >
               {t("get_quote")}
             </Link>
@@ -143,7 +150,7 @@ export default function Header() {
 
             <button
               type="button"
-              className="lg:hidden p-2 text-stone-600 relative z-50 cursor-pointer"
+              className="lg:hidden p-3 text-stone-600 relative z-50 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
@@ -164,7 +171,7 @@ export default function Header() {
             <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
               <Link
                 href={`/${locale}`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("home") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg ${isActive("home") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 aria-current={isActive("home") ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}
               >
@@ -174,7 +181,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors flex items-center justify-between text-left cursor-pointer ${isServiceActive() ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors flex items-center justify-between text-left rounded-lg cursor-pointer min-h-[44px] ${isServiceActive() ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 aria-expanded={mobileServicesOpen}
               >
                 {t("services")}
@@ -188,7 +195,7 @@ export default function Header() {
                     <Link
                       key={s.slug}
                       href={`/${locale}/services/${s.slug}`}
-                      className={`text-sm py-1.5 transition-colors ${pathname.startsWith(`/${locale}/services/${s.slug}`) ? "text-terracotta font-semibold" : "text-stone-500 hover:text-stone-900"}`}
+                      className={`text-sm py-3 px-3 transition-colors rounded-lg min-h-[44px] flex items-center ${pathname.startsWith(`/${locale}/services/${s.slug}`) ? "text-terracotta font-semibold bg-terracotta/5" : "text-stone-500 hover:text-stone-900 hover:bg-stone-50"}`}
                       onClick={() => setMenuOpen(false)}
                     >
                       {t(`services_${s.key}`)}
@@ -199,21 +206,21 @@ export default function Header() {
 
               <Link
                 href={`/${locale}/calculator`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("calculator") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("calculator") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {t("calculator")}
               </Link>
               <Link
                 href={`/${locale}/service-area`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("service-area") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("service-area") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {t("service_area")}
               </Link>
               <Link
                 href={`/${locale}/blog`}
-                className={`text-sm font-medium py-2 uppercase tracking-wider transition-colors ${isActive("blog") ? "text-terracotta" : "text-stone-600 hover:text-stone-900"}`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("blog") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {t("blog")}

@@ -27,23 +27,23 @@ export default function Footer() {
 
           <div>
             <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("quick_links")}</h3>
-            <nav className="flex flex-col gap-2">
-              <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("home")}</Link>
-              <Link href={`/${locale}/services`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("services")}</Link>
-              <Link href={`/${locale}/calculator`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("calculator")}</Link>
-              <Link href={`/${locale}/blog`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("blog")}</Link>
-              <Link href={`/${locale}/get-quote`} className="text-sm text-stone-400 hover:text-white transition-colors">{nav("get_quote")}</Link>
+            <nav className="flex flex-col gap-1">
+              <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("home")}</Link>
+              <Link href={`/${locale}/services`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("services")}</Link>
+              <Link href={`/${locale}/calculator`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("calculator")}</Link>
+              <Link href={`/${locale}/blog`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("blog")}</Link>
+              <Link href={`/${locale}/get-quote`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("get_quote")}</Link>
             </nav>
           </div>
 
           <div>
             <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("services_list")}</h3>
-            <nav className="flex flex-col gap-2">
+            <nav className="flex flex-col gap-1">
               {servicesList.map((s) => (
                 <Link
                   key={s.slug}
                   href={`/${locale}/services/${s.slug}`}
-                  className="text-sm text-stone-400 hover:text-white transition-colors"
+                  className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center"
                 >
                   {servicesT(`${s.id}.title`)}
                 </Link>
@@ -54,15 +54,15 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
             <div className="flex flex-col gap-2 text-sm text-stone-400">
-              <span>Laval, QC H7N 2C2</span>
-              <a href={`tel:${CONTACT_PHONE_TEL}`} className="hover:text-white transition-colors">{CONTACT_PHONE}</a>
-              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors">{CONTACT_EMAIL}</a>
+              <span className="py-1">Laval, QC H7N 2C2</span>
+              <a href={`tel:${CONTACT_PHONE_TEL}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_PHONE}</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_EMAIL}</a>
             </div>
             <h4 className="text-white font-heading font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>
             <div className="flex flex-col gap-1 text-sm text-stone-400">
-              <span>{t("mon_fri")}</span>
-              <span>{t("sat")}</span>
-              <span>{t("sun")}</span>
+              <span className="py-1">{t("mon_fri")}</span>
+              <span className="py-1">{t("sat")}</span>
+              <span className="py-1">{t("sun")}</span>
             </div>
           </div>
         </div>
@@ -85,8 +85,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Pavagexpert. {t("rights")}
           </p>
           <div className="flex gap-4 text-sm text-stone-500">
-            <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors">{t("privacy")}</Link>
-            <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors">{t("terms")}</Link>
+            <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors py-2 min-h-[44px] flex items-center">{t("privacy")}</Link>
+            <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors py-2 min-h-[44px] flex items-center">{t("terms")}</Link>
             
           </div>
         </div>

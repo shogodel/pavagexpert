@@ -40,7 +40,7 @@ export default function TrustBadges() {
               </div>
               <div>
                 <p className="font-heading font-bold text-stone-800 text-lg">{t(`${key}_title`)}</p>
-                <p className="text-xs md:text-sm text-stone-500">{t(`${key}_desc`)}</p>
+                <p className="text-xs md:text-sm text-stone-500 leading-relaxed">{t(`${key}_desc`)}</p>
               </div>
             </motion.div>
           ))}

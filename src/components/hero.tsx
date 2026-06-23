@@ -8,7 +8,7 @@ export default function Hero() {
   const t = useTranslations("hero");
 
   return (
-    <section className="relative min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden bg-stone-900">
+    <section className="relative min-h-[500px] md:min-h-[700px] flex items-center overflow-hidden bg-stone-900">
       <div
         className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-60"
       />

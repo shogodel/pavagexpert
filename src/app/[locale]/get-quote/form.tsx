@@ -111,7 +111,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("name_placeholder")}
               />
             </div>
@@ -125,7 +125,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("email_placeholder")}
               />
             </div>
@@ -138,7 +138,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.postalCode}
                 onChange={(e) => setForm({ ...form, postalCode: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder="H3Z 2Y7"
               />
             </div>
@@ -152,7 +152,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("phone_placeholder")}
               />
             </div>
@@ -167,7 +167,7 @@ export default function GetQuoteForm() {
                 multiple
                 accept="image/*"
                 onChange={(e) => setPhotoFiles(Array.from(e.target.files || []))}
-                className="w-full text-sm text-stone-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer"
+                className="w-full text-sm text-stone-500 file:mr-4 file:py-3.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer file:min-h-[44px]"
               />
               {photoFiles.length > 0 && (
                 <p className="text-xs text-stone-400 mt-1">{photoFiles.length} {t("photos_selected")}</p>
@@ -182,7 +182,7 @@ export default function GetQuoteForm() {
                 required
                 value={form.budget}
                 onChange={(e) => setForm({ ...form, budget: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("budget_placeholder")}
               />
             </div>
@@ -197,7 +197,7 @@ export default function GetQuoteForm() {
                 rows={6}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all resize-none text-base shadow-sm focus:shadow-md"
+                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all resize-y text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("desc_placeholder")}
               />
             </div>
@@ -213,7 +213,7 @@ export default function GetQuoteForm() {
             <button
               type="submit"
               disabled={sending}
-              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-lg transition-all text-lg shadow-lg hover:shadow-xl hover:shadow-terracotta/25"
+              className="w-full bg-terracotta hover:bg-terracotta-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-all text-lg shadow-lg hover:shadow-xl hover:shadow-terracotta/25 min-h-[52px]"
             >
               {sending ? "..." : t("submit")}
             </button>
