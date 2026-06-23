@@ -10,10 +10,11 @@ export default function Hero() {
   return (
     <section className="relative min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden bg-stone-900">
       <div
-        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-40"
+        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-60"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/95 via-stone-900/75 to-stone-900/30" />
-      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/60 to-stone-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-stone-900/40 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="max-w-2xl">

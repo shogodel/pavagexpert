@@ -36,6 +36,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   if (!id) return notFound();
   const service = (messages.services as Record<string, unknown>)[id] as Record<string, string> | undefined;
   if (!service) return notFound();
+  const serviceInfo = servicesList.find(s => s.slug === slug);
 
   const t = (messages.nav as Record<string, string>) || {};
   const seo = (messages.seo as Record<string, string>) || {};
@@ -60,8 +61,15 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         description={seo[seoDescKey] || service.content || service.desc}
         url={`https://pavagexpert.space/${locale}/services/${slug}`}
       />
-      <div className="pt-28 pb-12 bg-stone-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative pt-28 pb-12 bg-stone-900 text-white overflow-hidden">
+        {serviceInfo?.image && (
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${serviceInfo.image})` }} />
+            <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/70 to-stone-900/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
+          </div>
+        )}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <Link
               href={`/${locale}/services`}
