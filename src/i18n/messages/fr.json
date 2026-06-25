@@ -183,9 +183,7 @@
     "services_list": "Nos services",
     "contact_info": "Coordonnées",
     "hours": "Heures d'ouverture",
-    "mon_fri": "7 jours sur 7,",
-    "sat": "24 heures sur 24",
-    "sun": "Ouvert",
+    "always_open": "7 jours sur 7, 24 heures sur 24",
     "rights": "Tous droits réservés.",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation"

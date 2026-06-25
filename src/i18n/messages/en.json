@@ -183,9 +183,7 @@
     "services_list": "Our services",
     "contact_info": "Contact",
     "hours": "Hours",
-    "mon_fri": "7 days a week,",
-    "sat": "24 hours a day",
-    "sun": "Open",
+    "always_open": "7 days a week, 24 hours a day",
     "rights": "All rights reserved.",
     "privacy": "Privacy policy",
     "terms": "Terms of use"
