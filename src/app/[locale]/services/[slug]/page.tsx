@@ -65,9 +65,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       <div className="relative pt-28 pb-12 bg-stone-900 text-white overflow-hidden">
         {serviceInfo?.image && (
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${serviceInfo.image})` }} />
-            <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/70 to-stone-900/30" />
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${serviceInfo.image})` }} />
+            <div className="absolute inset-0 bg-gradient-to-r from-stone-900/70 via-stone-900/40 to-stone-900/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent" />
           </div>
         )}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

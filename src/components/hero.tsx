@@ -1,20 +1,47 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useTranslations } from "@/lib/use-translations";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+const images = [
+  "/images/hero-bg.jpg",
+  "/images/services/pavers.jpg",
+  "/images/services/asphalt.jpg",
+  "/images/services/concrete.jpg",
+  "/images/services/excavation.jpg",
+  "/images/services/retaining-walls.jpg",
+  "/images/services/landscaping.jpg",
+  "/images/services/turf.jpg",
+  "/images/services/drainage.jpg",
+];
 
 export default function Hero() {
   const t = useTranslations("hero");
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % images.length), 6000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <section className="relative min-h-[500px] md:min-h-[700px] flex items-center overflow-hidden bg-stone-900">
-      <div
-        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-60"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/60 to-stone-900/30" />
-      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-stone-900/40 via-transparent to-transparent" />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={images[index]}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('${images[index]}')` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.9 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-r from-stone-900/60 via-stone-900/30 to-stone-900/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-stone-900/20 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="max-w-2xl">
@@ -65,6 +92,20 @@ export default function Hero() {
               </div>
             ))}
           </motion.div>
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setIndex(i)}
+                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                  i === index ? "bg-terracotta w-6" : "bg-white/40 hover:bg-white/60"
+                }`}
+                aria-label={`Image ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
