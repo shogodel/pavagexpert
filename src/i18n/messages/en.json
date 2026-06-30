@@ -19,7 +19,7 @@
   "hero": {
     "title": "Pavagexpert is here to help you realize your dream driveway",
     "subtitle": "One simple submission — no runaround, no pressure.",
-    "cta_estimate": "Get my price, NOW",
+    "cta_estimate": "3 RBQ QUOTES IN 24H",
     "trust_badge_1": "RBQ-Certified",
     "trust_badge_2": "We answer fast, try it out!",
     "trust_badge_3": "Free Estimate — No Obligation"
@@ -67,7 +67,7 @@
       "desc": "French drains, sump pumps and stormwater management in Montreal and the South Shore. Sustainable solutions.",
       "content": "Protect your property from water infiltration with professional drainage solutions. Our certified contractors in Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne, Saint-Laurent, Kirkland and Dollard-Des-Ormeaux install French drains, catch basins, manholes and stormwater management systems compliant with municipal standards."
     },
-    "cta": "Request a Quote"
+    "cta": "3 RBQ quotes in 24h"
   },
   "calculator": {
     "title": "Paver Calculator",
@@ -91,7 +91,7 @@
     "materials_label": "Materials",
     "installation_label": "Installation",
     "total_label": "Total estimated",
-    "cta_get_quote": "Get my personalized quote →",
+    "cta_get_quote": "Get 3 RBQ quotes in 24h →",
     "result_prompt": "What you see isn't just a price — it's peace of mind."
   },
   "gallery": {
@@ -124,7 +124,8 @@
     "phone_placeholder": "e.g. (555) 123-4567",
     "budget": "Estimated budget",
     "budget_placeholder": "E.g. $5,000 - $10,000",
-    "photos": "Project photos",
+    "optional": "optional",
+    "photos": "Project photos (optional)",
     "photos_hint": "Show us your space. The more you show, the more precise contractors will be with their estimate.",
     "photos_selected": "file(s) selected",
     "video": "Project video (optional)",
@@ -132,7 +133,7 @@
     "project_desc": "Detailed description",
     "desc_hint": "Tell us your story: how long has your driveway been cracked? What have you imagined?",
     "desc_placeholder": "Area to pave: about 500 sq ft. Has a tree. Access through main entrance. I want a herringbone pattern...",
-    "submit": "Get my free estimate",
+    "submit": "Get 3 RBQ quotes in 24h",
     "success_title": "Your project has been sent!",
     "success_msg": "Your request was sent successfully. A team member will reach out shortly.",
     "success_verify_title": "Check your email",
@@ -153,7 +154,7 @@
     "title": "Why wait?",
     "quote": "The hardest part is starting. After that, everything falls into place.",
     "subtitle": "Get your free estimate for your needs. No pressure, no obligation. We are here to help!",
-    "cta": "Get my quote, NOW"
+    "cta": "Get 3 RBQ quotes in 24h"
   },
   "how_it_works": {
     "title": "How It Works",
@@ -178,12 +179,12 @@
     "description": "Pavagexpert makes paving pojects come to life with RBQ-certified paving experts in Montreal, Laval and the South Shore. Free estimate, no obligation.",
     "exit_title": "Don't let your project wait.",
     "exit_desc": "Get a free personalized estimate for your paving project. No commitment, no pressure. The first step is the easiest.",
-    "exit_cta": "Get my free quote,NOW",
+    "exit_cta": "Get 3 RBQ quotes in 24h",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",
     "hours": "Hours",
-    "always_open": "7 days a week, 24 hours a day",
+    "always_open": "Every day from 8 am to 9 pm",
     "rights": "All rights reserved.",
     "privacy": "Privacy policy",
     "terms": "Terms of use"

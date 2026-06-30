@@ -53,6 +53,7 @@ export default function Header() {
   );
 
   return (
+    <>
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-stone-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -112,7 +113,16 @@ export default function Header() {
             {navLink(`/${locale}/blog`, t("blog"), isActive("blog"))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="tel:+15142431580"
+              className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-terracotta hover:text-terracotta-dark transition-colors"
+              aria-label="Call us at (514) 243-1580"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+              (514) 243-1580
+            </a>
+
             <button
               type="button"
               onClick={() => {
@@ -240,5 +250,24 @@ export default function Header() {
         )}
       </div>
     </header>
+
+      <div className="fixed bottom-0 inset-x-0 z-50 lg:hidden flex">
+        <a
+          href="tel:+15142431580"
+          className="flex-1 bg-terracotta text-white text-sm font-semibold py-3.5 flex items-center justify-center gap-2 min-h-[52px]"
+          aria-label="Call us at (514) 243-1580"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+          (514) 243-1580
+        </a>
+        <a
+          href={`/${locale}/get-quote`}
+          className="flex-1 bg-stone-800 text-white text-sm font-semibold py-3.5 flex items-center justify-center gap-2 min-h-[52px]"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          {t("get_quote")}
+        </a>
+      </div>
+    </>
   );
 }

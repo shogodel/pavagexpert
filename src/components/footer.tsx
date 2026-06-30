@@ -2,7 +2,7 @@
 
 import { useTranslations, useLocale } from "@/lib/use-translations";
 import Link from "next/link";
-import { CONTACT_EMAIL } from "@/lib/constants";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/constants";
 import { servicesList } from "@/lib/services-data";
 import { useState, useEffect } from "react";
 
@@ -55,6 +55,7 @@ export default function Footer() {
             <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
             <div className="flex flex-col gap-2 text-sm text-stone-400">
               <span className="py-1">Laval, QC H7N 2C2</span>
+              <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_PHONE}</a>
               <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_EMAIL}</a>
             </div>
             <h4 className="text-white font-heading font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>

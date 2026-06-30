@@ -68,7 +68,7 @@ analytics_storage:${analyticsConsent?'"granted"':'"denied"'}});gtag('js',new Dat
         <I18nProvider locale={locale} messages={messages}>
           <UtmCapture />
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pb-[52px] lg:pb-0">{children}</main>
           <Footer />
           <CookieConsent />
         </I18nProvider>

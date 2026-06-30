@@ -176,10 +176,9 @@ export default function GetQuoteForm() {
 
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("budget")} <span className="text-red-500">*</span>
+                {t("budget")} <span className="text-stone-400 text-xs font-normal">({t("optional")})</span>
               </label>
               <input
-                required
                 value={form.budget}
                 onChange={(e) => setForm({ ...form, budget: e.target.value })}
                 className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
@@ -189,11 +188,10 @@ export default function GetQuoteForm() {
 
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("project_desc")} <span className="text-red-500">*</span>
+                {t("project_desc")} <span className="text-stone-400 text-xs font-normal">({t("optional")})</span>
               </label>
               <p className="text-xs text-stone-400 mb-2">{t("desc_hint")}</p>
               <textarea
-                required
                 rows={6}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
