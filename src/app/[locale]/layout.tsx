@@ -56,14 +56,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${inter.variable} ${playfair.variable} h-full scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans antialiased">
-        {analyticsConsent && (
-          <>
-            <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18245853211" strategy="afterInteractive" />
-            <Script id="google-ads-config" strategy="afterInteractive" dangerouslySetInnerHTML={{
-              __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18245853211');`,
-            }} />
-          </>
-        )}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18245853211" strategy="afterInteractive" />
+        <Script id="google-ads-config" strategy="afterInteractive" dangerouslySetInnerHTML={{
+          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:${analyticsConsent?'"granted"':'"denied"'},
+ad_user_data:${analyticsConsent?'"granted"':'"denied"'},
+ad_personalization:${analyticsConsent?'"granted"':'"denied"'},
+analytics_storage:${analyticsConsent?'"granted"':'"denied"'}});gtag('js',new Date());gtag('config','AW-18245853211');`,
+        }} />
         <JsonLd locale={locale} />
         <BreadcrumbJsonLd locale={locale} />
         <I18nProvider locale={locale} messages={messages}>

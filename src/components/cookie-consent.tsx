@@ -35,12 +35,41 @@ export default function CookieConsent() {
     setVisible(false);
   }, []);
 
-  const acceptAll = useCallback(() => save(true, ["necessary", "analytics"]), [save]);
-  const rejectAll = useCallback(() => save(false, ["necessary"]), [save]);
+  const acceptAll = useCallback(() => {
+    save(true, ["necessary", "analytics"]);
+    if (typeof gtag !== "undefined") {
+      gtag("consent", "update", {
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+        analytics_storage: "granted",
+      });
+    }
+  }, [save]);
+  const rejectAll = useCallback(() => {
+    save(false, ["necessary"]);
+    if (typeof gtag !== "undefined") {
+      gtag("consent", "update", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+      });
+    }
+  }, [save]);
   const saveCustom = useCallback(() => {
     const cats = ["necessary"];
-    if (analytics) cats.push("analytics");
+    const analyticsGranted = analytics;
+    if (analyticsGranted) cats.push("analytics");
     save(cats.length > 1, cats);
+    if (typeof gtag !== "undefined") {
+      gtag("consent", "update", {
+        ad_storage: analyticsGranted ? "granted" : "denied",
+        ad_user_data: analyticsGranted ? "granted" : "denied",
+        ad_personalization: analyticsGranted ? "granted" : "denied",
+        analytics_storage: analyticsGranted ? "granted" : "denied",
+      });
+    }
   }, [analytics, save]);
 
   if (!mounted || !visible) return null;
