@@ -19,7 +19,7 @@
   "hero": {
     "title": "Pavagexpert est là pour vous aider à réaliser l'entrée de vos rêves",
     "subtitle": "Une seule soumission simple — sans tracas, sans pression.",
-    "cta_estimate": "3 SOUMISSIONS RBQ SOUS 24H",
+    "cta_estimate": "MON ESTIMATION GRATUITE",
     "trust_badge_1": "Certifié RBQ",
     "trust_badge_2": "On vous répond vite, c'est promis !",
     "trust_badge_3": "Estimation gratuite — Sans engagement"
@@ -91,7 +91,7 @@
     "materials_label": "Matériaux",
     "installation_label": "Installation",
     "total_label": "Total estimé",
-    "cta_get_quote": "Recevez 3 soumissions RBQ sous 24h →",
+    "cta_get_quote": "Obtenez mon devis personnalisé →",
     "result_prompt": "Ce que vous voyez n'est pas qu'un prix — c'est la tranquillité d'esprit."
   },
   "gallery": {
@@ -133,7 +133,7 @@
     "project_desc": "Description détaillée",
     "desc_hint": "Racontez-nous votre projet : depuis combien de temps l'entrée est fissurée ? Qu'avez-vous imaginé ?",
     "desc_placeholder": "Surface à paver : environ 50m². Présence d'un arbre. Accès par l'entrée principale. Je veux un motif en chevrons...",
-    "submit": "Recevez vos 3 soumissions RBQ sous 24h",
+    "submit": "Obtenez mon estimation gratuite",
     "success_title": "Projet envoyé aux entrepreneurs !",
     "success_msg": "Votre demande a bien été transmise. Un membre de notre équipe vous contactera rapidement.",
     "success_verify_title": "Vérifiez votre courriel",
@@ -154,7 +154,7 @@
     "title": "Pourquoi attendre ?",
     "quote": "Le plus difficile, c'est de commencer. Après, tout s'enchaîne.",
     "subtitle": "Obtenez votre estimation gratuite pour vos besoins. Sans pression, sans engagement. Nous sommes là pour vous aider !",
-    "cta": "Recevez 3 soumissions RBQ sous 24h"
+    "cta": "Obtenez mon devis, MAINTENANT"
   },
   "how_it_works": {
     "title": "Comment ça marche",
@@ -179,7 +179,7 @@
     "description": "Pavagexpert donne vie à vos projets de pavage avec des experts certifiés RBQ à Montréal, Laval et la Rive-Sud. Estimation gratuite, sans engagement.",
     "exit_title": "Ne laissez pas votre projet attendre.",
     "exit_desc": "Obtenez une estimation personnalisée gratuite pour votre projet de pavage. Sans engagement, sans pression. La première étape est la plus simple.",
-    "exit_cta": "Recevez 3 soumissions RBQ sous 24h",
+    "exit_cta": "Obtenez mon devis gratuit, MAINTENANT",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",
