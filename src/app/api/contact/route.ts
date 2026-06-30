@@ -53,12 +53,7 @@ export async function POST(req: NextRequest) {
     if (!postalCode || postalCode.trim().length < 3) {
       return NextResponse.json({ ok: false, errors: ["postalCode"] }, { status: 400 });
     }
-    if (!budget || budget.trim().length < 1) {
-      return NextResponse.json({ ok: false, errors: ["budget"] }, { status: 400 });
-    }
-    if (!description || description.trim().length < 10) {
-      return NextResponse.json({ ok: false, errors: ["description"] }, { status: 400 });
-    }
+    // budget and description are optional — frontend treats them as such
 
     const photos = form.getAll("photos") as File[];
     const attachments = await Promise.all(
