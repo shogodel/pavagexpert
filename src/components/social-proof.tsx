@@ -23,7 +23,7 @@ export default function SocialProof() {
         >
           {principles.map((p, i) => (
             <div key={p.key} className="flex items-center gap-2 text-sm">
-              <span className="text-terracotta font-bold text-sm">{p.valueKey ? t(p.valueKey) : p.value}</span>
+              <span className="text-white font-bold text-sm">{p.valueKey ? t(p.valueKey) : p.value}</span>
               <span className="text-stone-400">{t(p.key)}</span>
               {i < principles.length - 1 && (
                 <span className="hidden sm:inline text-stone-600 ml-2">•</span>
