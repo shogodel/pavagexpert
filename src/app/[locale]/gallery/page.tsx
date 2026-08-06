@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function GalleryPage({ params }: { params: Promise<{ locale: string }> }) {
+  notFound();
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   const messages = await getMessages(locale);

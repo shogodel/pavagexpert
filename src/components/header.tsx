@@ -106,7 +106,6 @@ export default function Header() {
               )}
             </div>
 
-            {navLink(`/${locale}/gallery`, t("gallery"), isActive("gallery"))}
             {navLink(`/${locale}/calculator`, t("calculator"), isActive("calculator"))}
             {navLink(`/${locale}/blog`, t("blog"), isActive("blog"))}
           </nav>
@@ -203,13 +202,6 @@ export default function Header() {
                 </div>
               )}
 
-              <Link
-                href={`/${locale}/gallery`}
-                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("gallery") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("gallery")}
-              </Link>
               <Link
                 href={`/${locale}/calculator`}
                 className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("calculator") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
