@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
 import GallerySection from "@/components/gallery-section";
+import ContactPreview from "@/components/contact-preview";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -28,6 +29,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
         </div>
       </div>
       <GallerySection />
+      <ContactPreview />
     </>
   );
 }

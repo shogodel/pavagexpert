@@ -198,10 +198,6 @@ export default function Calculator() {
               </div>
             </div>
 
-            <p className="mt-4 text-sm text-stone-400 text-center italic">
-              {t("result_prompt")}
-            </p>
-
             <Link
               href="/get-quote"
               className="mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-all block shadow-lg hover:shadow-xl hover:shadow-terracotta/25"

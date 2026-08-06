@@ -3,6 +3,7 @@ import { isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";
 import { getAllSlugs, getArticle } from "@/lib/blog-data";
 import Link from "next/link";
+import ContactPreview from "@/components/contact-preview";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -54,6 +55,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
           </div>
         </div>
       </section>
+      <ContactPreview />
     </div>
   );
 }
