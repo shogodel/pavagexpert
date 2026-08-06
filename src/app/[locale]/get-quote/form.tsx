@@ -204,10 +204,6 @@ export default function GetQuoteForm() {
               <p className="text-red-600 text-sm text-center">{t("error_msg")}</p>
             )}
 
-            <p className="text-xs text-amber-600 text-center">
-              {t("urgency")}
-            </p>
-
             <button
               type="submit"
               disabled={sending}

@@ -47,21 +47,6 @@ export default function ServicesSection() {
             );
           })}
         </div>
-
-        <motion.div
-          className="text-center mt-10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-        >
-          <Link
-            href="/get-quote"
-            className="inline-flex bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg transition-colors"
-          >
-            {t("cta")}
-          </Link>
-        </motion.div>
       </div>
     </section>
   );

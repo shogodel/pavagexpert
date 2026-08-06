@@ -62,8 +62,6 @@ export default function Header() {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
-            {navLink(`/${locale}`, t("home"), isActive("home"))}
-
             <div
               className="relative"
               onMouseEnter={() => { if (!isTouchRef.current) setServicesOpen(true); }}
@@ -108,8 +106,8 @@ export default function Header() {
               )}
             </div>
 
+            {navLink(`/${locale}/gallery`, t("gallery"), isActive("gallery"))}
             {navLink(`/${locale}/calculator`, t("calculator"), isActive("calculator"))}
-            {navLink(`/${locale}/service-area`, t("service_area"), isActive("service-area"))}
             {navLink(`/${locale}/blog`, t("blog"), isActive("blog"))}
           </nav>
 
@@ -179,15 +177,6 @@ export default function Header() {
         {menuOpen && (
           <div className="lg:hidden pb-4 border-t border-stone-100 pt-4 relative z-50 bg-white">
             <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
-              <Link
-                href={`/${locale}`}
-                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg ${isActive("home") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
-                aria-current={isActive("home") ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("home")}
-              </Link>
-
               <button
                 type="button"
                 onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
@@ -215,18 +204,18 @@ export default function Header() {
               )}
 
               <Link
+                href={`/${locale}/gallery`}
+                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("gallery") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {t("gallery")}
+              </Link>
+              <Link
                 href={`/${locale}/calculator`}
                 className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("calculator") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {t("calculator")}
-              </Link>
-              <Link
-                href={`/${locale}/service-area`}
-                className={`text-sm font-medium py-3 px-3 uppercase tracking-wider transition-colors rounded-lg min-h-[44px] flex items-center ${isActive("service-area") ? "text-terracotta bg-terracotta/5" : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("service_area")}
               </Link>
               <Link
                 href={`/${locale}/blog`}

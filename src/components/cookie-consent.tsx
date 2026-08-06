@@ -120,29 +120,29 @@ export default function CookieConsent() {
   }
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-[60] p-4 pb-[env(safe-area-inset-bottom,16px)]">
-      <div className="max-w-2xl mx-auto bg-stone-900 border border-stone-700 rounded-xl p-5 shadow-2xl">
-        <p className="text-stone-300 text-sm mb-4 leading-relaxed">
+    <div className="fixed bottom-3 inset-x-0 z-[60] flex justify-center px-4">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2 max-w-2xl bg-stone-900/90 border border-stone-700 rounded-lg px-4 py-3 shadow-lg backdrop-blur-sm">
+        <p className="text-stone-300 text-xs leading-relaxed">
           {t("message")}
         </p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
-            onClick={acceptAll}
-            className="bg-terracotta hover:bg-terracotta/90 text-white text-sm font-medium py-2 px-5 rounded-lg transition cursor-pointer"
+            onClick={() => setShowCustomize(true)}
+            className="text-stone-400 hover:text-white text-xs px-3 py-2 transition cursor-pointer"
           >
-            {t("accept_all")}
+            {t("customize")}
           </button>
           <button
             onClick={rejectAll}
-            className="bg-stone-700 hover:bg-stone-600 text-white text-sm font-medium py-2 px-5 rounded-lg transition cursor-pointer"
+            className="text-stone-400 hover:text-white text-xs px-3 py-2 transition cursor-pointer"
           >
             {t("reject_all")}
           </button>
           <button
-            onClick={() => setShowCustomize(true)}
-            className="text-stone-400 hover:text-white text-sm py-2 px-5 transition cursor-pointer"
+            onClick={acceptAll}
+            className="bg-terracotta hover:bg-terracotta-dark text-white text-xs font-medium py-2 px-4 rounded-md transition cursor-pointer"
           >
-            {t("customize")}
+            {t("accept_all")}
           </button>
         </div>
       </div>

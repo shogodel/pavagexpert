@@ -140,8 +140,7 @@
     "success_verify_msg": "A confirmation link has been sent to you. Click it to activate your request and a team member will reach out shortly.",
     "error_msg": "An error occurred. Please try again.",
     "privacy": "Your personal data is protected — never shared without your consent.",
-    "guarantee": "Free estimate • No obligation • RBQ-certified",
-    "urgency": "Our teams of experts in pavement take new projects every day — be the next project they take on."
+    "guarantee": "Free estimate • No obligation • RBQ-certified"
   },
   "social_proof": {
     "projects": "projects done by our teams",
@@ -149,12 +148,6 @@
     "area_value": "Fast",
     "area": "response",
     "satisfaction": "free, with no obligation"
-  },
-  "psychology": {
-    "title": "Why wait?",
-    "quote": "The hardest part is starting. After that, everything falls into place.",
-    "subtitle": "Get your free estimate for your needs. No pressure, no obligation. We are here to help!",
-    "cta": "Get my quote, NOW"
   },
   "how_it_works": {
     "title": "How It Works",
@@ -177,9 +170,6 @@
   },
   "footer": {
     "description": "Pavagexpert makes paving pojects come to life with RBQ-certified paving experts in Montreal, Laval and the South Shore. Free estimate, no obligation.",
-    "exit_title": "Don't let your project wait.",
-    "exit_desc": "Get a free personalized estimate for your paving project. No commitment, no pressure. The first step is the easiest.",
-    "exit_cta": "Get my free quote,NOW",
     "quick_links": "Quick links",
     "services_list": "Our services",
     "contact_info": "Contact",

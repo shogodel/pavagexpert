@@ -140,8 +140,7 @@
     "success_verify_msg": "Un lien de confirmation vous a été envoyé. Cliquez dessus pour activer votre demande et un membre de notre équipe vous contactera rapidement.",
     "error_msg": "Une erreur est survenue. Veuillez réessayer.",
     "privacy": "Vos données personnelles sont protégées — jamais partagées sans votre accord.",
-    "guarantee": "Estimation gratuite • Sans engagement • Certifié RBQ",
-    "urgency": "Nos équipes d'experts en pavage prennent de nouveaux projets chaque jour — soyez le prochain projet qu'elles prennent en charge."
+    "guarantee": "Estimation gratuite • Sans engagement • Certifié RBQ"
   },
   "social_proof": {
     "projects": "projets réalisés par nos équipes",
@@ -149,12 +148,6 @@
     "area_value": "réponse rapide",
     "area": "réponse",
     "satisfaction": "gratuit, sans aucune obligation"
-  },
-  "psychology": {
-    "title": "Pourquoi attendre ?",
-    "quote": "Le plus difficile, c'est de commencer. Après, tout s'enchaîne.",
-    "subtitle": "Obtenez votre estimation gratuite pour vos besoins. Sans pression, sans engagement. Nous sommes là pour vous aider !",
-    "cta": "Obtenez mon devis, MAINTENANT"
   },
   "how_it_works": {
     "title": "Comment ça marche",
@@ -177,9 +170,6 @@
   },
   "footer": {
     "description": "Pavagexpert donne vie à vos projets de pavage avec des experts certifiés RBQ à Montréal, Laval et la Rive-Sud. Estimation gratuite, sans engagement.",
-    "exit_title": "Ne laissez pas votre projet attendre.",
-    "exit_desc": "Obtenez une estimation personnalisée gratuite pour votre projet de pavage. Sans engagement, sans pression. La première étape est la plus simple.",
-    "exit_cta": "Obtenez mon devis gratuit, MAINTENANT",
     "quick_links": "Liens rapides",
     "services_list": "Nos services",
     "contact_info": "Coordonnées",
