@@ -13,13 +13,8 @@ export default function GetQuoteForm() {
   const [error, setError] = useState(false);
   const [form, setForm] = useState({
     name: "",
-    email: "",
-    postalCode: "",
     phone: "",
-    budget: "",
-    description: "",
   });
-  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const mountTime = useRef(0);
 
   useEffect(() => {
@@ -33,13 +28,8 @@ export default function GetQuoteForm() {
     try {
       const fd = new FormData();
       fd.set("name", form.name);
-      fd.set("email", form.email);
       fd.set("phone", form.phone);
-      fd.set("postalCode", form.postalCode);
-      fd.set("budget", form.budget);
-      fd.set("description", form.description);
       fd.set("_fm", String(mountTime.current));
-      for (const f of photoFiles) fd.append("photos", f);
       const tracking = getTrackingData();
       if (tracking)       fd.set("lead_source", JSON.stringify(tracking));
       fd.set("locale", locale);
@@ -118,33 +108,6 @@ export default function GetQuoteForm() {
 
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("email")} <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
-                placeholder={t("email_placeholder")}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("postal_code")} <span className="text-red-500">*</span>
-              </label>
-              <input
-                required
-                value={form.postalCode}
-                onChange={(e) => setForm({ ...form, postalCode: e.target.value })}
-                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
-                placeholder="H3Z 2Y7"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
                 {t("phone")} <span className="text-red-500">*</span>
               </label>
               <input
@@ -154,49 +117,6 @@ export default function GetQuoteForm() {
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
                 placeholder={t("phone_placeholder")}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("photos")}
-              </label>
-              <p className="text-xs text-stone-400 mb-2">{t("photos_hint")}</p>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={(e) => setPhotoFiles(Array.from(e.target.files || []))}
-                className="w-full text-sm text-stone-500 file:mr-4 file:py-3.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20 file:cursor-pointer cursor-pointer file:min-h-[44px]"
-              />
-              {photoFiles.length > 0 && (
-                <p className="text-xs text-stone-400 mt-1">{photoFiles.length} {t("photos_selected")}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("budget")} <span className="text-stone-400 text-xs font-normal">({t("optional")})</span>
-              </label>
-              <input
-                value={form.budget}
-                onChange={(e) => setForm({ ...form, budget: e.target.value })}
-                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all text-base shadow-sm focus:shadow-md min-h-[48px]"
-                placeholder={t("budget_placeholder")}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                {t("project_desc")} <span className="text-stone-400 text-xs font-normal">({t("optional")})</span>
-              </label>
-              <p className="text-xs text-stone-400 mb-2">{t("desc_hint")}</p>
-              <textarea
-                rows={6}
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-4 py-3.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta outline-none transition-all resize-y text-base shadow-sm focus:shadow-md min-h-[48px]"
-                placeholder={t("desc_placeholder")}
               />
             </div>
 
