@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("quick_links")}</h3>
+            <h3 className="text-stone-200 font-heading font-semibold mb-4 text-sm">{t("quick_links")}</h3>
             <nav className="flex flex-col gap-1">
               <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("home")}</Link>
               <Link href={`/${locale}/services`} className="text-sm text-stone-400 hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{nav("services")}</Link>
@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("services_list")}</h3>
+            <h3 className="text-stone-200 font-heading font-semibold mb-4 text-sm">{t("services_list")}</h3>
             <nav className="flex flex-col gap-1">
               {servicesList.map((s) => (
                 <Link
@@ -52,13 +52,13 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-heading font-semibold mb-4 uppercase text-sm tracking-wider">{t("contact_info")}</h3>
+            <h3 className="text-stone-200 font-heading font-semibold mb-4 text-sm">{t("contact_info")}</h3>
             <div className="flex flex-col gap-2 text-sm text-stone-400">
-              <span className="py-1">Laval, QC H7N 2C2</span>
+              <span className="py-1">Laval, QC</span>
               <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_PHONE}</a>
               <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors py-2 min-h-[44px] flex items-center">{CONTACT_EMAIL}</a>
             </div>
-            <h4 className="text-white font-heading font-semibold mt-4 mb-2 uppercase text-xs tracking-wider">{t("hours")}</h4>
+            <h4 className="text-stone-200 font-heading font-semibold mt-4 mb-2 text-sm">{t("hours")}</h4>
             <div className="flex flex-col gap-1 text-sm text-stone-400">
               <span className="py-1">{t("always_open")}</span>
             </div>
@@ -72,7 +72,6 @@ export default function Footer() {
           <div className="flex gap-4 text-sm text-stone-500">
             <Link href={`/${locale}/privacy`} className="hover:text-stone-300 transition-colors py-2 min-h-[44px] flex items-center">{t("privacy")}</Link>
             <Link href={`/${locale}/terms`} className="hover:text-stone-300 transition-colors py-2 min-h-[44px] flex items-center">{t("terms")}</Link>
-            
           </div>
         </div>
       </div>
