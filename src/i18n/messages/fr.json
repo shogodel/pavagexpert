@@ -71,7 +71,7 @@
   },
   "calculator": {
     "title": "Calculateur de Pavé Uni",
-    "subtitle": "Estimez le coût de votre projet en quelques clics",
+    "subtitle": "En quelques clics.",
     "shape": "Forme",
     "rectangle": "Rectangulaire",
     "square": "Carré",
@@ -91,8 +91,7 @@
     "materials_label": "Matériaux",
     "installation_label": "Installation",
     "total_label": "Total estimé",
-    "cta_get_quote": "Obtenez mon devis personnalisé →",
-    "result_prompt": "Ce que vous voyez n'est pas qu'un prix — c'est la tranquillité d'esprit."
+    "cta_get_quote": "Obtenir mon devis"
   },
   "gallery": {
     "title": "Nos Réalisations",
@@ -113,7 +112,7 @@
     "dismiss": "Pas maintenant"
   },
   "get_quote": {
-    "title": "Pavagexpert considère votre projet comme le sien",
+    "title": "Votre projet mérite le meilleur.",
     "subtitle": "Racontez-nous votre projet en toute simplicité",
     "name": "Nom complet",
     "name_placeholder": "Ex. : Jean Tremblay",

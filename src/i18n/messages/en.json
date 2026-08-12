@@ -71,7 +71,7 @@
   },
   "calculator": {
     "title": "Paver Calculator",
-    "subtitle": "Estimate your project cost in seconds",
+    "subtitle": "In a few clicks.",
     "shape": "Shape",
     "rectangle": "Rectangle",
     "square": "Square",
@@ -91,8 +91,7 @@
     "materials_label": "Materials",
     "installation_label": "Installation",
     "total_label": "Total estimated",
-    "cta_get_quote": "Get my personalized quote →",
-    "result_prompt": "What you see isn't just a price — it's peace of mind."
+    "cta_get_quote": "Get my quote"
   },
   "gallery": {
     "title": "Our Portfolio",
@@ -113,8 +112,8 @@
     "dismiss": "Not now"
   },
   "get_quote": {
-    "title": "Pavagexpert looks at your project like is their own's",
-    "subtitle": "Tell us about your project in a few words",
+    "title": "Your project deserves the best.",
+    "subtitle": "Tell us about your project",
     "name": "Full name",
     "name_placeholder": "e.g. John Smith",
     "email": "Email",
