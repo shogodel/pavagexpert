@@ -19,9 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function GalleryPage({ params }: { params: Promise<{ locale: string }> }) {
-  notFound();
   const { locale } = await params;
-  if (!isLocale(locale)) return null;
+  if (!isLocale(locale)) return notFound();
   const messages = await getMessages(locale);
   return (
     <>
