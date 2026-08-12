@@ -9,9 +9,9 @@ export default function TrustBadges() {
   const t = useTranslations("trust_badges");
 
   return (
-    <section className="py-10 bg-stone-50 border-y border-stone-100">
+    <section className="py-14 md:py-16 bg-stone-50 border-y border-stone-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {badgeKeys.map((key, i) => (
             <motion.div
               key={key}

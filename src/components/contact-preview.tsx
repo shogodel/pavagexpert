@@ -8,7 +8,7 @@ export default function ContactPreview() {
   const t = useTranslations("get_quote");
 
   return (
-    <section className="py-16 md:py-24 bg-stone-900">
+    <section className="py-20 md:py-28 bg-stone-900">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -16,8 +16,8 @@ export default function ContactPreview() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t("title")}</h2>
-          <p className="text-lg text-stone-400 mb-8">{t("subtitle")}</p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-5">{t("title")}</h2>
+          <p className="text-lg text-stone-400 mb-10">{t("subtitle")}</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

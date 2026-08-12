@@ -29,7 +29,7 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            className="mt-6 text-lg md:text-xl text-stone-300 leading-relaxed"
+            className="mt-8 text-lg md:text-xl text-stone-300 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -38,7 +38,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            className="mt-8 flex flex-col sm:flex-row gap-4"
+            className="mt-10 flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
@@ -52,7 +52,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div
-            className="mt-10 flex flex-wrap gap-6"
+            className="mt-12 flex flex-wrap gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
