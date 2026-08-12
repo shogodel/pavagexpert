@@ -17,12 +17,12 @@
     "service_area": "Service Areas"
   },
   "hero": {
-    "title": "Pavagexpert is here to help you realize your dream driveway",
-    "subtitle": "One simple submission — no runaround, no pressure.",
-    "cta_estimate": "Get my price, NOW",
+    "title": "Your dream driveway.",
+    "subtitle": "Free estimate, fast answers, no obligation.",
+    "cta_estimate": "Get my free estimate",
     "trust_badge_1": "RBQ-Certified",
-    "trust_badge_2": "We answer fast, try it out!",
-    "trust_badge_3": "Free Estimate — No Obligation"
+    "trust_badge_2": "Fast answers, guaranteed",
+    "trust_badge_3": "Free estimate, no obligation"
   },
   "services": {
     "title": "Our Services",

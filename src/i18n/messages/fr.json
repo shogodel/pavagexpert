@@ -17,12 +17,12 @@
     "service_area": "Zones desservies"
   },
   "hero": {
-    "title": "Pavagexpert est là pour vous aider à réaliser l'entrée de vos rêves",
-    "subtitle": "Une seule soumission simple — sans tracas, sans pression.",
-    "cta_estimate": "MON ESTIMATION GRATUITE",
+    "title": "L'entrée de vos rêves.",
+    "subtitle": "Estimation gratuite, réponse rapide, sans engagement.",
+    "cta_estimate": "Obtenir mon estimation",
     "trust_badge_1": "Certifié RBQ",
-    "trust_badge_2": "On vous répond vite, c'est promis !",
-    "trust_badge_3": "Estimation gratuite — Sans engagement"
+    "trust_badge_2": "Réponse rapide garantie",
+    "trust_badge_3": "Estimation gratuite, sans engagement"
   },
   "services": {
     "title": "Nos Services",
