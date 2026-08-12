@@ -26,7 +26,7 @@
   },
   "services": {
     "title": "Nos Services",
-    "subtitle": "De l'excavation à la finition, on s'occupe de tout",
+    "subtitle": "De l'excavation à la finition, on s'occupe de tout.",
     "pavers": {
       "title": "Pavé Uni",
       "desc": "Entrées, terrasses et stationnements en pavé uni à Montréal, Laval, Longueuil et tout le Grand Montréal. Résistent aux hivers québécois.",
@@ -151,11 +151,11 @@
   },
   "how_it_works": {
     "title": "Comment ça marche",
-    "subtitle": "Trois étapes simples pour transformer votre projet en réalité",
+    "subtitle": "Trois étapes simples.",
     "step1_title": "1. Racontez votre projet",
     "step1_desc": "Décrivez votre espace en quelques minutes. Photos, vidéo, dimensions — plus vous en dites, plus les offres seront précises.",
-    "step2_title": "2. Nous trouvons la meilleure équipe pour votre projet",
-    "step2_desc": "Nos équipes sont composées d'experts chevronnés en pavage, des professionnels certifiés RBQ de notre réseau.",
+    "step2_title": "2. Nous trouvons votre équipe",
+    "step2_desc": "Des experts certifiés RBQ, choisis pour votre projet.",
     "step3_title": "3. Votre projet commence",
     "step3_desc": "Planifiez votre visite sur place, recevez votre devis personnalisé et regardez votre vision prendre vie."
   },
