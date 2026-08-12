@@ -65,7 +65,7 @@ export default function Calculator() {
   }
 
   return (
-    <section className="py-20 md:py-28 bg-stone-50">
+    <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center mb-16 md:mb-20"
@@ -200,7 +200,7 @@ export default function Calculator() {
 
             <Link
               href="/get-quote"
-              className="mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-all block shadow-lg hover:shadow-xl hover:shadow-terracotta/25"
+              className="mt-4 bg-terracotta hover:bg-terracotta-dark text-white font-semibold px-8 py-3.5 rounded-lg text-center transition-all block shadow-lg hover:shadow-xl hover:shadow-terracotta/25"
             >
               {t("cta_get_quote")}
             </Link>

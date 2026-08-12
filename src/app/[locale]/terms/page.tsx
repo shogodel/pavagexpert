@@ -23,10 +23,10 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <div className="pt-24 pb-8 bg-stone-100">
+      <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href={`/${locale}`} className="text-sm text-terracotta hover:underline mb-4 inline-block">&larr; Accueil</Link>
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800">{messages.terms?.title}</h1>
+          <Link href={`/${locale}`} className="text-sm text-stone-400 hover:text-white mb-4 inline-block">&larr; Accueil</Link>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold">{messages.terms?.title}</h1>
         </div>
       </div>
       <section className="py-12 md:py-16">

@@ -40,11 +40,11 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ lo
   return (
     <div className="min-h-screen bg-stone-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="pt-24 pb-8 bg-stone-100">
+      <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href={`/${locale}/blog`} className="text-sm text-terracotta hover:underline mb-4 inline-block min-h-[44px] py-2">&larr; Blog</Link>
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800 mb-2">{article.title}</h1>
-          <p className="text-stone-500">{article.desc}</p>
+          <Link href={`/${locale}/blog`} className="text-sm text-stone-400 hover:text-white mb-4 inline-block min-h-[44px] py-2">&larr; Blog</Link>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold mb-2">{article.title}</h1>
+          <p className="text-lg text-stone-300">{article.desc}</p>
         </div>
       </div>
       <section className="py-12 md:py-16">

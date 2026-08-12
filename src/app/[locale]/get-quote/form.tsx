@@ -71,10 +71,10 @@ export default function GetQuoteForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
-      <div className="pt-28 pb-10 bg-gradient-to-b from-stone-900 to-stone-800 text-white shadow-lg">
+      <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-3xl md:text-4xl font-heading font-bold">{t("title")}</h1>
-          <p className="mt-2 text-stone-300">{t("subtitle")}</p>
+          <p className="mt-3 text-lg text-stone-300">{t("subtitle")}</p>
         </div>
       </div>
 

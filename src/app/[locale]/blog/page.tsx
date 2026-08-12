@@ -26,14 +26,14 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <div className="pt-24 pb-8 bg-stone-100">
+      <div className="pt-28 pb-12 bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-stone-800 mb-2">{messages.blog?.title || "Blog"}</h1>
-          <p className="text-stone-500">{messages.blog?.subtitle || ""}</p>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold mb-2">{messages.blog?.title || "Blog"}</h1>
+          <p className="text-lg text-stone-300">{messages.blog?.subtitle || ""}</p>
         </div>
       </div>
 
-      <section className="py-12 md:py-16">
+      <section className="py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {slugs.map((slug) => {

@@ -9,7 +9,7 @@ export default function HowItWorks() {
   const t = useTranslations("how_it_works");
 
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-20 md:py-28 bg-stone-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center mb-16 md:mb-20"
